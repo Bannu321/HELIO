@@ -1,0 +1,51 @@
+Project File Tree
+
+- package.json
+- README.md
+- tailwind.config.js
+- public/
+  - index.html
+- server/
+  - index.js
+  - package.json
+  - models/
+    - index.js
+  - routes/
+    - estimation.js
+    - grid.js
+    - panels.js
+    - revenue.js
+    - weather.js
+  - middleware/ (directory)
+  - controllers/ (directory)
+- src/
+  - App.jsx
+  - index.css
+  - index.js
+  - components/
+    - charts/
+      - EnergyRevenueChart.jsx
+      - PowerChart.jsx
+    - dashboard/
+      - EstimationPanel.jsx
+      - PanelGrid.jsx
+      - StatCard.jsx
+    - layout/
+      - Sidebar.jsx
+      - Topbar.jsx
+    - reports/
+      - RevenueTable.jsx
+    - weather/
+      - WeatherWidget.jsx
+  - context/
+    - SolarContext.jsx
+  - pages/
+    - Dashboard.jsx
+  - services/
+    - api.js
+  - hooks/ (directory)
+  - utils/ (directory)
+
+Notes:
+- This tree reflects the workspace snapshot you provided.
+- Let me know if you want this written in a different format or committed to git.

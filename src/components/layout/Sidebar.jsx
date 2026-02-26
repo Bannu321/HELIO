@@ -1,0 +1,113 @@
+import React, { useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import clsx from 'clsx';
+import { useSolar } from '../../context/SolarContext';
+
+const navGroups = [
+  {
+    label: 'Overview',
+    items: [
+      { icon: '◉', label: 'Dashboard',    path: '/' },
+      { icon: '⚡', label: 'Grid Monitor', path: '/grid' },
+      { icon: '☀',  label: 'Panel Health', path: '/panels' },
+    ],
+  },
+  {
+    label: 'Reports',
+    items: [
+      { icon: '₹',  label: 'Revenue',      path: '/revenue' },
+      { icon: '📊', label: 'Energy Log',   path: '/energy' },
+      { icon: '🌦', label: 'Weather AI',   path: '/weather' },
+      { icon: '🔮', label: 'Estimation',   path: '/estimation' },
+    ],
+  },
+  {
+    label: 'Config',
+    items: [
+      { icon: '🔔', label: 'Alerts',       path: '/alerts' },
+      { icon: '⚙',  label: 'Settings',     path: '/settings' },
+    ],
+  },
+];
+
+export default function Sidebar() {
+  const location  = useLocation();
+  const navigate  = useNavigate();
+  const { overview } = useSolar();
+
+  return (
+    <aside className="w-60 flex-shrink-0 border-r border-void-500 bg-void-800/60 backdrop-blur-sm flex flex-col">
+      {/* Logo */}
+      <div className="px-5 py-6 border-b border-void-600">
+        <div className="flex items-center gap-3">
+          <div className="relative">
+            <div className="w-9 h-9 rounded-full bg-solar-500 animate-glow shadow-solar" />
+            <div className="absolute inset-[-6px] rounded-full border border-dashed border-solar-500/30 animate-spin-slow" />
+          </div>
+          <div>
+            <div className="font-display text-lg font-extrabold tracking-[4px] text-solar-400">HELIO</div>
+            <div className="text-[10px] text-void-200 tracking-[2px] mt-0.5">SOLAR INTELLIGENCE</div>
+          </div>
+        </div>
+      </div>
+
+      {/* Navigation */}
+      <nav className="flex-1 px-3 py-4 overflow-y-auto">
+        {navGroups.map((group) => (
+          <div key={group.label} className="mb-4">
+            <div className="px-3 py-1.5 text-[10px] text-void-300 font-mono tracking-[2px] uppercase mb-1">
+              {group.label}
+            </div>
+            {group.items.map((item) => (
+              <button
+                key={item.path}
+                onClick={() => navigate(item.path)}
+                className={clsx('nav-item w-full text-left mb-0.5', {
+                  active: location.pathname === item.path,
+                })}
+              >
+                <span className="w-5 text-center text-base">{item.icon}</span>
+                <span>{item.label}</span>
+              </button>
+            ))}
+          </div>
+        ))}
+      </nav>
+
+      {/* Grid Health Widget */}
+      <div className="px-3 pb-5">
+        <div className="card-glow p-4 rounded-xl">
+          <div className="text-[10px] text-void-200 font-mono tracking-widest mb-3">GRID HEALTH</div>
+          
+          <div className="space-y-2.5">
+            <div>
+              <div className="flex justify-between items-center mb-1">
+                <span className="text-xs text-void-100">Efficiency</span>
+                <span className="text-xs font-mono text-solar-400">{overview?.gridEfficiency ?? '—'}%</span>
+              </div>
+              <div className="progress-track h-1.5">
+                <div className="progress-solar" style={{ width: `${overview?.gridEfficiency ?? 0}%` }} />
+              </div>
+            </div>
+            <div>
+              <div className="flex justify-between items-center mb-1">
+                <span className="text-xs text-void-100">Battery</span>
+                <span className="text-xs font-mono text-energy-blue">{overview?.batteryLevel ?? '—'}%</span>
+              </div>
+              <div className="progress-track h-1.5">
+                <div className="progress-blue" style={{ width: `${overview?.batteryLevel ?? 0}%` }} />
+              </div>
+            </div>
+          </div>
+
+          <div className="mt-3 flex items-center gap-1.5">
+            <div className="w-1.5 h-1.5 rounded-full bg-energy-green animate-blink" />
+            <span className="text-[10px] text-void-200 font-mono">
+              {overview?.panelsActive ?? '—'} panels active · {overview?.panelsFault ?? 0} faults
+            </span>
+          </div>
+        </div>
+      </div>
+    </aside>
+  );
+}
