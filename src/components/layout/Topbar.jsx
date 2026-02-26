@@ -1,15 +1,18 @@
 import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useSolar } from "../../context/SolarContext";
+import { useAuth } from "../../context/AuthContext";
 import { useTheme } from "../../context/ThemeContext";
-import { Sun, Moon, Bell, RefreshCw } from "lucide-react";
+import { Sun, Moon, Bell, RefreshCw, LogOut, Settings } from "lucide-react";
 
 export default function Topbar() {
   const { refresh, lastRefresh } = useSolar();
+  const { user, logout } = useAuth();
   const [time, setTime] = useState("");
   const [refreshing, setRefreshing] = useState(false);
+  const [userMenuOpen, setUserMenuOpen] = useState(false);
   const location = useLocation();
-  const navigator = useNavigate();
+  const navigate = useNavigate();
   const { isDark, toggleTheme } = useTheme();
 
   // Dynamic breadcrumb generation based on current route
@@ -26,12 +29,24 @@ export default function Topbar() {
 
   const handleRefresh = async () => {
     setRefreshing(true);
-    if (refresh) await refresh(); // Safety check
+    if (refresh) await refresh();
     setTimeout(() => setRefreshing(false), 800);
   };
 
+  const handleLogout = () => {
+    logout();
+    navigate("/");
+  };
+
+  const userInitials =
+    user?.name
+      ?.split(" ")
+      .map((n) => n[0])
+      .join("")
+      .toUpperCase() || "U";
+
   return (
-    <header className="h-[72px] flex items-center justify-between px-6 lg:px-8 border-b border-slate-200 dark:border-void-800 bg-white dark:bg-void-900/80 backdrop-blur-md sticky top-0 z-50 transition-colors duration-300\">
+    <header className="h-[72px] flex items-center justify-between px-6 lg:px-8 border-b border-slate-200 dark:border-void-800 bg-white dark:bg-void-900/80 backdrop-blur-md sticky top-0 z-50 transition-colors duration-300">
       {/* Left: Dynamic Breadcrumb */}
       <div className="flex items-center gap-3 text-sm font-mono tracking-wide">
         <span className="text-solar-600 dark:text-solar-400 font-bold">
@@ -71,7 +86,9 @@ export default function Topbar() {
         <button
           onClick={handleRefresh}
           disabled={refreshing}
-          className={`flex items-center gap-2 text-slate-600 dark:text-void-300 hover:text-slate-900 dark:hover:text-white transition-colors px-2 py-1.5 ${refreshing ? "opacity-60 cursor-not-allowed" : ""}`}
+          className={`flex items-center gap-2 text-slate-600 dark:text-void-300 hover:text-slate-900 dark:hover:text-white transition-colors px-2 py-1.5 ${
+            refreshing ? "opacity-60 cursor-not-allowed" : ""
+          }`}
         >
           <RefreshCw
             className={`w-4 h-4 ${refreshing ? "animate-spin text-solar-500" : ""}`}
@@ -79,29 +96,75 @@ export default function Topbar() {
           <span className="hidden sm:inline text-sm font-medium">Refresh</span>
         </button>
 
-        {/* ✨ Theme Toggle Button ✨ */}
+        {/* Theme Toggle Button */}
         <button
           onClick={toggleTheme}
-          className="p-2 mr-1 text-slate-500 hover:text-solar-600 dark:text-void-300 dark:hover:text-solar-400 transition-colors rounded-full hover:bg-slate-100 dark:hover:bg-void-700"
+          className="p-2 text-slate-500 hover:text-solar-600 dark:text-void-300 dark:hover:text-solar-400 transition-colors rounded-full hover:bg-slate-100 dark:hover:bg-void-700"
           aria-label="Toggle Theme"
         >
           {isDark ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
         </button>
 
-        {/* Notification dot */}
+        {/* Notification Button */}
         <button
           className="relative p-2 text-slate-600 dark:text-void-300 hover:text-slate-900 dark:hover:text-white transition-colors"
-          onClick={() => {
-            navigator("/alerts");
-          }}
+          onClick={() => navigate("/alerts")}
         >
           <Bell className="w-5 h-5" />
           <span className="absolute top-1.5 right-2 w-2 h-2 rounded-full bg-energy-rose border border-white dark:border-void-900" />
         </button>
 
-        {/* Avatar */}
-        <div className="w-8 h-8 rounded-full bg-gradient-to-br from-solar-400 to-solar-600 flex items-center justify-center text-xs font-bold text-void-900 shadow-lg cursor-pointer hover:shadow-solar-500/20 transition-all">
-          A
+        {/* User Menu */}
+        <div className="relative">
+          <button
+            onClick={() => setUserMenuOpen(!userMenuOpen)}
+            className="w-9 h-9 rounded-full bg-gradient-to-br from-solar-400 to-solar-600 flex items-center justify-center text-xs font-bold text-void-900 shadow-lg hover:shadow-solar-500/30 transition-all cursor-pointer"
+            title={user?.email}
+          >
+            {userInitials}
+          </button>
+
+          {/* Dropdown Menu */}
+          {userMenuOpen && (
+            <div className="absolute right-0 top-12 w-56 bg-white dark:bg-void-800 border border-slate-200 dark:border-void-700 rounded-xl shadow-lg z-50 overflow-hidden">
+              {/* User Info */}
+              <div className="px-4 py-3 border-b border-slate-200 dark:border-void-700 bg-slate-50 dark:bg-void-900">
+                <div className="text-sm font-bold text-slate-900 dark:text-white">
+                  {user?.name || "User"}
+                </div>
+                <div className="text-xs text-slate-600 dark:text-void-300 font-mono mt-0.5">
+                  {user?.email}
+                </div>
+                {user?.installationId && (
+                  <div className="text-xs text-slate-500 dark:text-void-400 mt-1 font-mono">
+                    ID: {user.installationId}
+                  </div>
+                )}
+              </div>
+
+              {/* Menu Items */}
+              <div className="py-2">
+                <button
+                  onClick={() => {
+                    navigate("/settings");
+                    setUserMenuOpen(false);
+                  }}
+                  className="w-full px-4 py-2 text-left text-sm text-slate-700 dark:text-void-200 hover:bg-slate-100 dark:hover:bg-void-700 flex items-center gap-3 transition-colors"
+                >
+                  <Settings className="w-4 h-4" />
+                  Settings
+                </button>
+
+                <button
+                  onClick={handleLogout}
+                  className="w-full px-4 py-2 text-left text-sm text-energy-rose hover:bg-energy-rose/10 dark:hover:bg-energy-rose/20 flex items-center gap-3 transition-colors border-t border-slate-200 dark:border-void-700"
+                >
+                  <LogOut className="w-4 h-4" />
+                  Sign Out
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </header>
