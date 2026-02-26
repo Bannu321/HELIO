@@ -1,22 +1,24 @@
-import React, { useState, useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { useSolar } from '../../context/SolarContext';
-import { Bell, RefreshCw } from 'lucide-react';
+import React, { useState, useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useSolar } from "../../context/SolarContext";
+import { useTheme } from "../../context/ThemeContext";
+import { Sun, Moon, Bell, RefreshCw } from "lucide-react";
 
 export default function Topbar() {
   const { refresh, lastRefresh } = useSolar();
-  const [time, setTime] = useState('');
+  const [time, setTime] = useState("");
   const [refreshing, setRefreshing] = useState(false);
   const location = useLocation();
   const navigator = useNavigate();
+  const { isDark, toggleTheme } = useTheme();
 
   // Dynamic breadcrumb generation based on current route
-  const path = location.pathname.split('/')[1];
-  const pageName = path ? path.charAt(0).toUpperCase() + path.slice(1) : 'Home';
+  const path = location.pathname.split("/")[1];
+  const pageName = path ? path.charAt(0).toUpperCase() + path.slice(1) : "Home";
 
   useEffect(() => {
     const tick = () =>
-      setTime(new Date().toLocaleTimeString('en-IN', { hour12: false }));
+      setTime(new Date().toLocaleTimeString("en-IN", { hour12: false }));
     tick();
     const id = setInterval(tick, 1000);
     return () => clearInterval(id);
@@ -29,13 +31,14 @@ export default function Topbar() {
   };
 
   return (
-    <header className="h-[68px] flex items-center justify-between px-6 lg:px-8 border-b border-void-800 bg-void-900/80 backdrop-blur-md sticky top-0 z-50">
-      
+    <header className="h-[68px] flex items-center justify-between px-6 lg:px-8 border-b border-slate-200 dark:border-void-800 bg-white dark:bg-void-900/80 backdrop-blur-md sticky top-0 z-50 transition-colors duration-300">
       {/* Left: Dynamic Breadcrumb */}
       <div className="flex items-center gap-3 text-sm font-mono tracking-wide">
-        <span className="text-solar-400 font-bold">HELIO</span>
-        <span className="text-void-600">/</span>
-        <span className="text-white">{pageName}</span>
+        <span className="text-solar-600 dark:text-solar-400 font-bold">
+          HELIO
+        </span>
+        <span className="text-slate-400 dark:text-void-600">/</span>
+        <span className="text-slate-900 dark:text-white">{pageName}</span>
       </div>
 
       {/* Center: Live status bar */}
@@ -47,10 +50,12 @@ export default function Topbar() {
           </span>
           GRID LIVE
         </div>
-        <div className="text-xs font-mono text-void-300">
-          Last sync:{' '}
-          <span className="text-void-100">
-            {lastRefresh ? lastRefresh.toLocaleTimeString('en-IN', { hour12: false }) : 'Just now'}
+        <div className="text-xs font-mono text-slate-600 dark:text-void-300">
+          Last sync:{" "}
+          <span className="text-slate-900 dark:text-void-100">
+            {lastRefresh
+              ? lastRefresh.toLocaleTimeString("en-IN", { hour12: false })
+              : "Just now"}
           </span>
         </div>
       </div>
@@ -58,7 +63,7 @@ export default function Topbar() {
       {/* Right: Actions */}
       <div className="flex items-center gap-4">
         {/* Digital Clock */}
-        <span className="hidden sm:block font-mono text-sm text-void-300 bg-void-800/50 px-3 py-1.5 rounded-lg border border-void-700">
+        <span className="hidden sm:block font-mono text-sm text-slate-600 dark:text-void-300 bg-slate-100 dark:bg-void-800/50 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-void-700 transition-colors">
           {time}
         </span>
 
@@ -66,16 +71,43 @@ export default function Topbar() {
         <button
           onClick={handleRefresh}
           disabled={refreshing}
-          className={`flex items-center gap-2 text-void-300 hover:text-white transition-colors px-2 py-1.5 ${refreshing ? 'opacity-60 cursor-not-allowed' : ''}`}
+          className={`flex items-center gap-2 text-slate-600 dark:text-void-300 hover:text-slate-900 dark:hover:text-white transition-colors px-2 py-1.5 ${refreshing ? "opacity-60 cursor-not-allowed" : ""}`}
         >
-          <RefreshCw className={`w-4 h-4 ${refreshing ? 'animate-spin text-solar-400' : ''}`} />
+          <RefreshCw
+            className={`w-4 h-4 ${refreshing ? "animate-spin text-solar-500" : ""}`}
+          />
           <span className="hidden sm:inline text-sm font-medium">Refresh</span>
         </button>
 
+        {/* ✨ Theme Toggle Button ✨ */}
+        <button
+          onClick={toggleTheme}
+          className="p-2 mr-1 text-slate-500 hover:text-solar-600 dark:text-void-300 dark:hover:text-solar-400 transition-colors rounded-full hover:bg-slate-100 dark:hover:bg-void-700"
+          aria-label="Toggle Theme"
+        >
+          {isDark ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+        </button>
+
+        <button
+          onClick={handleRefresh}
+          className={`btn-ghost flex items-center gap-2 ${refreshing ? "opacity-60" : ""}`}
+          disabled={refreshing}
+        >
+          <RefreshCw
+            className={`w-4 h-4 ${refreshing ? "animate-spin" : ""}`}
+          />
+          Refresh
+        </button>
+
         {/* Notification dot */}
-        <button className="relative p-2 text-void-300 hover:text-white transition-colors" onClick={() =>{navigator('/alerts')}}>
+        <button
+          className="relative p-2 text-slate-600 dark:text-void-300 hover:text-slate-900 dark:hover:text-white transition-colors"
+          onClick={() => {
+            navigator("/alerts");
+          }}
+        >
           <Bell className="w-5 h-5" />
-          <span className="absolute top-1.5 right-2 w-2 h-2 rounded-full bg-energy-rose border border-void-900" />
+          <span className="absolute top-1.5 right-2 w-2 h-2 rounded-full bg-energy-rose border border-white dark:border-void-900" />
         </button>
 
         {/* Avatar */}
@@ -83,7 +115,6 @@ export default function Topbar() {
           A
         </div>
       </div>
-
     </header>
   );
 }

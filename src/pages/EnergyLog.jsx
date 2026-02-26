@@ -10,9 +10,9 @@ export default function EnergyLog() {
       <header className="flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>
           <h1 className="font-display text-2xl font-extrabold text-white tracking-wide">Energy Generation Log</h1>
-          <p className="text-sm text-void-300 mt-1 font-mono">Historical yield and performance tracking</p>
+          <p className="text-sm text-slate-600 dark:text-void-300 mt-1 font-mono">Historical yield and performance tracking</p>
         </div>
-        <button className="bg-void-800 hover:bg-void-700 border border-void-600 text-white px-4 py-2 rounded-lg font-medium transition-colors flex items-center gap-2">
+        <button className="bg-slate-300 dark:bg-void-800 hover:bg-slate-400 dark:hover:bg-void-700 border border-slate-400 dark:border-void-600 text-slate-900 dark:text-white px-4 py-2 rounded-lg font-medium transition-colors flex items-center gap-2">
           <DownloadCloud className="w-4 h-4" /> Export History
         </button>
       </header>
@@ -25,10 +25,10 @@ export default function EnergyLog() {
       </div>
 
       {/* Historical Chart Section */}
-      <div className="bg-void-800 border border-void-700 rounded-2xl p-6 shadow-card">
+      <div className="bg-white dark:bg-void-800 border border-slate-300 dark:border-void-700 rounded-2xl p-6 shadow-card">
         <div className="flex justify-between items-center mb-6">
-          <h2 className="font-display font-bold text-white">Generation History (Last 7 Days)</h2>
-          <select className="bg-void-900 border border-void-700 text-void-200 text-sm rounded-lg px-3 py-1.5 outline-none focus:border-solar-500">
+          <h2 className="font-display font-bold text-slate-900 dark:text-white">Generation History (Last 7 Days)</h2>
+          <select className="bg-slate-100 dark:bg-void-900 border border-slate-300 dark:border-void-700 text-slate-700 dark:text-void-200 text-sm rounded-lg px-3 py-1.5 outline-none focus:border-solar-500">
             <option>Last 7 Days</option>
             <option>Last 30 Days</option>
             <option>This Year</option>
@@ -41,12 +41,12 @@ export default function EnergyLog() {
       </div>
 
       {/* Simple Daily Log Table */}
-      <div className="bg-void-800 border border-void-700 rounded-2xl p-6 shadow-card">
-        <h2 className="font-display font-bold text-white mb-4">Daily Summaries</h2>
+      <div className="bg-white dark:bg-void-800 border border-slate-300 dark:border-void-700 rounded-2xl p-6 shadow-card">
+        <h2 className="font-display font-bold text-slate-900 dark:text-white mb-4">Daily Summaries</h2>
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="border-b border-void-700 text-void-400 text-xs font-mono uppercase tracking-wider">
+              <tr className="border-b border-slate-300 dark:border-void-700 text-slate-600 dark:text-void-400 text-xs font-mono uppercase tracking-wider">
                 <th className="pb-4 pl-2 font-medium">Date</th>
                 <th className="pb-4 font-medium">Total Yield</th>
                 <th className="pb-4 font-medium">Peak Power</th>
@@ -59,11 +59,11 @@ export default function EnergyLog() {
                 { date: 'Feb 24, 2026', yield: '32.1 kWh', peak: '4.9 kW', weather: 'Partly Cloudy' },
                 { date: 'Feb 23, 2026', yield: '41.0 kWh', peak: '6.1 kW', weather: 'High Irradiance' },
               ].map((row, idx) => (
-                <tr key={idx} className="border-b border-void-700/50 hover:bg-void-700/20 transition-colors">
-                  <td className="py-4 pl-2 text-void-100">{row.date}</td>
+                <tr key={idx} className="border-b border-slate-200 dark:border-void-700/50 hover:bg-slate-100 dark:hover:bg-void-700/20 transition-colors">
+                  <td className="py-4 pl-2 text-slate-800 dark:text-void-100">{row.date}</td>
                   <td className="py-4 text-energy-green font-bold">{row.yield}</td>
-                  <td className="py-4 text-void-200">{row.peak}</td>
-                  <td className="py-4 text-void-300">{row.weather}</td>
+                  <td className="py-4 text-slate-600 dark:text-void-200">{row.peak}</td>
+                  <td className="py-4 text-slate-600 dark:text-void-300">{row.weather}</td>
                 </tr>
               ))}
             </tbody>
@@ -76,17 +76,17 @@ export default function EnergyLog() {
 
 function LogCard({ title, value, unit, subtext, icon: Icon, color }) {
   return (
-    <div className="bg-void-800/50 border border-void-700 rounded-2xl p-6 shadow-card flex items-start gap-4">
-      <div className={`p-3 bg-void-900 border border-void-700 rounded-xl ${color}`}>
+    <div className="bg-slate-100 dark:bg-void-800/50 border border-slate-300 dark:border-void-700 rounded-2xl p-6 shadow-card flex items-start gap-4">
+      <div className={`p-3 bg-slate-200 dark:bg-void-900 border border-slate-300 dark:border-void-700 rounded-xl ${color}`}>
         <Icon className="w-6 h-6" />
       </div>
       <div>
-        <h3 className="text-void-300 text-sm font-medium">{title}</h3>
+        <h3 className="text-slate-700 dark:text-void-300 text-sm font-medium">{title}</h3>
         <div className="flex items-baseline gap-1 mt-1">
-          <span className="text-2xl font-display font-bold text-white">{value}</span>
-          <span className="text-sm font-mono text-void-400">{unit}</span>
+          <span className="text-2xl font-display font-bold text-slate-900 dark:text-white">{value}</span>
+          <span className="text-sm font-mono text-slate-600 dark:text-void-400">{unit}</span>
         </div>
-        {subtext && <p className="text-xs text-void-400 mt-1">{subtext}</p>}
+        {subtext && <p className="text-xs text-slate-600 dark:text-void-400 mt-1">{subtext}</p>}
       </div>
     </div>
   );

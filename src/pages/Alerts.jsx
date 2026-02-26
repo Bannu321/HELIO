@@ -11,12 +11,12 @@ const alertsData = [
 export default function Alerts() {
   return (
     <div className="max-w-4xl mx-auto space-y-6 animate-fade-in">
-      <header className="flex justify-between items-end border-b border-void-800 pb-4">
+      <header className="flex justify-between items-end border-b border-slate-300 dark:border-void-700 pb-4">
         <div>
-          <h1 className="font-display text-2xl font-extrabold text-white tracking-wide">System Alerts</h1>
-          <p className="text-sm text-void-300 mt-1 font-mono">Notifications and diagnostics</p>
+          <h1 className="font-display text-2xl font-extrabold text-slate-900 dark:text-white tracking-wide">System Alerts</h1>
+          <p className="text-sm text-slate-600 dark:text-void-300 mt-1 font-mono">Notifications and diagnostics</p>
         </div>
-        <button className="text-xs font-mono text-void-400 hover:text-white transition-colors">MARK ALL AS READ</button>
+        <button className="text-xs font-mono text-slate-600 dark:text-void-400 hover:text-slate-900 dark:hover:text-white transition-colors">MARK ALL AS READ</button>
       </header>
 
       <div className="space-y-4">
@@ -39,16 +39,16 @@ function AlertRow({ alert }) {
   const { icon: Icon, color, bg, border } = config[alert.type];
 
   return (
-    <div className={`flex items-start gap-4 p-5 rounded-2xl border ${border} ${bg} backdrop-blur-sm transition-all hover:bg-opacity-20`}>
+    <div className={`flex items-start gap-4 p-5 rounded-2xl border ${border} ${bg} backdrop-blur-sm transition-all hover:bg-opacity-20 bg-slate-50 dark:bg-slate-950`}>
       <div className={`mt-1 ${color}`}>
         <Icon className="w-6 h-6" />
       </div>
       <div className="flex-1">
         <div className="flex justify-between items-start mb-1">
           <h3 className={`font-display font-bold ${color}`}>{alert.title}</h3>
-          <span className="text-xs font-mono text-void-400">{alert.time}</span>
+          <span className="text-xs font-mono text-slate-600 dark:text-void-400">{alert.time}</span>
         </div>
-        <p className="text-sm text-void-200">{alert.desc}</p>
+        <p className="text-sm text-slate-700 dark:text-void-200">{alert.desc}</p>
       </div>
     </div>
   );

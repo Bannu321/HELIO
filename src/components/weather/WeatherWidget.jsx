@@ -7,11 +7,14 @@ export default function WeatherWidget() {
   if (loading || !weather) {
     return (
       <div className="card p-5 space-y-4">
-        <div className="h-4 bg-void-600 rounded animate-pulse w-1/3" />
-        <div className="h-16 bg-void-600 rounded animate-pulse" />
+        <div className="h-4 bg-slate-200 dark:bg-void-600 rounded animate-pulse w-1/3" />
+        <div className="h-16 bg-slate-200 dark:bg-void-600 rounded animate-pulse" />
         <div className="grid grid-cols-2 gap-2">
           {[1, 2, 3, 4].map((i) => (
-            <div key={i} className="h-12 bg-void-600 rounded animate-pulse" />
+            <div
+              key={i}
+              className="h-12 bg-slate-200 dark:bg-void-600 rounded animate-pulse"
+            />
           ))}
         </div>
       </div>
@@ -37,9 +40,11 @@ export default function WeatherWidget() {
           <div className="font-display text-sm font-bold text-white">
             Weather Intelligence
           </div>
-          <div className="text-xs text-void-200 mt-0.5">{weather.location}</div>
+          <div className="text-xs text-slate-600 dark:text-void-200 mt-0.5">
+            {weather.location}
+          </div>
         </div>
-        <span className="text-xs font-mono text-void-200 bg-void-600 px-2 py-1 rounded">
+        <span className="text-xs font-mono text-slate-600 dark:text-void-200 bg-slate-200 dark:bg-void-600 px-2 py-1 rounded">
           AI FORECAST
         </span>
       </div>
@@ -50,7 +55,7 @@ export default function WeatherWidget() {
           <div className="text-5xl leading-none animate-float">
             {weather.icon}
           </div>
-          <div className="text-xs text-void-200 mt-2 max-w-[120px] leading-relaxed">
+          <div className="text-xs text-slate-600 dark:text-void-200 mt-2 max-w-[120px] leading-relaxed">
             {weather.label}
           </div>
         </div>
@@ -58,7 +63,7 @@ export default function WeatherWidget() {
           <div className="font-display text-4xl font-extrabold text-solar-400">
             {weather.temp}°<span className="text-xl">C</span>
           </div>
-          <div className="text-xs text-void-200 mt-1">
+          <div className="text-xs text-slate-600 dark:text-void-200 mt-1">
             Feels {weather.feelsLike}°C
           </div>
         </div>
@@ -72,11 +77,14 @@ export default function WeatherWidget() {
           { label: "UV INDEX", val: `${weather.uvIndex} — High`, icon: "☀" },
           { label: "CLOUD COVER", val: `${weather.cloud}%`, icon: "☁" },
         ].map((item) => (
-          <div key={item.label} className="bg-void-600/60 rounded-xl p-3">
-            <div className="text-[9px] font-mono text-void-200 tracking-widest">
+          <div
+            key={item.label}
+            className="bg-slate-200 dark:bg-void-600/60 rounded-xl p-3"
+          >
+            <div className="text-[9px] font-mono text-slate-600 dark:text-void-200 tracking-widest">
               {item.label}
             </div>
-            <div className="text-sm text-white mt-1 font-mono">
+            <div className="text-sm text-slate-900 dark:text-white mt-1 font-mono">
               {item.icon} {item.val}
             </div>
           </div>
@@ -86,8 +94,10 @@ export default function WeatherWidget() {
       {/* Irradiance bar */}
       <div>
         <div className="flex justify-between text-[10px] font-mono mb-1.5">
-          <span className="text-void-200 tracking-wider">SOLAR IRRADIANCE</span>
-          <span className="text-solar-400 font-bold">
+          <span className="text-slate-600 dark:text-void-200 tracking-wider">
+            SOLAR IRRADIANCE
+          </span>
+          <span className="text-solar-600 dark:text-solar-400 font-bold">
             {weather.irradiance} W/m²
           </span>
         </div>
@@ -97,7 +107,7 @@ export default function WeatherWidget() {
             style={{ width: `${irradPct}%` }}
           />
         </div>
-        <div className="flex justify-between text-[9px] text-void-300 font-mono mt-1">
+        <div className="flex justify-between text-[9px] text-slate-600 dark:text-void-300 font-mono mt-1">
           <span>0 W/m²</span>
           <span>1000 W/m²</span>
         </div>
@@ -105,7 +115,7 @@ export default function WeatherWidget() {
 
       {/* 5-day forecast strip */}
       <div>
-        <div className="text-[10px] font-mono text-void-200 tracking-widest mb-2">
+        <div className="text-[10px] font-mono text-slate-600 dark:text-void-200 tracking-widest mb-2">
           5-DAY FORECAST
         </div>
         <div className="flex gap-1.5">
@@ -115,17 +125,17 @@ export default function WeatherWidget() {
               className={`flex-1 flex flex-col items-center gap-1 py-2 px-1 rounded-lg transition-colors ${
                 i === 0
                   ? "bg-solar-500/10 border border-solar-500/20"
-                  : "bg-void-600/40 hover:bg-void-600/70"
+                  : "bg-slate-200 dark:bg-void-600/40 hover:bg-slate-300 dark:hover:bg-void-600/70"
               }`}
             >
-              <span className="text-[9px] font-mono text-void-200">
+              <span className="text-[9px] font-mono text-slate-600 dark:text-void-200">
                 {day.day}
               </span>
               <span className="text-base leading-none">{day.icon}</span>
-              <span className="text-[10px] font-mono text-white">
+              <span className="text-[10px] font-mono text-slate-900 dark:text-white">
                 {day.high}°
               </span>
-              <span className="text-[9px] font-mono text-void-300">
+              <span className="text-[9px] font-mono text-slate-600 dark:text-void-300">
                 {day.low}°
               </span>
             </div>

@@ -1,55 +1,88 @@
-@import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
-  * { box-sizing: border-box; margin: 0; padding: 0; }
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+  html {
+    /* Ensure smooth color transitions when theme changes */
+    @apply transition-colors duration-300;
+  }
   body {
-    /* ✨ Light mode default, dark mode via modifier */
-    @apply bg-slate-50 text-slate-900 dark:bg-void-900 dark:text-white font-body transition-colors duration-300;
+    /* Light mode default, dark mode via modifier */
+    @apply bg-slate-50 text-slate-900 dark:bg-void-900 dark:text-white font-body;
     font-size: 14px;
     -webkit-font-smoothing: antialiased;
   }
-  ::-webkit-scrollbar { width: 4px; height: 4px; }
-  ::-webkit-scrollbar-track { @apply bg-slate-100 dark:bg-void-800; }
-  ::-webkit-scrollbar-thumb { @apply bg-slate-300 dark:bg-void-400 rounded-full; }
+  ::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+  }
+  ::-webkit-scrollbar-track {
+    @apply bg-slate-100 dark:bg-void-800;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-slate-300 dark:bg-void-400 rounded-full;
+  }
 }
 
 @layer components {
-  .card, .card-glow, .card-green {
+  .card,
+  .card-glow,
+  .card-green {
     @apply bg-white dark:bg-void-700 border border-slate-200 dark:border-void-500 rounded-2xl transition-all duration-300;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
   }
   .dark .card {
-    box-shadow: 0 4px 24px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.04);
-    background-image: linear-gradient(135deg, rgba(255,255,255,0.03) 0%, transparent 60%);
+    box-shadow:
+      0 4px 24px rgba(0, 0, 0, 0.4),
+      inset 0 1px 0 rgba(255, 255, 255, 0.04);
+    background-image: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.03) 0%,
+      transparent 60%
+    );
   }
   .dark .card-glow {
-    border-color: rgba(251,191,36,0.2);
-    box-shadow: 0 4px 24px rgba(0,0,0,0.4), 0 0 0 1px rgba(251,191,36,0.08), inset 0 1px 0 rgba(255,255,255,0.04);
+    border-color: rgba(251, 191, 36, 0.2);
+    box-shadow:
+      0 4px 24px rgba(0, 0, 0, 0.4),
+      0 0 0 1px rgba(251, 191, 36, 0.08),
+      inset 0 1px 0 rgba(255, 255, 255, 0.04);
   }
   .dark .card-green {
-    border-color: rgba(0,229,160,0.2);
-    box-shadow: 0 4px 24px rgba(0,0,0,0.4), 0 0 0 1px rgba(0,229,160,0.08), inset 0 1px 0 rgba(255,255,255,0.04);
+    border-color: rgba(0, 229, 160, 0.2);
+    box-shadow:
+      0 4px 24px rgba(0, 0, 0, 0.4),
+      0 0 0 1px rgba(0, 229, 160, 0.08),
+      inset 0 1px 0 rgba(255, 255, 255, 0.04);
   }
 
   /* Keep your stat colors identical across themes */
-  .stat-up   { @apply text-energy-green text-xs font-mono; }
-  .stat-down { @apply text-energy-rose text-xs font-mono; }
+  .stat-up {
+    @apply text-energy-green text-xs font-mono;
+  }
+  .stat-down {
+    @apply text-energy-rose text-xs font-mono;
+  }
 
   .btn-solar {
     @apply bg-solar-500 hover:bg-solar-400 text-void-900 font-display font-bold text-xs tracking-widest px-5 py-2.5 rounded-lg transition-all duration-200 cursor-pointer;
   }
-  
+
   .btn-ghost {
     @apply border border-slate-300 dark:border-void-400 hover:border-slate-400 dark:hover:border-void-200 text-slate-600 dark:text-void-100 hover:text-slate-900 dark:hover:text-white font-mono text-xs tracking-wider px-4 py-2 rounded-lg transition-all duration-200;
   }
 
   .live-badge {
     @apply flex items-center gap-1.5 text-energy-green text-xs font-mono px-3 py-1.5 rounded-full;
-    background: rgba(0,229,160,0.08);
-    border: 1px solid rgba(0,229,160,0.2);
+    background: rgba(0, 229, 160, 0.08);
+    border: 1px solid rgba(0, 229, 160, 0.2);
   }
 
   .nav-item {
@@ -59,14 +92,18 @@
     @apply text-solar-600 dark:text-solar-400 bg-solar-50 dark:bg-solar-500/10 border border-solar-200 dark:border-solar-500/20;
   }
 
-  .data-table { @apply w-full; }
+  .data-table {
+    @apply w-full;
+  }
   .data-table th {
     @apply text-slate-500 dark:text-void-200 text-xs font-mono tracking-widest uppercase px-4 py-3 text-left border-b border-slate-200 dark:border-void-500;
   }
   .data-table td {
     @apply px-4 py-3.5 border-b border-slate-100 dark:border-void-600 text-sm text-slate-700 dark:text-void-100 transition-colors;
   }
-  .data-table tr:last-child td { @apply border-b-0; }
+  .data-table tr:last-child td {
+    @apply border-b-0;
+  }
 
   /* Ensure inputs adjust in light mode */
   .field {
@@ -74,54 +111,118 @@
   }
   .field:focus {
     border-color: #f59e0b;
-    box-shadow: 0 0 0 3px rgba(245,158,11,0.15);
+    box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.15);
   }
 }
 
-
 .ambient-top::before {
-  content: '';
-  position: fixed; top: -200px; left: 0; right: 0; height: 400px;
-  background: radial-gradient(ellipse at 30% 0%, rgba(251,191,36,0.07) 0%, transparent 70%);
-  pointer-events: none; z-index: 0;
+  content: "";
+  position: fixed;
+  top: -200px;
+  left: 0;
+  right: 0;
+  height: 400px;
+  background: radial-gradient(
+    ellipse at 30% 0%,
+    rgba(251, 191, 36, 0.04) 0%,
+    transparent 70%
+  );
+  pointer-events: none;
+  z-index: 0;
+  transition: background 300ms ease;
+}
+.dark .ambient-top::before {
+  background: radial-gradient(
+    ellipse at 30% 0%,
+    rgba(251, 191, 36, 0.07) 0%,
+    transparent 70%
+  );
 }
 .ambient-top::after {
-  content: '';
-  position: fixed; bottom: 0; right: -100px;
-  width: 500px; height: 500px;
-  background: radial-gradient(circle, rgba(0,229,160,0.05) 0%, transparent 70%);
-  pointer-events: none; z-index: 0;
+  content: "";
+  position: fixed;
+  bottom: 0;
+  right: -100px;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(
+    circle,
+    rgba(0, 229, 160, 0.02) 0%,
+    transparent 70%
+  );
+  pointer-events: none;
+  z-index: 0;
+  transition: background 300ms ease;
+}
+.dark .ambient-top::after {
+  background: radial-gradient(
+    circle,
+    rgba(0, 229, 160, 0.05) 0%,
+    transparent 70%
+  );
 }
 
 .recharts-default-tooltip {
-  background: #141C2A !important;
-  border: 1px solid rgba(251,191,36,0.2) !important;
+  background: #f8f8f8 !important;
+  color: #333 !important;
+  border: 1px solid rgba(0, 0, 0, 0.1) !important;
   border-radius: 8px !important;
 }
+.dark .recharts-default-tooltip {
+  background: #141c2a !important;
+  color: #fff !important;
+  border: 1px solid rgba(251, 191, 36, 0.2) !important;
+  border-radius: 8px !important;
+}
+
 .recharts-cartesian-grid-horizontal line,
-.recharts-cartesian-grid-vertical line { stroke: rgba(255,255,255,0.04) !important; }
+.recharts-cartesian-grid-vertical line {
+  stroke: rgba(255, 255, 255, 0.04) !important;
+}
 .recharts-text {
   fill: #536080 !important;
-  font-family: 'Space Mono', monospace !important;
+  font-family: "Space Mono", monospace !important;
   font-size: 10px !important;
 }
 
 /* Ambient glow only in dark mode to prevent washing out light mode */
 .dark .ambient-top::before {
-  content: ''; position: fixed; top: -200px; left: 0; right: 0; height: 400px;
-  background: radial-gradient(ellipse at 30% 0%, rgba(251,191,36,0.07) 0%, transparent 70%);
-  pointer-events: none; z-index: 0;
+  content: "";
+  position: fixed;
+  top: -200px;
+  left: 0;
+  right: 0;
+  height: 400px;
+  background: radial-gradient(
+    ellipse at 30% 0%,
+    rgba(251, 191, 36, 0.07) 0%,
+    transparent 70%
+  );
+  pointer-events: none;
+  z-index: 0;
 }
 .dark .ambient-top::after {
-  content: ''; position: fixed; bottom: 0; right: -100px; width: 500px; height: 500px;
-  background: radial-gradient(circle, rgba(0,229,160,0.05) 0%, transparent 70%);
-  pointer-events: none; z-index: 0;
+  content: "";
+  position: fixed;
+  bottom: 0;
+  right: -100px;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(
+    circle,
+    rgba(0, 229, 160, 0.05) 0%,
+    transparent 70%
+  );
+  pointer-events: none;
+  z-index: 0;
 }
 
 /* Recharts overrides for Dark Mode */
 .dark .recharts-default-tooltip {
-  background: #141C2A !important;
-  border: 1px solid rgba(251,191,36,0.2) !important;
+  background: #141c2a !important;
+  border: 1px solid rgba(251, 191, 36, 0.2) !important;
 }
 .dark .recharts-cartesian-grid-horizontal line,
-.dark .recharts-cartesian-grid-vertical line { stroke: rgba(255,255,255,0.04) !important; }
+.dark .recharts-cartesian-grid-vertical line {
+  stroke: rgba(255, 255, 255, 0.04) !important;
+}

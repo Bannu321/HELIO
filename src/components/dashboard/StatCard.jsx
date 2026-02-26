@@ -49,7 +49,7 @@ export default function StatCard({
       <div className={clsx("absolute top-0 left-0 right-0 h-[2px]", s.bar)} />
 
       <div className="flex items-start justify-between mb-3">
-        <span className="text-[10px] font-mono text-void-200 tracking-widest uppercase">
+        <span className="text-[10px] font-mono text-slate-600 dark:text-void-200 tracking-widest uppercase">
           {label}
         </span>
         {icon && (
@@ -61,13 +61,15 @@ export default function StatCard({
 
       {loading ? (
         <div className="space-y-2">
-          <div className="h-8 bg-void-600 rounded animate-pulse w-2/3" />
+          <div className="h-8 bg-slate-300 dark:bg-void-600 rounded animate-pulse w-2/3" />
           {delta && (
-            <div className="h-4 bg-void-600 rounded animate-pulse w-1/2" />
+            <div className="h-4 bg-slate-300 dark:bg-void-600 rounded animate-pulse w-1/2" />
           )}
         </div>
       ) : value === null || value === undefined ? (
-        <div className="text-void-300 text-sm">No data available</div>
+        <div className="text-slate-500 dark:text-void-300 text-sm">
+          No data available
+        </div>
       ) : (
         <>
           <div
@@ -78,7 +80,7 @@ export default function StatCard({
           >
             {value}
             {unit && (
-              <span className="text-sm font-normal text-void-200 ml-1.5">
+              <span className="text-sm font-normal text-slate-600 dark:text-void-200 ml-1.5">
                 {unit}
               </span>
             )}
