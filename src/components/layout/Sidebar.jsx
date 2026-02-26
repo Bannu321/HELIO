@@ -1,38 +1,38 @@
-import React, { useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
-import clsx from 'clsx';
-import { useSolar } from '../../context/SolarContext';
+import React, { useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import clsx from "clsx";
+import { useSolar } from "../../context/SolarContext";
 
 const navGroups = [
   {
-    label: 'Overview',
+    label: "Overview",
     items: [
-      { icon: '◉', label: 'Dashboard',    path: '/' },
-      { icon: '⚡', label: 'Grid Monitor', path: '/grid' },
-      { icon: '☀',  label: 'Panel Health', path: '/panels' },
+      { icon: "◉", label: "Dashboard", path: "/dashboard" },
+      { icon: "⚡", label: "Grid Monitor", path: "/grid" },
+      { icon: "☀", label: "Panel Health", path: "/panels" },
     ],
   },
   {
-    label: 'Reports',
+    label: "Reports",
     items: [
-      { icon: '₹',  label: 'Revenue',      path: '/revenue' },
-      { icon: '📊', label: 'Energy Log',   path: '/energy' },
-      { icon: '🌦', label: 'Weather AI',   path: '/weather' },
-      { icon: '🔮', label: 'Estimation',   path: '/estimation' },
+      { icon: "₹", label: "Revenue", path: "/revenue" },
+      { icon: "📊", label: "Energy Log", path: "/energy" },
+      { icon: "🌦", label: "Weather AI", path: "/weather" },
+      { icon: "🔮", label: "Estimation", path: "/estimation" },
     ],
   },
   {
-    label: 'Config',
+    label: "Config",
     items: [
-      { icon: '🔔', label: 'Alerts',       path: '/alerts' },
-      { icon: '⚙',  label: 'Settings',     path: '/settings' },
+      { icon: "🔔", label: "Alerts", path: "/alerts" },
+      { icon: "⚙", label: "Settings", path: "/settings" },
     ],
   },
 ];
 
 export default function Sidebar() {
-  const location  = useLocation();
-  const navigate  = useNavigate();
+  const location = useLocation();
+  const navigate = useNavigate();
   const { overview } = useSolar();
 
   return (
@@ -45,8 +45,18 @@ export default function Sidebar() {
             <div className="absolute inset-[-6px] rounded-full border border-dashed border-solar-500/30 animate-spin-slow" />
           </div>
           <div>
-            <div className="font-display text-lg font-extrabold tracking-[4px] text-solar-400">HELIO</div>
-            <div className="text-[10px] text-void-200 tracking-[2px] mt-0.5">SOLAR INTELLIGENCE</div>
+            <div className="font-display text-lg font-extrabold tracking-[4px] text-solar-400">
+              <button
+                onClick={() => {
+                  navigate("/");
+                }}
+              >
+                HELIO
+              </button>
+            </div>
+            <div className="text-[10px] text-void-200 tracking-[2px] mt-0.5">
+              SOLAR INTELLIGENCE
+            </div>
           </div>
         </div>
       </div>
@@ -58,18 +68,30 @@ export default function Sidebar() {
             <div className="px-3 py-1.5 text-[10px] text-void-300 font-mono tracking-[2px] uppercase mb-1">
               {group.label}
             </div>
-            {group.items.map((item) => (
-              <button
-                key={item.path}
-                onClick={() => navigate(item.path)}
-                className={clsx('nav-item w-full text-left mb-0.5', {
-                  active: location.pathname === item.path,
-                })}
-              >
-                <span className="w-5 text-center text-base">{item.icon}</span>
-                <span>{item.label}</span>
-              </button>
-            ))}
+            {group.items.map((item) => {
+              const isActive = location.pathname === item.path;
+              return (
+                <button
+                  key={item.path}
+                  onClick={() => navigate(item.path)}
+                  className={clsx(
+                    "w-full text-left mb-0.5 flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-200 text-sm",
+                    isActive
+                      ? "bg-solar-500/20 text-solar-400 border border-solar-500/30"
+                      : "text-void-100 hover:text-white hover:bg-void-600 border border-transparent",
+                  )}
+                  aria-current={isActive ? "page" : undefined}
+                >
+                  <span className="w-5 text-center text-base flex-shrink-0">
+                    {item.icon}
+                  </span>
+                  <span>{item.label}</span>
+                  {isActive && (
+                    <span className="ml-auto text-solar-400">→</span>
+                  )}
+                </button>
+              );
+            })}
           </div>
         ))}
       </nav>
@@ -77,25 +99,37 @@ export default function Sidebar() {
       {/* Grid Health Widget */}
       <div className="px-3 pb-5">
         <div className="card-glow p-4 rounded-xl">
-          <div className="text-[10px] text-void-200 font-mono tracking-widest mb-3">GRID HEALTH</div>
-          
+          <div className="text-[10px] text-void-200 font-mono tracking-widest mb-3">
+            GRID HEALTH
+          </div>
+
           <div className="space-y-2.5">
             <div>
               <div className="flex justify-between items-center mb-1">
                 <span className="text-xs text-void-100">Efficiency</span>
-                <span className="text-xs font-mono text-solar-400">{overview?.gridEfficiency ?? '—'}%</span>
+                <span className="text-xs font-mono text-solar-400">
+                  {overview?.gridEfficiency ?? "—"}%
+                </span>
               </div>
               <div className="progress-track h-1.5">
-                <div className="progress-solar" style={{ width: `${overview?.gridEfficiency ?? 0}%` }} />
+                <div
+                  className="progress-solar"
+                  style={{ width: `${overview?.gridEfficiency ?? 0}%` }}
+                />
               </div>
             </div>
             <div>
               <div className="flex justify-between items-center mb-1">
                 <span className="text-xs text-void-100">Battery</span>
-                <span className="text-xs font-mono text-energy-blue">{overview?.batteryLevel ?? '—'}%</span>
+                <span className="text-xs font-mono text-energy-blue">
+                  {overview?.batteryLevel ?? "—"}%
+                </span>
               </div>
               <div className="progress-track h-1.5">
-                <div className="progress-blue" style={{ width: `${overview?.batteryLevel ?? 0}%` }} />
+                <div
+                  className="progress-blue"
+                  style={{ width: `${overview?.batteryLevel ?? 0}%` }}
+                />
               </div>
             </div>
           </div>
@@ -103,7 +137,8 @@ export default function Sidebar() {
           <div className="mt-3 flex items-center gap-1.5">
             <div className="w-1.5 h-1.5 rounded-full bg-energy-green animate-blink" />
             <span className="text-[10px] text-void-200 font-mono">
-              {overview?.panelsActive ?? '—'} panels active · {overview?.panelsFault ?? 0} faults
+              {overview?.panelsActive ?? "—"} panels active ·{" "}
+              {overview?.panelsFault ?? 0} faults
             </span>
           </div>
         </div>

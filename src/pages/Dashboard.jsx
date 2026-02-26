@@ -1,12 +1,10 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import StatCard from '../components/dashboard/StatCard';
 import PowerChart from '../components/charts/PowerChart';
-import EnergyRevenueChart from '../components/charts/EnergyRevenueChart';
 import WeatherWidget from '../components/weather/WeatherWidget';
-import RevenueTable from '../components/reports/RevenueTable';
-import EstimationPanel from '../components/dashboard/EstimationPanel';
-import PanelGrid from '../components/dashboard/PanelGrid';
 import { useSolar } from '../context/SolarContext';
+import { ArrowRight } from 'lucide-react';
 
 export default function Dashboard() {
   const { overview, loading } = useSolar();
@@ -18,94 +16,83 @@ export default function Dashboard() {
     v != null ? `₹${Number(v).toLocaleString('en-IN')}` : '—';
 
   return (
-    <div className="p-6 space-y-5">
+    <div className="space-y-6">
       {/* Page heading */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>
-          <h1 className="font-display text-xl font-extrabold text-white tracking-wide">Solar Grid Dashboard</h1>
-          <p className="text-xs text-void-200 mt-0.5 font-mono">
+          <h1 className="font-display text-2xl font-extrabold text-white tracking-wide">System Overview</h1>
+          <p className="text-sm text-void-300 mt-1 font-mono">
             {new Date().toLocaleDateString('en-IN', { weekday:'long', year:'numeric', month:'long', day:'numeric' })}
           </p>
         </div>
-        <div className="flex items-center gap-2 text-xs font-mono text-void-200">
+        <div className="flex items-center gap-2 bg-void-800/50 border border-void-700 py-2 px-4 rounded-xl text-sm font-mono text-void-200">
           <span className="text-solar-400">⚡</span>
           CO₂ Saved Today:{' '}
           <span className="text-energy-green font-bold">{overview?.co2Saved ?? '—'} t</span>
         </div>
       </div>
 
-      {/* KPI Stats Row */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <StatCard
-          label="Current Power"
-          value={fmt(overview?.currentPower)}
-          unit="kW"
-          delta="+3.2% from last hour"
-          deltaUp
-          accent="solar"
-          icon="⚡"
-          loading={loading}
-        />
-        <StatCard
-          label="Today's Energy"
-          value={fmt(overview?.todayEnergy)}
-          unit="kWh"
-          delta="+12% vs daily avg"
-          deltaUp
-          accent="green"
-          icon="🔋"
-          loading={loading}
-        />
-        <StatCard
-          label="Revenue Today"
-          value={fmtINR(overview?.todayRevenue)}
-          delta="On track for ₹6,200"
-          deltaUp
-          accent="blue"
-          icon="₹"
-          loading={loading}
-        />
-        <StatCard
-          label="Monthly Total"
-          value={fmtINR(overview?.monthlyRevenue)}
-          delta="+8.4% vs last month"
-          deltaUp
-          accent="solar"
-          icon="📈"
-          loading={loading}
-        />
+      {/* KPI Stats Row (The Vital Pulse) */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <Link to="/grid" className="block group">
+          <StatCard
+            label="Current Power" value={fmt(overview?.currentPower)} unit="kW"
+            delta="+3.2% from last hour" deltaUp accent="solar" icon="⚡" loading={loading}
+          />
+        </Link>
+        <Link to="/energy" className="block group">
+          <StatCard
+            label="Today's Energy" value={fmt(overview?.todayEnergy)} unit="kWh"
+            delta="+12% vs daily avg" deltaUp accent="green" icon="🔋" loading={loading}
+          />
+        </Link>
+        <Link to="/revenue" className="block group">
+          <StatCard
+            label="Revenue Today" value={fmtINR(overview?.todayRevenue)}
+            delta="On track for ₹6,200" deltaUp accent="blue" icon="₹" loading={loading}
+          />
+        </Link>
+        <Link to="/panels" className="block group">
+          <StatCard
+            label="Panel Health" value="98.5" unit="%"
+            delta="Array B needs cleaning" deltaUp={false} accent="rose" icon="🔧" loading={loading}
+          />
+        </Link>
       </div>
 
-      {/* Charts row */}
-      <div className="grid grid-cols-1 xl:grid-cols-3 gap-5">
-        <div className="xl:col-span-2">
-          <PowerChart />
+      {/* Main Visuals Row */}
+      <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
+        {/* Main Chart */}
+        <div className="xl:col-span-2 bg-void-800 border border-void-700 rounded-2xl p-5 shadow-card flex flex-col">
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="font-display font-bold text-white">Live Generation</h2>
+            <Link to="/estimation" className="text-xs text-solar-400 hover:text-solar-300 flex items-center gap-1 transition-colors">
+              AI Forecast <ArrowRight className="w-3 h-3" />
+            </Link>
+          </div>
+          <div className="flex-1 min-h-[300px]">
+            <PowerChart />
+          </div>
         </div>
-        <div>
-          <WeatherWidget />
-        </div>
-      </div>
 
-      {/* Energy + Revenue chart row */}
-      <div className="grid grid-cols-1 xl:grid-cols-3 gap-5">
-        <div className="xl:col-span-2">
-          <EnergyRevenueChart />
-        </div>
-        <div>
-          <EstimationPanel />
+        {/* Weather Intelligence */}
+        <div className="bg-void-800 border border-void-700 rounded-2xl p-5 shadow-card flex flex-col">
+           <div className="flex justify-between items-center mb-4">
+            <h2 className="font-display font-bold text-white">Grid Environment</h2>
+            <Link to="/weather" className="text-xs text-energy-cyan hover:text-cyan-300 flex items-center gap-1 transition-colors">
+              Details <ArrowRight className="w-3 h-3" />
+            </Link>
+          </div>
+          <div className="flex-1">
+            <WeatherWidget />
+          </div>
         </div>
       </div>
 
-      {/* Revenue Table */}
-      <RevenueTable />
-
-      {/* Panel Grid */}
-      <PanelGrid />
-
-      {/* Architecture strip */}
-      <div className="card p-5">
+      {/* Architecture strip (Kept because it's a great visual anchor) */}
+      <div className="bg-void-800 border border-void-700 rounded-2xl p-5 shadow-card mt-8">
         <div className="font-display text-sm font-bold text-white mb-1">System Architecture</div>
-        <div className="text-xs text-void-200 mb-4">Data flow · MERN stack integration</div>
+        <div className="text-xs text-void-300 mb-5 font-mono">Data flow · MERN stack integration</div>
         <div className="flex items-center justify-between gap-2 flex-wrap">
           {[
             { icon:'☀️', layer:'INPUT',     name:'Solar Array',   sub:'24 × 400W panels' },
@@ -120,15 +107,14 @@ export default function Dashboard() {
               <div className={`flex flex-col items-center text-center px-3 py-3 rounded-xl border transition-all ${
                 node.highlight
                   ? 'bg-solar-500/10 border-solar-500/30 flex-1'
-                  : 'bg-void-600/40 border-void-500 hover:bg-void-600/70 flex-1'
+                  : 'bg-void-900 border-void-700 flex-1'
               }`}>
                 <div className="text-xl mb-1">{node.icon}</div>
-                <div className="text-[8px] font-mono text-void-300 tracking-widest">{node.layer}</div>
-                <div className={`text-xs font-display font-bold mt-0.5 ${node.highlight ? 'text-solar-400' : 'text-white'}`}>{node.name}</div>
-                <div className="text-[9px] text-void-200 mt-0.5">{node.sub}</div>
+                <div className="text-[9px] font-mono text-void-400 tracking-widest">{node.layer}</div>
+                <div className={`text-xs font-display font-bold mt-1 ${node.highlight ? 'text-solar-400' : 'text-void-100'}`}>{node.name}</div>
               </div>
               {i < arr.length - 1 && (
-                <div className="text-void-400 text-sm font-mono animate-[arrow-flow_1.5s_ease-in-out_infinite] flex-shrink-0">→</div>
+                <div className="text-void-500 text-sm font-mono flex-shrink-0">→</div>
               )}
             </React.Fragment>
           ))}

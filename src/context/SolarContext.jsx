@@ -1,22 +1,31 @@
-import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
-import { fetchGridOverview, fetchWeather } from '../services/api';
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  useCallback,
+} from "react";
+import { fetchGridOverview, fetchWeather } from "../services/api";
 
 const SolarContext = createContext(null);
 
 export function SolarProvider({ children }) {
-  const [overview, setOverview]   = useState(null);
-  const [weather, setWeather]     = useState(null);
-  const [loading, setLoading]     = useState(true);
+  const [overview, setOverview] = useState(null);
+  const [weather, setWeather] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [lastRefresh, setLastRefresh] = useState(new Date());
 
   const refresh = useCallback(async () => {
     try {
+      setError(null);
       const [ov, wx] = await Promise.all([fetchGridOverview(), fetchWeather()]);
       setOverview(ov);
       setWeather(wx);
       setLastRefresh(new Date());
     } catch (e) {
-      console.error(e);
+      console.error("Failed to refresh data:", e);
+      setError(e?.message || "Failed to load data. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -29,10 +38,16 @@ export function SolarProvider({ children }) {
   }, [refresh]);
 
   return (
-    <SolarContext.Provider value={{ overview, weather, loading, refresh, lastRefresh }}>
+    <SolarContext.Provider
+      value={{ overview, weather, loading, error, refresh, lastRefresh }}
+    >
       {children}
     </SolarContext.Provider>
   );
 }
 
-export const useSolar = () => useContext(SolarContext);
+export const useSolar = () => {
+  const context = useContext(SolarContext);
+  if (!context) throw new Error("useSolar must be used within SolarProvider");
+  return context;
+};
