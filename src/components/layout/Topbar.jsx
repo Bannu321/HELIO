@@ -24,7 +24,7 @@ export default function Topbar() {
 
   const handleRefresh = async () => {
     setRefreshing(true);
-    if (refresh) await refresh(); // Added safety check in case refresh isn't passed yet
+    if (refresh) await refresh(); // Safety check
     setTimeout(() => setRefreshing(false), 800);
   };
 
@@ -73,7 +73,7 @@ export default function Topbar() {
         </button>
 
         {/* Notification dot */}
-        <button className="relative p-2 text-void-300 hover:text-white transition-colors" onClick={ () => {navigator('/alerts')}}>
+        <button className="relative p-2 text-void-300 hover:text-white transition-colors" onClick={() =>{navigator('/alerts')}}>
           <Bell className="w-5 h-5" />
           <span className="absolute top-1.5 right-2 w-2 h-2 rounded-full bg-energy-rose border border-void-900" />
         </button>

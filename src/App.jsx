@@ -4,6 +4,7 @@ import { SolarProvider } from "./context/SolarContext";
 import ErrorBoundary from "./components/ErrorBoundary";
 import Sidebar from "./components/layout/Sidebar";
 import Topbar from "./components/layout/Topbar";
+import { ThemeProvider } from './context/ThemeContext';
 import Home from "./pages/Home";
 import Dashboard from "./pages/Dashboard";
 import PanelHealth from "./pages/PanelHealth";

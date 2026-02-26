@@ -1,6 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: ["./src/**/*.{js,jsx,ts,tsx}"],
+  darkMode: 'class',
   safelist: [
     { pattern: /bg-(void|solar|energy|grid)-(50|100|200|300|400|500|600|700|800|900|cyan|green|amber|orange|rose|blue)\/(5|8|10|12|15|20|25|30|40|50|60|70)/ },
     { pattern: /border-(void|solar|energy|grid)-(50|100|200|300|400|500|600|700|800|900|cyan|green|amber|orange|rose|blue)\/(10|15|20|25|30|40|60)/ },
@@ -86,3 +87,5 @@ module.exports = {
   },
   plugins: [],
 }
+
+
