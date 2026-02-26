@@ -110,7 +110,9 @@ function TechCard({ title, value, unit, icon: Icon, color }) {
           <span className="text-2xl font-display font-bold text-slate-900 dark:text-white">
             {value}
           </span>
-          <span className="text-xs font-mono text-slate-600 dark:text-void-400">{unit}</span>
+          <span className="text-xs font-mono text-slate-600 dark:text-void-400">
+            {unit}
+          </span>
         </div>
       </div>
       <Icon className={`w-8 h-8 opacity-50 ${color}`} />

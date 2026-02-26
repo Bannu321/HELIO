@@ -60,12 +60,12 @@ export default function StatCard({
       </div>
 
       {loading ? (
-      <div className="space-y-3">
-        <div className="h-8 bg-slate-300 dark:bg-void-600 rounded animate-pulse w-2/3" />
-        {delta && (
-          <div className="h-4 bg-slate-300 dark:bg-void-600 rounded animate-pulse w-1/2" />
-        )}
-      </div>
+        <div className="space-y-3">
+          <div className="h-8 bg-slate-300 dark:bg-void-600 rounded animate-pulse w-2/3" />
+          {delta && (
+            <div className="h-4 bg-slate-300 dark:bg-void-600 rounded animate-pulse w-1/2" />
+          )}
+        </div>
       ) : value === null || value === undefined ? (
         <div className="text-slate-500 dark:text-void-300 text-sm">
           No data available

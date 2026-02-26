@@ -1,18 +1,21 @@
-import React from 'react';
-import PanelGrid from '../components/dashboard/PanelGrid';
-import { useSolar } from '../context/SolarContext';
-import { Wrench, ShieldCheck, AlertTriangle } from 'lucide-react';
+import React from "react";
+import PanelGrid from "../components/dashboard/PanelGrid";
+import { useSolar } from "../context/SolarContext";
+import { Wrench, ShieldCheck, AlertTriangle } from "lucide-react";
 
 export default function PanelHealth() {
   const { panels, loading } = useSolar();
 
   return (
     <div className="max-w-7xl mx-auto px-6 lg:px-8 py-8 lg:py-12 space-y-10 animate-fade-in">
-      
       <header className="flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>
-          <h1 className="font-display text-2xl font-extrabold text-slate-900 dark:text-white tracking-wide">Hardware & Panel Health</h1>
-          <p className="text-sm text-slate-600 dark:text-void-300 mt-1 font-mono">Individual module diagnostics and soiling alerts</p>
+          <h1 className="font-display text-2xl font-extrabold text-slate-900 dark:text-white tracking-wide">
+            Hardware & Panel Health
+          </h1>
+          <p className="text-sm text-slate-600 dark:text-void-300 mt-1 font-mono">
+            Individual module diagnostics and soiling alerts
+          </p>
         </div>
         <button className="bg-slate-300 dark:bg-void-800 hover:bg-slate-400 dark:hover:bg-void-700 border border-slate-400 dark:border-void-600 text-slate-900 dark:text-white px-4 py-2 rounded-lg font-medium transition-colors flex items-center gap-2">
           <Wrench className="w-4 h-4" /> Schedule Maintenance
@@ -26,9 +29,15 @@ export default function PanelHealth() {
             <ShieldCheck className="w-6 h-6" />
           </div>
           <div>
-            <h3 className="text-slate-700 dark:text-void-300 text-sm font-medium">System Status</h3>
-            <p className="text-xl font-display font-bold text-slate-900 dark:text-white mt-1">Optimal</p>
-            <p className="text-xs text-slate-600 dark:text-void-400 mt-1">23/24 Panels Online</p>
+            <h3 className="text-slate-700 dark:text-void-300 text-sm font-medium">
+              System Status
+            </h3>
+            <p className="text-xl font-display font-bold text-slate-900 dark:text-white mt-1">
+              Optimal
+            </p>
+            <p className="text-xs text-slate-600 dark:text-void-400 mt-1">
+              23/24 Panels Online
+            </p>
           </div>
         </div>
 
@@ -37,31 +46,47 @@ export default function PanelHealth() {
             <AlertTriangle className="w-6 h-6" />
           </div>
           <div>
-            <h3 className="text-slate-700 dark:text-void-300 text-sm font-medium">Action Required</h3>
-            <p className="text-xl font-display font-bold text-slate-900 dark:text-white mt-1">Soiling Loss</p>
-            <p className="text-xs text-slate-600 dark:text-void-400 mt-1">Array B showing 2.1% dust drop</p>
+            <h3 className="text-slate-700 dark:text-void-300 text-sm font-medium">
+              Action Required
+            </h3>
+            <p className="text-xl font-display font-bold text-slate-900 dark:text-white mt-1">
+              Soiling Loss
+            </p>
+            <p className="text-xs text-slate-600 dark:text-void-400 mt-1">
+              Array B showing 2.1% dust drop
+            </p>
           </div>
         </div>
 
         <div className="bg-white dark:bg-void-800 border border-slate-300 dark:border-void-700 rounded-2xl p-6 shadow-card flex flex-col justify-center">
-          <h3 className="text-slate-700 dark:text-void-300 text-sm font-medium mb-2">Average Efficiency</h3>
+          <h3 className="text-slate-700 dark:text-void-300 text-sm font-medium mb-2">
+            Average Efficiency
+          </h3>
           <div className="w-full bg-slate-200 dark:bg-void-900 rounded-full h-2 mb-1">
-            <div className="bg-energy-cyan h-2 rounded-full" style={{ width: '92%' }}></div>
+            <div
+              className="bg-energy-cyan h-2 rounded-full"
+              style={{ width: "92%" }}
+            ></div>
           </div>
           <div className="flex justify-between text-xs font-mono">
-            <span className="text-slate-900 dark:text-white font-bold">92.4%</span>
-            <span className="text-slate-600 dark:text-void-400">Target: 95%</span>
+            <span className="text-slate-900 dark:text-white font-bold">
+              92.4%
+            </span>
+            <span className="text-slate-600 dark:text-void-400">
+              Target: 95%
+            </span>
           </div>
         </div>
       </div>
 
       {/* Your Existing Panel Grid Component */}
       <div className="bg-white dark:bg-void-800 border border-slate-300 dark:border-void-700 rounded-2xl p-6 shadow-card">
-        <h2 className="font-display font-bold text-slate-900 dark:text-white mb-6">Live Array Map</h2>
+        <h2 className="font-display font-bold text-slate-900 dark:text-white mb-6">
+          Live Array Map
+        </h2>
         {/* Render the PanelGrid you already have in your components folder */}
         <PanelGrid />
       </div>
-
     </div>
   );
 }
