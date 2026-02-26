@@ -21,11 +21,11 @@ export default function Dashboard() {
     v != null ? `₹${Number(v).toLocaleString("en-IN")}` : "—";
 
   return (
-    <div className="space-y-6">
+    <div className="max-w-7xl mx-auto px-6 lg:px-8 py-8 lg:py-12 space-y-10">
       {/* Page heading */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>
-          <h1 className="font-display text-2xl font-extrabold text-white tracking-wide">
+          <h1 className="font-display text-2xl font-extrabold text-slate-900 dark:text-white tracking-wide">
             System Overview
           </h1>
           <p className="text-sm text-slate-600 dark:text-void-300 mt-1 font-mono">
@@ -47,7 +47,7 @@ export default function Dashboard() {
       </div>
 
       {/* KPI Stats Row (The Vital Pulse) */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         <Link to="/grid" className="block group">
           <StatCard
             label="Current Power"
@@ -98,10 +98,10 @@ export default function Dashboard() {
       </div>
 
       {/* Main Visuals Row */}
-      <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
         {/* Main Chart */}
-        <div className="xl:col-span-2 bg-white dark:bg-void-800 border border-slate-300 dark:border-void-700 rounded-2xl p-5 shadow-card flex flex-col">
-          <div className="flex justify-between items-center mb-4">
+        <div className="xl:col-span-2 bg-white dark:bg-void-800 border border-slate-300 dark:border-void-700 rounded-2xl p-8 shadow-card flex flex-col">
+          <div className="flex justify-between items-center mb-6">
             <h2 className="font-display font-bold text-slate-900 dark:text-white">
               Live Generation
             </h2>
@@ -118,8 +118,8 @@ export default function Dashboard() {
         </div>
 
         {/* Weather Intelligence */}
-        <div className="bg-white dark:bg-void-800 border border-slate-300 dark:border-void-700 rounded-2xl p-5 shadow-card flex flex-col">
-          <div className="flex justify-between items-center mb-4">
+        <div className="bg-white dark:bg-void-800 border border-slate-300 dark:border-void-700 rounded-2xl p-8 shadow-card flex flex-col">
+          <div className="flex justify-between items-center mb-6">
             <h2 className="font-display font-bold text-slate-900 dark:text-white">
               Grid Environment
             </h2>
@@ -137,11 +137,11 @@ export default function Dashboard() {
       </div>
 
       {/* Architecture strip (Kept because it's a great visual anchor) */}
-      <div className="bg-white dark:bg-void-800 border border-slate-300 dark:border-void-700 rounded-2xl p-5 shadow-card mt-8">
-        <div className="font-display text-sm font-bold text-slate-900 dark:text-white mb-1">
+      <div className="bg-white dark:bg-void-800 border border-slate-300 dark:border-void-700 rounded-2xl p-8 shadow-card mt-12">
+        <div className="font-display text-sm font-bold text-slate-900 dark:text-white mb-2">
           System Architecture
         </div>
-        <div className="text-xs text-slate-600 dark:text-void-300 mb-5 font-mono">
+        <div className="text-xs text-slate-600 dark:text-void-300 mb-6 font-mono">
           Data flow · MERN stack integration
         </div>
         <div className="flex items-center justify-between gap-2 flex-wrap">

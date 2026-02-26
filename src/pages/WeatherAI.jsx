@@ -4,7 +4,7 @@ import { CloudRain, Sun, Thermometer, Wind, BrainCircuit } from 'lucide-react';
 
 export default function WeatherAI() {
   return (
-    <div className="max-w-7xl mx-auto space-y-8 animate-fade-in">
+    <div className="max-w-7xl mx-auto px-6 lg:px-8 py-8 lg:py-12 space-y-10 animate-fade-in">
       
       <header>
         <h1 className="font-display text-2xl font-extrabold text-slate-900 dark:text-white tracking-wide">Weather Intelligence & AI</h1>
@@ -12,22 +12,22 @@ export default function WeatherAI() {
       </header>
 
       {/* Environmental Metrics */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
         <EnvCard title="Global Irradiance" value="912" unit="W/m²" icon={Sun} color="text-solar-400" />
         <EnvCard title="Panel Temp" value="42.5" unit="°C" icon={Thermometer} color="text-energy-rose" />
         <EnvCard title="Cloud Cover" value="12" unit="%" icon={CloudRain} color="text-slate-600 dark:text-void-300" />
         <EnvCard title="Wind Speed" value="14" unit="km/h" icon={Wind} color="text-energy-cyan" />
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Your existing Weather Widget */}
-        <div className="bg-white dark:bg-void-800 border border-slate-300 dark:border-void-700 rounded-2xl p-6 shadow-card h-full">
-          <h2 className="font-display font-bold text-slate-900 dark:text-white mb-4">Live Meteorological Data</h2>
+        <div className="bg-white dark:bg-void-800 border border-slate-300 dark:border-void-700 rounded-2xl p-8 shadow-card h-full">
+          <h2 className="font-display font-bold text-slate-900 dark:text-white mb-8">Live Meteorological Data</h2>
           <WeatherWidget />
         </div>
 
         {/* AI Forecast Panel */}
-        <div className="bg-white dark:bg-void-800 border border-slate-300 dark:border-void-700 rounded-2xl p-6 shadow-card relative overflow-hidden flex flex-col">
+        <div className="bg-white dark:bg-void-800 border border-slate-300 dark:border-void-700 rounded-2xl p-8 shadow-card relative overflow-hidden flex flex-col">
           <div className="absolute top-0 right-0 w-48 h-48 bg-energy-cyan rounded-full blur-[80px] opacity-10 pointer-events-none" />
           
           <div className="flex items-center gap-3 mb-6">

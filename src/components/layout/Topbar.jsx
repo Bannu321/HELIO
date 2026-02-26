@@ -31,7 +31,7 @@ export default function Topbar() {
   };
 
   return (
-    <header className="h-[68px] flex items-center justify-between px-6 lg:px-8 border-b border-slate-200 dark:border-void-800 bg-white dark:bg-void-900/80 backdrop-blur-md sticky top-0 z-50 transition-colors duration-300">
+    <header className="h-[72px] flex items-center justify-between px-6 lg:px-8 border-b border-slate-200 dark:border-void-800 bg-white dark:bg-void-900/80 backdrop-blur-md sticky top-0 z-50 transition-colors duration-300\">
       {/* Left: Dynamic Breadcrumb */}
       <div className="flex items-center gap-3 text-sm font-mono tracking-wide">
         <span className="text-solar-600 dark:text-solar-400 font-bold">
@@ -63,7 +63,7 @@ export default function Topbar() {
       {/* Right: Actions */}
       <div className="flex items-center gap-4">
         {/* Digital Clock */}
-        <span className="hidden sm:block font-mono text-sm text-slate-600 dark:text-void-300 bg-slate-100 dark:bg-void-800/50 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-void-700 transition-colors">
+        <span className="hidden sm:block font-mono text-sm text-slate-600 dark:text-void-300 bg-slate-100 dark:bg-void-800/50 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-void-700 transition-colors min-w-[5ch] text-center">
           {time}
         </span>
 
@@ -86,17 +86,6 @@ export default function Topbar() {
           aria-label="Toggle Theme"
         >
           {isDark ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
-        </button>
-
-        <button
-          onClick={handleRefresh}
-          className={`btn-ghost flex items-center gap-2 ${refreshing ? "opacity-60" : ""}`}
-          disabled={refreshing}
-        >
-          <RefreshCw
-            className={`w-4 h-4 ${refreshing ? "animate-spin" : ""}`}
-          />
-          Refresh
         </button>
 
         {/* Notification dot */}

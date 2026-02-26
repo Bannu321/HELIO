@@ -10,8 +10,8 @@ const alertsData = [
 
 export default function Alerts() {
   return (
-    <div className="max-w-4xl mx-auto space-y-6 animate-fade-in">
-      <header className="flex justify-between items-end border-b border-slate-300 dark:border-void-700 pb-4">
+    <div className="max-w-4xl mx-auto px-6 lg:px-8 py-8 lg:py-12 space-y-8 animate-fade-in">
+      <header className="flex justify-between items-end border-b border-slate-300 dark:border-void-700 pb-6">
         <div>
           <h1 className="font-display text-2xl font-extrabold text-slate-900 dark:text-white tracking-wide">System Alerts</h1>
           <p className="text-sm text-slate-600 dark:text-void-300 mt-1 font-mono">Notifications and diagnostics</p>
@@ -19,7 +19,7 @@ export default function Alerts() {
         <button className="text-xs font-mono text-slate-600 dark:text-void-400 hover:text-slate-900 dark:hover:text-white transition-colors">MARK ALL AS READ</button>
       </header>
 
-      <div className="space-y-4">
+      <div className="space-y-6">
         {alertsData.map((alert) => (
           <AlertRow key={alert.id} alert={alert} />
         ))}

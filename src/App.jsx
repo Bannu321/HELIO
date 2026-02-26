@@ -37,8 +37,8 @@ export default function App() {
             <div className="ambient-top min-h-screen flex flex-col bg-slate-50 text-slate-900 dark:bg-void-900 dark:text-void-100 transition-colors duration-300">
               <Topbar />
               <div className="flex flex-1 relative z-10">
-                <Sidebar />
-                <main className="flex-1 overflow-y-auto min-h-0 max-h-[calc(100vh-68px)] relative bg-slate-50 dark:bg-void-800">
+                <Sidebar className="overflow-y-auto" />
+                <main className="flex-1 overflow-y-auto relative bg-slate-50 dark:bg-void-800">
                   <div className="absolute inset-0 bg-solar-glow pointer-events-none opacity-30 z-0" />
                   <div className="relative z-10">
                     <Routes>

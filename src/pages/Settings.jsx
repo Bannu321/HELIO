@@ -3,9 +3,9 @@ import { Save } from 'lucide-react';
 
 export default function Settings() {
   return (
-    <div className="max-w-4xl mx-auto space-y-8 animate-fade-in pb-10">
+    <div className="max-w-4xl mx-auto px-6 lg:px-8 py-8 lg:py-12 space-y-10 animate-fade-in pb-16">
       
-      <header className="flex justify-between items-end border-b border-slate-300 dark:border-void-700 pb-4">
+      <header className="flex justify-between items-end border-b border-slate-300 dark:border-void-700 pb-6">
         <div>
           <h1 className="font-display text-2xl font-extrabold text-slate-900 dark:text-white tracking-wide">Platform Settings</h1>
           <p className="text-sm text-slate-600 dark:text-void-300 mt-1 font-mono">Configure grid integrations and preferences</p>
@@ -16,8 +16,8 @@ export default function Settings() {
       </header>
 
       {/* Grid Configuration */}
-      <section className="bg-white dark:bg-void-800 border border-slate-300 dark:border-void-700 rounded-2xl p-6 shadow-card space-y-4">
-        <h2 className="font-display font-bold text-slate-900 dark:text-white border-b border-slate-300 dark:border-void-700 pb-2">Grid & Tariff Settings</h2>
+      <section className="bg-white dark:bg-void-800 border border-slate-300 dark:border-void-700 rounded-2xl p-8 shadow-card space-y-6">
+        <h2 className="font-display font-bold text-slate-900 dark:text-white border-b border-slate-300 dark:border-void-700 pb-3">Grid & Tariff Settings</h2>
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="space-y-2">

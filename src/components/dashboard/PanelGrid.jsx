@@ -27,7 +27,7 @@ export default function PanelGrid() {
   const blocks = ["BLOCK-A", "BLOCK-B", "BLOCK-C", "BLOCK-D"];
 
   return (
-    <div className="card p-5 flex flex-col gap-4">
+    <div className="card p-8 flex flex-col gap-6">
       {error ? (
         <div className="text-energy-rose text-sm flex items-center gap-2">
           <span>⚠</span>
@@ -37,19 +37,19 @@ export default function PanelGrid() {
         <>
           <div className="flex items-start justify-between">
             <div>
-              <div className="font-display text-sm font-bold text-white">
+              <div className="font-display text-sm font-bold text-slate-900 dark:text-white">
                 Panel Array Status
               </div>
-              <div className="text-xs text-slate-600 dark:text-void-200 mt-0.5">
+              <div className="text-xs text-slate-600 dark:text-void-200 mt-1">
                 24 panels · 4 blocks · real-time health
               </div>
             </div>
-            <div className="flex items-center gap-2 text-[10px] font-mono">
-              <span className="flex items-center gap-1">
+            <div className="flex items-center gap-3 text-[10px] font-mono">
+              <span className="flex items-center gap-1.5">
                 <span className="w-2 h-2 rounded-sm bg-energy-green inline-block" />{" "}
                 Active
               </span>
-              <span className="flex items-center gap-1">
+              <span className="flex items-center gap-1.5">
                 <span className="w-2 h-2 rounded-sm bg-energy-rose inline-block" />{" "}
                 Fault
               </span>
@@ -57,7 +57,7 @@ export default function PanelGrid() {
           </div>
 
           {loading ? (
-            <div className="grid grid-cols-6 gap-2">
+            <div className="grid grid-cols-6 gap-3">
               {Array.from({ length: 24 }).map((_, i) => (
                 <div
                   key={i}
@@ -66,13 +66,13 @@ export default function PanelGrid() {
               ))}
             </div>
           ) : (
-            <div className="space-y-3">
+            <div className="space-y-6">
               {blocks.map((block) => (
                 <div key={block}>
-                  <div className="text-[9px] font-mono text-slate-500 dark:text-void-300 tracking-widest mb-1.5">
+                  <div className="text-[9px] font-mono text-slate-500 dark:text-void-300 tracking-widest mb-3">
                     {block}
                   </div>
-                  <div className="grid grid-cols-6 gap-1.5">
+                  <div className="grid grid-cols-6 gap-2.5">
                     {panels
                       .filter((p) => p.block === block)
                       .map((panel) => (
@@ -84,7 +84,7 @@ export default function PanelGrid() {
                             )
                           }
                           className={clsx(
-                            "rounded-lg p-2 flex flex-col items-center gap-0.5 transition-all border text-center",
+                            "rounded-lg p-3 flex flex-col items-center gap-1 transition-all border text-center",
                             panel.status === "active"
                               ? "bg-energy-green/8 border-energy-green/20 hover:bg-energy-green/15 hover:border-energy-green/40"
                               : "bg-energy-rose/8 border-energy-rose/20 hover:bg-energy-rose/15",
@@ -116,8 +116,8 @@ export default function PanelGrid() {
 
           {/* Selected panel detail */}
           {selected && (
-            <div className="bg-slate-200/70 dark:bg-void-600/70 border border-solar-500/20 rounded-xl p-4 animate-slide-up">
-              <div className="flex items-center justify-between mb-3">
+            <div className="bg-slate-200/70 dark:bg-void-600/70 border border-solar-500/20 rounded-xl p-6 animate-slide-up">
+              <div className="flex items-center justify-between mb-4">
                 <div className="font-display font-bold text-solar-600 dark:text-solar-400">
                   {selected.id} — {selected.block}
                 </div>

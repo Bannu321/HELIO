@@ -4,7 +4,7 @@ import { BrainCircuit, Cpu, Target, Network } from 'lucide-react';
 
 export default function Estimation() {
   return (
-    <div className="max-w-7xl mx-auto space-y-8 animate-fade-in">
+    <div className="max-w-7xl mx-auto px-6 lg:px-8 py-8 lg:py-12 space-y-10 animate-fade-in">
       
       <header>
         <h1 className="font-display text-2xl font-extrabold text-slate-900 dark:text-white tracking-wide">AI Power Estimation</h1>
@@ -12,7 +12,7 @@ export default function Estimation() {
       </header>
 
       {/* Model Health Stats */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
         <ModelCard title="Model Status" value="Online" icon={Cpu} color="text-energy-green" />
         <ModelCard title="Prediction Accuracy" value="94.2%" icon={Target} color="text-solar-400" />
         <ModelCard title="Data Points" value="1.2M+" icon={Network} color="text-energy-cyan" />
@@ -20,14 +20,14 @@ export default function Estimation() {
       </div>
 
       {/* Existing Estimation Panel Component */}
-      <div className="bg-white dark:bg-void-800 border border-slate-300 dark:border-void-700 rounded-2xl p-6 shadow-card">
-        <h2 className="font-display font-bold text-slate-900 dark:text-white mb-6">Generation Forecast</h2>
+      <div className="bg-white dark:bg-void-800 border border-slate-300 dark:border-void-700 rounded-2xl p-8 shadow-card">
+        <h2 className="font-display font-bold text-slate-900 dark:text-white mb-8">Generation Forecast</h2>
         {/* Render your existing EstimationPanel here */}
         <EstimationPanel />
       </div>
 
       {/* Variables Section */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         <div className="bg-slate-100 dark:bg-void-800/50 border border-slate-300 dark:border-void-700 rounded-2xl p-6">
           <h3 className="text-sm font-bold text-slate-600 dark:text-void-200 uppercase tracking-widest mb-4">Current Input Variables</h3>
           <ul className="space-y-3 font-mono text-sm">

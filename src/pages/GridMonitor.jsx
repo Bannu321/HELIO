@@ -7,9 +7,9 @@ export default function GridMonitor() {
   const { overview, loading } = useSolar();
 
   return (
-    <div className="max-w-7xl mx-auto space-y-8 animate-fade-in">
+    <div className="max-w-7xl mx-auto px-6 lg:px-8 py-8 lg:py-12 space-y-10 animate-fade-in">
       <header>
-        <h1 className="font-display text-2xl font-extrabold text-white tracking-wide">
+        <h1 className="font-display text-2xl font-extrabold text-slate-900 dark:text-white tracking-wide">
           Grid Monitor
         </h1>
         <p className="text-sm text-slate-600 dark:text-void-300 mt-1 font-mono">

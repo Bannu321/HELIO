@@ -51,12 +51,12 @@ export default function RevenueTable() {
       <table className="w-full text-left border-collapse">
         <thead>
           <tr className="border-b border-slate-300 dark:border-void-700 text-slate-600 dark:text-void-400 text-xs font-mono uppercase tracking-wider">
-            <th className="pb-4 pl-2 font-medium">Transaction ID</th>
-            <th className="pb-4 font-medium">Date & Time</th>
-            <th className="pb-4 font-medium">Type</th>
-            <th className="pb-4 font-medium">Energy</th>
-            <th className="pb-4 font-medium">Amount</th>
-            <th className="pb-4 font-medium">Status</th>
+            <th className="pb-5 pl-2 font-medium">Transaction ID</th>
+            <th className="pb-5 font-medium">Date & Time</th>
+            <th className="pb-5 font-medium">Type</th>
+            <th className="pb-5 font-medium">Energy</th>
+            <th className="pb-5 font-medium">Amount</th>
+            <th className="pb-5 font-medium">Status</th>
           </tr>
         </thead>
         <tbody className="text-sm">
@@ -65,13 +65,13 @@ export default function RevenueTable() {
               key={idx}
               className="border-b border-slate-200 dark:border-void-700/50 hover:bg-slate-100 dark:hover:bg-void-700/20 transition-colors group"
             >
-              <td className="py-4 pl-2 font-mono text-slate-600 dark:text-void-300 group-hover:text-slate-900 dark:group-hover:text-white transition-colors">
+              <td className="py-5 pl-2 font-mono text-slate-600 dark:text-void-300 group-hover:text-slate-900 dark:group-hover:text-white transition-colors">
                 {row.id}
               </td>
-              <td className="py-4 text-slate-800 dark:text-void-100">
+              <td className="py-5 text-slate-800 dark:text-void-100">
                 {row.date}
               </td>
-              <td className="py-4">
+              <td className="py-5">
                 <span
                   className={`px-2.5 py-1 rounded-md text-xs font-bold ${
                     row.type === "Export"
@@ -82,15 +82,15 @@ export default function RevenueTable() {
                   {row.type}
                 </span>
               </td>
-              <td className="py-4 text-slate-700 dark:text-void-200">
+              <td className="py-5 text-slate-700 dark:text-void-200">
                 {row.units}
               </td>
               <td
-                className={`py-4 font-mono font-bold ${row.amount.startsWith("+") ? "text-energy-green" : "text-energy-rose"}`}
+                className={`py-5 font-mono font-bold ${row.amount.startsWith("+") ? "text-energy-green" : "text-energy-rose"}`}
               >
                 {row.amount}
               </td>
-              <td className="py-4">
+              <td className="py-5">
                 <StatusBadge status={row.status} />
               </td>
             </tr>

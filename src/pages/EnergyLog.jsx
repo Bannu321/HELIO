@@ -5,11 +5,11 @@ import PowerChart from '../components/charts/PowerChart';
 
 export default function EnergyLog() {
   return (
-    <div className="max-w-7xl mx-auto space-y-8 animate-fade-in">
+    <div className="max-w-7xl mx-auto px-6 lg:px-8 py-8 lg:py-12 space-y-10 animate-fade-in">
       
       <header className="flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>
-          <h1 className="font-display text-2xl font-extrabold text-white tracking-wide">Energy Generation Log</h1>
+          <h1 className="font-display text-2xl font-extrabold text-slate-900 dark:text-white tracking-wide">Energy Generation Log</h1>
           <p className="text-sm text-slate-600 dark:text-void-300 mt-1 font-mono">Historical yield and performance tracking</p>
         </div>
         <button className="bg-slate-300 dark:bg-void-800 hover:bg-slate-400 dark:hover:bg-void-700 border border-slate-400 dark:border-void-600 text-slate-900 dark:text-white px-4 py-2 rounded-lg font-medium transition-colors flex items-center gap-2">

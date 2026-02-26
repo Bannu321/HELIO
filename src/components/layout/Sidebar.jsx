@@ -36,7 +36,7 @@ export default function Sidebar() {
   const { overview } = useSolar();
 
   return (
-    <aside className="w-60 flex-shrink-0 border-r border-slate-300 dark:border-void-500 bg-white dark:bg-void-800 backdrop-blur-sm flex flex-col transition-colors duration-300">
+    <aside className="w-60 flex-shrink-0 border-r border-slate-300 dark:border-void-500 bg-white dark:bg-void-800 backdrop-blur-sm flex flex-col transition-colors duration-300 overflow-y-auto">
       {/* Logo */}
       <div className="px-5 py-6 border-b border-slate-200 dark:border-void-600">
         <div className="flex items-center gap-3">
@@ -62,10 +62,10 @@ export default function Sidebar() {
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 px-3 py-4 overflow-y-auto">
+      <nav className="flex-1 px-3 py-6 overflow-y-auto space-y-1">
         {navGroups.map((group) => (
-          <div key={group.label} className="mb-4">
-            <div className="px-3 py-1.5 text-[10px] text-slate-500 dark:text-void-300 font-mono tracking-[2px] uppercase mb-1">
+          <div key={group.label} className="mb-6">
+            <div className="px-3 py-2 text-[10px] text-slate-500 dark:text-void-300 font-mono tracking-[2px] uppercase mb-2">
               {group.label}
             </div>
             {group.items.map((item) => {
@@ -75,7 +75,7 @@ export default function Sidebar() {
                   key={item.path}
                   onClick={() => navigate(item.path)}
                   className={clsx(
-                    "w-full text-left mb-0.5 flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-200 text-sm",
+                    "w-full text-left mb-1 flex items-center gap-3 px-3 py-3 rounded-xl transition-all duration-200 text-sm",
                     isActive
                       ? "bg-solar-50 dark:bg-solar-500/20 text-solar-600 dark:text-solar-400 border border-solar-200 dark:border-solar-500/30"
                       : "text-slate-700 dark:text-void-100 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-void-600 border border-transparent",
@@ -99,7 +99,7 @@ export default function Sidebar() {
       </nav>
 
       {/* Grid Health Widget */}
-      <div className="px-3 pb-5">
+      <div className="px-3 pb-8">
         <div className="card-glow p-4 rounded-xl">
           <div className="text-[10px] text-slate-600 dark:text-void-200 font-mono tracking-widest mb-3">
             GRID HEALTH
