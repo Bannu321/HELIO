@@ -24,7 +24,8 @@ export default function LandingPage() {
               <div className="absolute inset-[-6px] rounded-full border border-dashed border-solar-500/30 animate-spin-slow" />
             </div>
             <div className="font-display text-2xl font-extrabold text-solar-600 dark:text-solar-400 tracking-[3px]">
-              HELIO
+              {/* HELIO */}
+              VIT-Charge
             </div>
           </div>
           <button
@@ -149,7 +150,8 @@ export default function LandingPage() {
       <section className="py-24">
         <div className="max-w-6xl mx-auto px-6 lg:px-8">
           <h2 className="font-display text-4xl font-extrabold mb-16 text-center">
-            Why Choose HELIO?
+            {/* Why Choose HELIO? */}
+            Why Choose VIT-Charge?
           </h2>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
@@ -234,7 +236,9 @@ export default function LandingPage() {
             Ready to Optimize Your Solar Investment?
           </h2>
           <p className="text-xl text-white/90 mb-10 max-w-2xl mx-auto">
-            Join 1000+ solar installations making smarter decisions with HELIO
+            {/* Join 1000+ solar installations making smarter decisions with HELIO */}
+            Join 1000+ solar installations making smarter decisions with
+            VIT-Charge
           </p>
           <button
             onClick={() => navigate("/login")}
@@ -253,7 +257,10 @@ export default function LandingPage() {
             <div>
               <div className="flex items-center gap-2 mb-4">
                 <div className="w-8 h-8 rounded-full bg-solar-500"></div>
-                <span className="font-display font-bold text-lg">HELIO</span>
+                {/* <span className="font-display font-bold text-lg">HELIO</span> */}
+                <span className="font-display font-bold text-lg">
+                  VIT-Charge
+                </span>
               </div>
               <p className="text-slate-600 dark:text-void-300 text-sm">
                 Real-time solar intelligence
@@ -287,7 +294,8 @@ export default function LandingPage() {
           <div className="border-t border-slate-300 dark:border-void-700 pt-8">
             <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
               <div className="text-slate-600 dark:text-void-300 text-sm font-mono">
-                © 2026 HELIO Solar. All rights reserved.
+                {/* © 2026 HELIO Solar. All rights reserved. */}© 2026
+                VIT-Charge Solar. All rights reserved.
               </div>
               <div className="flex gap-6">
                 {["Privacy", "Terms", "Cookies"].map((item, i) => (

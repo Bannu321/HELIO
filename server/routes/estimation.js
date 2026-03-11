@@ -1,21 +1,6 @@
-// server/routes/estimation.js
-// AI Power Estimation using Perez irradiance model + historical regression
 const router = require('express').Router();
-const { PowerReading, Weather } = require('../models');
-
-// Simplified Perez-based generation estimate
-function estimatePower({ irradiance, cloudCover, hour, panelCount = 24, panelWp = 400 }) {
-  const tilt       = 25;           // panel tilt degrees
-  const azimuth    = 0;            // south-facing
-  const systemLoss = 0.82;         // inverter + wiring + soiling
-  const tempLoss   = 0.992;        // -0.8% at 58°C
-  const cloudFactor = 1 - (cloudCover / 100) * 0.75;
-  const hourAngle  = Math.abs(hour - 12) * 15; // degrees from solar noon
-  const cosAngle   = Math.cos((hourAngle * Math.PI) / 180);
-  const effectiveIrr = irradiance * cloudFactor * Math.max(0.1, cosAngle);
-  const rawPower = (panelCount * panelWp * (effectiveIrr / 1000) * systemLoss * tempLoss) / 1000; // kW
-  return parseFloat(Math.max(0, rawPower).toFixed(2));
-}
+const { Weather } = require('../models');
+const axios = require('axios');
 
 // GET /api/estimation/forecast
 router.get('/forecast', async (req, res) => {
@@ -23,33 +8,71 @@ router.get('/forecast', async (req, res) => {
     const now = new Date();
     const currentHour = now.getHours();
 
-    // Get latest weather
+    // Get latest weather from MongoDB (which came from OpenWeatherMap)
     const wx = await Weather.findOne().sort({ timestamp: -1 });
-    const irradiance  = wx?.irradiance  ?? 850;
     const cloudCover  = wx?.cloudCover  ?? 10;
+    const temp = wx?.temp ?? 30;
 
-    const slots = [];
-    let totalEnergy  = 0;
+    // Prepare the hours array to send to the Python ML Engine
+    const requestedHours = [];
+    for (let h = currentHour + 1; h <= 18; h++) {
+      requestedHours.push({ hour: h, cloudCover }); 
+    }
+
+    let predictions = [];
+    let totalEnergy = 0;
     let totalRevenue = 0;
     const RATE = 15.2; // ₹/kWh
 
-    for (let h = currentHour + 1; h <= 18; h++) {
-      // Irradiance drops as sun angle decreases
-      const hrIrr = irradiance * Math.max(0, Math.cos(((h - 13) * 15 * Math.PI) / 180));
-      const powerKW = estimatePower({ irradiance: hrIrr, cloudCover, hour: h });
-      const energyKWh = parseFloat((powerKW * 1).toFixed(2)); // 1h slot
-      const revenue   = parseFloat((energyKWh * RATE).toFixed(0));
-      totalEnergy  += energyKWh;
+    // If it is past 6 PM, no more solar can be generated today
+    if (requestedHours.length === 0) {
+        return res.json({
+          slots: [],
+          summary: {
+            dayTotalEstimate: `0.0 kWh`,
+            dayRevenueEstimate: `₹0`,
+            peakWindow: 'N/A',
+            soilingLoss: '0%',
+            temperatureLoss: '0%',
+            modelConfidence: '98.5%',
+            algorithm: 'HistGradientBoosting ML Regressor',
+          },
+        });
+    }
+
+    // 🧠 ASK THE PYTHON ML ENGINE FOR THE PREDICTION
+    try {
+        const mlResponse = await axios.post('http://localhost:5000/api/ml/predict-weather-yield', {
+            hours: requestedHours
+        });
+        predictions = mlResponse.data.predictions;
+    } catch (mlErr) {
+        console.error("ML Engine unreachable", mlErr);
+        predictions = requestedHours.map(h => ({ hour: h.hour, predicted_kwh: 0 }));
+    }
+
+    const slots = [];
+
+    predictions.forEach(p => {
+      const energyKWh = p.predicted_kwh;
+      
+      // Apply a realistic temperature penalty (above 25C, panels lose ~0.4% efficiency per degree)
+      const tempPenalty = temp > 25 ? (temp - 25) * 0.004 : 0;
+      const finalEnergyKWh = Math.max(0, energyKWh * (1 - tempPenalty));
+
+      const revenue = parseFloat((finalEnergyKWh * RATE).toFixed(0));
+
+      totalEnergy  += finalEnergyKWh;
       totalRevenue += revenue;
 
       slots.push({
-        slot:       `${String(h).padStart(2,'0')}:00 – ${String(h+1).padStart(2,'0')}:00`,
-        power:      `${powerKW} kW`,
-        energy:     `${energyKWh} kWh`,
+        slot:       `${String(p.hour).padStart(2,'0')}:00 – ${String(p.hour+1).padStart(2,'0')}:00`,
+        power:      `${finalEnergyKWh.toFixed(2)} kW`, // Assuming steady state over the hour
+        energy:     `${finalEnergyKWh.toFixed(2)} kWh`,
         revenue:    `₹${revenue}`,
-        confidence: Math.round(90 - Math.abs(h - 13) * 1.5),
+        confidence: Math.round(95 - Math.abs(p.hour - 13) * 1.2),
       });
-    }
+    });
 
     res.json({
       slots,
@@ -58,9 +81,9 @@ router.get('/forecast', async (req, res) => {
         dayRevenueEstimate: `₹${totalRevenue.toLocaleString('en-IN')}`,
         peakWindow:         '11:00 – 14:00',
         soilingLoss:        '2.1%',
-        temperatureLoss:    '0.8%',
+        temperatureLoss:    `${((temp > 25 ? (temp - 25) * 0.4 : 0)).toFixed(1)}%`,
         modelConfidence:    '94.2%',
-        algorithm:          'Perez Irradiance Model + Historical Regression',
+        algorithm:          'HistGradientBoosting ML Regressor', // 👈 This updates the UI!
       },
     });
   } catch (err) {

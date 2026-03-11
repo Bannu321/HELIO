@@ -50,7 +50,8 @@ export default function Topbar() {
       {/* Left: Dynamic Breadcrumb */}
       <div className="flex items-center gap-3 text-sm font-mono tracking-wide">
         <span className="text-solar-600 dark:text-solar-400 font-bold">
-          HELIO
+          {/* HELIO */}
+          VIT-Charge
         </span>
         <span className="text-slate-400 dark:text-void-600">/</span>
         <span className="text-slate-900 dark:text-white">{pageName}</span>

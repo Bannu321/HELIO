@@ -26,7 +26,7 @@ export default function Login() {
         const userData = {
           email,
           name: email.split('@')[0].charAt(0).toUpperCase() + email.split('@')[0].slice(1),
-          installationId: 'HELIO-2024-001',
+          installationId: 'VIT-2024-001',
         };
         login(userData);
         navigate('/');
@@ -61,12 +61,14 @@ export default function Login() {
               <div className="absolute inset-[-8px] rounded-full border border-dashed border-solar-500/50 animate-spin-slow" />
             </div>
             <span className="font-display text-3xl font-extrabold text-solar-600 dark:text-solar-400 tracking-[3px]">
-              HELIO
+              {/* HELIO */}
+              VIT-Charge
             </span>
           </div>
           <h2 className="text-2xl font-bold text-slate-900 dark:text-white">Welcome Back</h2>
           <p className="text-slate-600 dark:text-void-300 text-sm mt-1">
-            Sign in to access your solar dashboard
+            {/* Sign in to access your solar dashboard */}
+            Sign in to access your Smart Campus dashboard
           </p>
         </div>
 

@@ -1,0 +1,162 @@
+{
+  "B001": {
+    "peak_hour": 12,
+    "base_load_kwh": 30.68,
+    "peak_load_kwh": 160.81,
+    "weekday_weekend_ratio": 2.05,
+    "cluster_id": 2,
+    "dna_type": "Always On"
+  },
+  "B002": {
+    "peak_hour": 12,
+    "base_load_kwh": 30.68,
+    "peak_load_kwh": 160.89,
+    "weekday_weekend_ratio": 2.05,
+    "cluster_id": 2,
+    "dna_type": "Always On"
+  },
+  "B003": {
+    "peak_hour": 13,
+    "base_load_kwh": 30.79,
+    "peak_load_kwh": 161.1,
+    "weekday_weekend_ratio": 2.05,
+    "cluster_id": 2,
+    "dna_type": "Always On"
+  },
+  "B004": {
+    "peak_hour": 12,
+    "base_load_kwh": 30.56,
+    "peak_load_kwh": 161.15,
+    "weekday_weekend_ratio": 2.06,
+    "cluster_id": 2,
+    "dna_type": "Always On"
+  },
+  "B005": {
+    "peak_hour": 12,
+    "base_load_kwh": 30.68,
+    "peak_load_kwh": 161.06,
+    "weekday_weekend_ratio": 2.05,
+    "cluster_id": 2,
+    "dna_type": "Always On"
+  },
+  "B006": {
+    "peak_hour": 12,
+    "base_load_kwh": 30.73,
+    "peak_load_kwh": 160.98,
+    "weekday_weekend_ratio": 2.05,
+    "cluster_id": 2,
+    "dna_type": "Always On"
+  },
+  "B007": {
+    "peak_hour": 12,
+    "base_load_kwh": 107.27,
+    "peak_load_kwh": 229.59,
+    "weekday_weekend_ratio": 1.4,
+    "cluster_id": 3,
+    "dna_type": "Weekend Warrior"
+  },
+  "B008": {
+    "peak_hour": 13,
+    "base_load_kwh": 107.51,
+    "peak_load_kwh": 229.54,
+    "weekday_weekend_ratio": 1.4,
+    "cluster_id": 3,
+    "dna_type": "Weekend Warrior"
+  },
+  "B009": {
+    "peak_hour": 13,
+    "base_load_kwh": 107.27,
+    "peak_load_kwh": 229.3,
+    "weekday_weekend_ratio": 1.4,
+    "cluster_id": 3,
+    "dna_type": "Weekend Warrior"
+  },
+  "B010": {
+    "peak_hour": 8,
+    "base_load_kwh": 41.96,
+    "peak_load_kwh": 131.34,
+    "weekday_weekend_ratio": 1.0,
+    "cluster_id": 4,
+    "dna_type": "Heat Seeker"
+  },
+  "B011": {
+    "peak_hour": 8,
+    "base_load_kwh": 41.93,
+    "peak_load_kwh": 131.5,
+    "weekday_weekend_ratio": 1.0,
+    "cluster_id": 4,
+    "dna_type": "Heat Seeker"
+  },
+  "B012": {
+    "peak_hour": 8,
+    "base_load_kwh": 41.91,
+    "peak_load_kwh": 131.65,
+    "weekday_weekend_ratio": 1.0,
+    "cluster_id": 4,
+    "dna_type": "Heat Seeker"
+  },
+  "B013": {
+    "peak_hour": 8,
+    "base_load_kwh": 42.02,
+    "peak_load_kwh": 131.49,
+    "weekday_weekend_ratio": 1.0,
+    "cluster_id": 4,
+    "dna_type": "Heat Seeker"
+  },
+  "B014": {
+    "peak_hour": 12,
+    "base_load_kwh": 15.98,
+    "peak_load_kwh": 112.89,
+    "weekday_weekend_ratio": 1.0,
+    "cluster_id": 0,
+    "dna_type": "9-to-5 Worker"
+  },
+  "B015": {
+    "peak_hour": 12,
+    "base_load_kwh": 16.02,
+    "peak_load_kwh": 113.03,
+    "weekday_weekend_ratio": 1.0,
+    "cluster_id": 0,
+    "dna_type": "9-to-5 Worker"
+  },
+  "B016": {
+    "peak_hour": 12,
+    "base_load_kwh": 6.81,
+    "peak_load_kwh": 92.49,
+    "weekday_weekend_ratio": 2.18,
+    "cluster_id": 1,
+    "dna_type": "Night Owl"
+  },
+  "B017": {
+    "peak_hour": 12,
+    "base_load_kwh": 6.84,
+    "peak_load_kwh": 92.67,
+    "weekday_weekend_ratio": 2.18,
+    "cluster_id": 1,
+    "dna_type": "Night Owl"
+  },
+  "B018": {
+    "peak_hour": 12,
+    "base_load_kwh": 19.16,
+    "peak_load_kwh": 189.14,
+    "weekday_weekend_ratio": 1.0,
+    "cluster_id": 0,
+    "dna_type": "9-to-5 Worker"
+  },
+  "B019": {
+    "peak_hour": 12,
+    "base_load_kwh": 19.15,
+    "peak_load_kwh": 189.3,
+    "weekday_weekend_ratio": 1.0,
+    "cluster_id": 0,
+    "dna_type": "9-to-5 Worker"
+  },
+  "B020": {
+    "peak_hour": 16,
+    "base_load_kwh": 23.86,
+    "peak_load_kwh": 159.11,
+    "weekday_weekend_ratio": 1.0,
+    "cluster_id": 0,
+    "dna_type": "9-to-5 Worker"
+  }
+}

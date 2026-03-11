@@ -1,0 +1,302 @@
+[
+  {
+    "buildingId": "B001",
+    "name": "Academic Block A",
+    "type": "academic",
+    "floorArea": 7416,
+    "maxOccupancy": 703,
+    "hasSolar": false,
+    "solarCapacityKw": 0,
+    "hvacCapacityKw": 296.64,
+    "lightingLoadKw": 74.16,
+    "location": {
+      "latitude": 16.50161983008124,
+      "longitude": 80.49217911674718
+    }
+  },
+  {
+    "buildingId": "B002",
+    "name": "Academic Block B",
+    "type": "academic",
+    "floorArea": 6930,
+    "maxOccupancy": 734,
+    "hasSolar": false,
+    "solarCapacityKw": 0,
+    "hvacCapacityKw": 277.2,
+    "lightingLoadKw": 69.3,
+    "location": {
+      "latitude": 16.499055952057695,
+      "longitude": 80.49254308968897
+    }
+  },
+  {
+    "buildingId": "B003",
+    "name": "Academic Block C",
+    "type": "academic",
+    "floorArea": 4832,
+    "maxOccupancy": 448,
+    "hasSolar": false,
+    "solarCapacityKw": 0,
+    "hvacCapacityKw": 193.28,
+    "lightingLoadKw": 48.32,
+    "location": {
+      "latitude": 16.49705257760684,
+      "longitude": 80.50010251605495
+    }
+  },
+  {
+    "buildingId": "B004",
+    "name": "Academic Block D",
+    "type": "academic",
+    "floorArea": 4420,
+    "maxOccupancy": 795,
+    "hasSolar": false,
+    "solarCapacityKw": 0,
+    "hvacCapacityKw": 176.8,
+    "lightingLoadKw": 44.2,
+    "location": {
+      "latitude": 16.501120327699972,
+      "longitude": 80.50313486303422
+    }
+  },
+  {
+    "buildingId": "B005",
+    "name": "Academic Block E",
+    "type": "academic",
+    "floorArea": 5537,
+    "maxOccupancy": 677,
+    "hasSolar": true,
+    "solarCapacityKw": 35,
+    "hvacCapacityKw": 221.48000000000002,
+    "lightingLoadKw": 55.370000000000005,
+    "location": {
+      "latitude": 16.49784265351376,
+      "longitude": 80.49569494378578
+    }
+  },
+  {
+    "buildingId": "B006",
+    "name": "Academic Block F",
+    "type": "academic",
+    "floorArea": 3982,
+    "maxOccupancy": 546,
+    "hasSolar": true,
+    "solarCapacityKw": 95,
+    "hvacCapacityKw": 159.28,
+    "lightingLoadKw": 39.82,
+    "location": {
+      "latitude": 16.493348761227058,
+      "longitude": 80.50470378483888
+    }
+  },
+  {
+    "buildingId": "B007",
+    "name": "Laboratory Block A",
+    "type": "laboratory",
+    "floorArea": 2178,
+    "maxOccupancy": 193,
+    "hasSolar": false,
+    "solarCapacityKw": 0,
+    "hvacCapacityKw": 87.12,
+    "lightingLoadKw": 21.78,
+    "location": {
+      "latitude": 16.496172592801337,
+      "longitude": 80.50003311542369
+    }
+  },
+  {
+    "buildingId": "B008",
+    "name": "Laboratory Block B",
+    "type": "laboratory",
+    "floorArea": 4440,
+    "maxOccupancy": 102,
+    "hasSolar": true,
+    "solarCapacityKw": 92,
+    "hvacCapacityKw": 177.6,
+    "lightingLoadKw": 44.4,
+    "location": {
+      "latitude": 16.50217345165704,
+      "longitude": 80.49469772961594
+    }
+  },
+  {
+    "buildingId": "B009",
+    "name": "Laboratory Block C",
+    "type": "laboratory",
+    "floorArea": 4180,
+    "maxOccupancy": 107,
+    "hasSolar": false,
+    "solarCapacityKw": 0,
+    "hvacCapacityKw": 167.20000000000002,
+    "lightingLoadKw": 41.800000000000004,
+    "location": {
+      "latitude": 16.49879754569462,
+      "longitude": 80.49685056317422
+    }
+  },
+  {
+    "buildingId": "B010",
+    "name": "Hostel Block A",
+    "type": "hostel",
+    "floorArea": 7907,
+    "maxOccupancy": 762,
+    "hasSolar": true,
+    "solarCapacityKw": 67,
+    "hvacCapacityKw": 316.28000000000003,
+    "lightingLoadKw": 79.07000000000001,
+    "location": {
+      "latitude": 16.497730937567752,
+      "longitude": 80.50792809901972
+    }
+  },
+  {
+    "buildingId": "B011",
+    "name": "Hostel Block B",
+    "type": "hostel",
+    "floorArea": 5917,
+    "maxOccupancy": 494,
+    "hasSolar": true,
+    "solarCapacityKw": 58,
+    "hvacCapacityKw": 236.68,
+    "lightingLoadKw": 59.17,
+    "location": {
+      "latitude": 16.50925124051338,
+      "longitude": 80.49702506775219
+    }
+  },
+  {
+    "buildingId": "B012",
+    "name": "Hostel Block C",
+    "type": "hostel",
+    "floorArea": 6309,
+    "maxOccupancy": 438,
+    "hasSolar": true,
+    "solarCapacityKw": 69,
+    "hvacCapacityKw": 252.36,
+    "lightingLoadKw": 63.09,
+    "location": {
+      "latitude": 16.495993305226353,
+      "longitude": 80.49095911636189
+    }
+  },
+  {
+    "buildingId": "B013",
+    "name": "Hostel Block D",
+    "type": "hostel",
+    "floorArea": 5430,
+    "maxOccupancy": 423,
+    "hasSolar": false,
+    "solarCapacityKw": 0,
+    "hvacCapacityKw": 217.20000000000002,
+    "lightingLoadKw": 54.300000000000004,
+    "location": {
+      "latitude": 16.491160664015606,
+      "longitude": 80.50031281538293
+    }
+  },
+  {
+    "buildingId": "B014",
+    "name": "Library Block A",
+    "type": "library",
+    "floorArea": 6821,
+    "maxOccupancy": 1148,
+    "hasSolar": false,
+    "solarCapacityKw": 0,
+    "hvacCapacityKw": 272.84000000000003,
+    "lightingLoadKw": 68.21000000000001,
+    "location": {
+      "latitude": 16.508826650635456,
+      "longitude": 80.50291305627104
+    }
+  },
+  {
+    "buildingId": "B015",
+    "name": "Library Block B",
+    "type": "library",
+    "floorArea": 5948,
+    "maxOccupancy": 646,
+    "hasSolar": true,
+    "solarCapacityKw": 97,
+    "hvacCapacityKw": 237.92000000000002,
+    "lightingLoadKw": 59.480000000000004,
+    "location": {
+      "latitude": 16.50722221569665,
+      "longitude": 80.49214781741681
+    }
+  },
+  {
+    "buildingId": "B016",
+    "name": "Administrative Block A",
+    "type": "administrative",
+    "floorArea": 2559,
+    "maxOccupancy": 197,
+    "hasSolar": true,
+    "solarCapacityKw": 78,
+    "hvacCapacityKw": 102.36,
+    "lightingLoadKw": 25.59,
+    "location": {
+      "latitude": 16.490814138300987,
+      "longitude": 80.50965409942273
+    }
+  },
+  {
+    "buildingId": "B017",
+    "name": "Administrative Block B",
+    "type": "administrative",
+    "floorArea": 3769,
+    "maxOccupancy": 246,
+    "hasSolar": true,
+    "solarCapacityKw": 46,
+    "hvacCapacityKw": 150.76,
+    "lightingLoadKw": 37.69,
+    "location": {
+      "latitude": 16.49905457496182,
+      "longitude": 80.50334965645644
+    }
+  },
+  {
+    "buildingId": "B018",
+    "name": "Cafeteria Block A",
+    "type": "cafeteria",
+    "floorArea": 1710,
+    "maxOccupancy": 454,
+    "hasSolar": true,
+    "solarCapacityKw": 93,
+    "hvacCapacityKw": 68.4,
+    "lightingLoadKw": 17.1,
+    "location": {
+      "latitude": 16.49464270863339,
+      "longitude": 80.50479414435667
+    }
+  },
+  {
+    "buildingId": "B019",
+    "name": "Cafeteria Block B",
+    "type": "cafeteria",
+    "floorArea": 2534,
+    "maxOccupancy": 298,
+    "hasSolar": true,
+    "solarCapacityKw": 80,
+    "hvacCapacityKw": 101.36,
+    "lightingLoadKw": 25.34,
+    "location": {
+      "latitude": 16.503396896832722,
+      "longitude": 80.49341422509806
+    }
+  },
+  {
+    "buildingId": "B020",
+    "name": "Sports Block A",
+    "type": "sports",
+    "floorArea": 10531,
+    "maxOccupancy": 518,
+    "hasSolar": true,
+    "solarCapacityKw": 73,
+    "hvacCapacityKw": 421.24,
+    "lightingLoadKw": 105.31,
+    "location": {
+      "latitude": 16.4934840471785,
+      "longitude": 80.50657736319987
+    }
+  }
+]

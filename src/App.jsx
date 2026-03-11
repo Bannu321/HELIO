@@ -18,6 +18,9 @@ import WeatherAI from "./pages/WeatherAI";
 import Estimation from "./pages/Estimation";
 import Alerts from "./pages/Alerts";
 import Settings from "./pages/Settings";
+import EnergyDNA from "./pages/EnergyDNA";
+import EnergyFlow from "./pages/EnergyFlow";
+import BatteryManagementModule from "./pages/BatteryManagementModule";
 
 // Page 404 fallback
 const NotFound = () => (
@@ -148,6 +151,17 @@ function AppContent() {
           </ProtectedRoute>
         }
       />
+
+      <Route
+        path="/energy-dna"
+        element={
+          <ProtectedRoute>
+            <DashboardLayout>
+              <EnergyDNA />
+            </DashboardLayout>
+          </ProtectedRoute>
+        }
+      />
       <Route
         path="/revenue"
         element={
@@ -184,6 +198,27 @@ function AppContent() {
           <ProtectedRoute>
             <DashboardLayout>
               <Estimation />
+            </DashboardLayout>
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/flow"
+        element={
+          <ProtectedRoute>
+            <DashboardLayout>
+              <EnergyFlow />
+            </DashboardLayout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/battery"
+        element={
+          <ProtectedRoute>
+            <DashboardLayout>
+              <BatteryManagementModule />
             </DashboardLayout>
           </ProtectedRoute>
         }
