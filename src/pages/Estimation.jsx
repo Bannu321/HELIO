@@ -1,157 +1,13 @@
-// import React from "react";
-// import EstimationPanel from "../components/dashboard/EstimationPanel";
-// import { BrainCircuit, Cpu, Target, Network } from "lucide-react";
-
-// export default function Estimation() {
-//   return (
-//     <div className="max-w-7xl mx-auto px-6 lg:px-8 py-8 lg:py-12 space-y-10 animate-fade-in">
-//       <header>
-//         <h1 className="font-display text-2xl font-extrabold text-slate-900 dark:text-white tracking-wide">
-//           AI Power Estimation
-//         </h1>
-//         <p className="text-sm text-slate-600 dark:text-void-300 mt-1 font-mono">
-//           LSTM Time-Series & Perez Irradiance Forecast Models
-//         </p>
-//       </header>
-
-//       {/* Model Health Stats */}
-//       <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
-//         <ModelCard
-//           title="Model Status"
-//           value="Online"
-//           icon={Cpu}
-//           color="text-energy-green"
-//         />
-//         <ModelCard
-//           title="Prediction Accuracy"
-//           value="94.2%"
-//           icon={Target}
-//           color="text-solar-400"
-//         />
-//         <ModelCard
-//           title="Data Points"
-//           value="1.2M+"
-//           icon={Network}
-//           color="text-energy-cyan"
-//         />
-//         <ModelCard
-//           title="Next Sync"
-//           value="12m 30s"
-//           icon={BrainCircuit}
-//           color="text-slate-600 dark:text-void-300"
-//         />
-//       </div>
-
-//       {/* Existing Estimation Panel Component */}
-//       <div className="bg-white dark:bg-void-800 border border-slate-300 dark:border-void-700 rounded-2xl p-8 shadow-card">
-//         <h2 className="font-display font-bold text-slate-900 dark:text-white mb-8">
-//           Generation Forecast
-//         </h2>
-//         {/* Render your existing EstimationPanel here */}
-//         <EstimationPanel />
-//       </div>
-
-//       {/* Variables Section */}
-//       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-//         <div className="bg-slate-100 dark:bg-void-800/50 border border-slate-300 dark:border-void-700 rounded-2xl p-6">
-//           <h3 className="text-sm font-bold text-slate-600 dark:text-void-200 uppercase tracking-widest mb-4">
-//             Current Input Variables
-//           </h3>
-//           <ul className="space-y-3 font-mono text-sm">
-//             <li className="flex justify-between text-slate-600 dark:text-void-300">
-//               <span className="text-slate-900 dark:text-white">
-//                 Cloud Cover (NASA POWER)
-//               </span>{" "}
-//               12%
-//             </li>
-//             <li className="flex justify-between text-slate-600 dark:text-void-300">
-//               <span className="text-slate-900 dark:text-white">
-//                 Aerosol Optical Depth
-//               </span>{" "}
-//               0.14
-//             </li>
-//             <li className="flex justify-between text-slate-600 dark:text-void-300">
-//               <span className="text-slate-900 dark:text-white">
-//                 Panel Azimuth
-//               </span>{" "}
-//               180° (South)
-//             </li>
-//             <li className="flex justify-between text-slate-600 dark:text-void-300">
-//               <span className="text-slate-900 dark:text-white">
-//                 Soiling Loss Penalty
-//               </span>{" "}
-//               -2.1%
-//             </li>
-//           </ul>
-//         </div>
-//         <div className="bg-slate-100 dark:bg-void-800/50 border border-slate-300 dark:border-void-700 rounded-2xl p-6">
-//           <h3 className="text-sm font-bold text-slate-600 dark:text-void-200 uppercase tracking-widest mb-4">
-//             Model Confidence
-//           </h3>
-//           <div className="space-y-4">
-//             <div>
-//               <div className="flex justify-between text-xs font-mono text-slate-600 dark:text-void-300 mb-1">
-//                 <span>1-Hour Forecast</span>{" "}
-//                 <span className="text-energy-green">98%</span>
-//               </div>
-//               <div className="w-full bg-slate-200 dark:bg-void-900 rounded-full h-1.5">
-//                 <div className="bg-energy-green h-1.5 rounded-full w-[98%]"></div>
-//               </div>
-//             </div>
-//             <div>
-//               <div className="flex justify-between text-xs font-mono text-slate-600 dark:text-void-300 mb-1">
-//                 <span>6-Hour Forecast</span>{" "}
-//                 <span className="text-solar-400">85%</span>
-//               </div>
-//               <div className="w-full bg-slate-200 dark:bg-void-900 rounded-full h-1.5">
-//                 <div className="bg-solar-400 h-1.5 rounded-full w-[85%]"></div>
-//               </div>
-//             </div>
-//             <div>
-//               <div className="flex justify-between text-xs font-mono text-slate-600 dark:text-void-300 mb-1">
-//                 <span>24-Hour Forecast</span>{" "}
-//                 <span className="text-energy-amber">72%</span>
-//               </div>
-//               <div className="w-full bg-slate-200 dark:bg-void-900 rounded-full h-1.5">
-//                 <div className="bg-energy-amber h-1.5 rounded-full w-[72%]"></div>
-//               </div>
-//             </div>
-//           </div>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// }
-
-// function ModelCard({ title, value, icon: Icon, color }) {
-//   return (
-//     <div className="bg-white dark:bg-void-800 border border-slate-300 dark:border-void-700 rounded-xl p-5 flex items-center justify-between">
-//       <div>
-//         <h3 className="text-slate-600 dark:text-void-400 text-xs font-bold tracking-widest mb-1">
-//           {title.toUpperCase()}
-//         </h3>
-//         <span className={`text-xl font-display font-bold ${color}`}>
-//           {value}
-//         </span>
-//       </div>
-//       <Icon className={`w-6 h-6 opacity-50 ${color}`} />
-//     </div>
-//   );
-// }
-
-
-
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import EstimationPanel from "../components/dashboard/EstimationPanel";
-import { BrainCircuit, Cpu, Target, Network } from "lucide-react";
+import { BrainCircuit, Cpu, Target, Network, Clock, ShieldCheck, Sparkles } from "lucide-react";
+import clsx from "clsx";
 
 export default function Estimation() {
   const [modelData, setModelData] = useState({ weather: null, forecast: null });
   const [loading, setLoading] = useState(true);
-  
-  // Ticking countdown timer state for the "Next Sync" card
-  const [syncTime, setSyncTime] = useState(300); // 5 minutes in seconds
+  const [syncTime, setSyncTime] = useState(300);
 
   useEffect(() => {
     const fetchModelDiagnostics = async () => {
@@ -160,10 +16,10 @@ export default function Estimation() {
           axios.get("http://localhost:5000/api/weather/current"),
           axios.get("http://localhost:5000/api/estimation/forecast"),
         ]);
-        
+
         setModelData({
           weather: weatherRes.data,
-          forecast: forecastRes.data
+          forecast: forecastRes.data,
         });
         setLoading(false);
       } catch (error) {
@@ -175,151 +31,148 @@ export default function Estimation() {
     fetchModelDiagnostics();
   }, []);
 
-  // Countdown timer effect
   useEffect(() => {
     const timer = setInterval(() => {
-      setSyncTime((prev) => (prev > 0 ? prev - 1 : 300)); // Reset to 5 mins when it hits 0
+      setSyncTime((prev) => (prev > 0 ? prev - 1 : 300));
     }, 1000);
     return () => clearInterval(timer);
   }, []);
 
-  // Format the seconds into MMm SSs
   const formatTime = (seconds) => {
     const m = Math.floor(seconds / 60);
     const s = seconds % 60;
-    return `${m}m ${s.toString().padStart(2, '0')}s`;
+    return `${m}m ${s.toString().padStart(2, "0")}s`;
   };
 
   const { weather, forecast } = modelData;
-
-  // Fallback values if backend is loading/offline
   const cloudCover = weather?.cloudCover ?? 12;
   const accuracy = forecast?.summary?.modelConfidence ?? "94.2%";
-  const algorithm = forecast?.summary?.algorithm ?? "Facebook Prophet Time-Series";
+  const algorithm = forecast?.summary?.algorithm ?? "Meta Prophet Additive Regression";
   const soilingPenalty = forecast?.summary?.soilingLoss ?? "-2.1%";
 
   return (
-    <div className="max-w-7xl mx-auto px-6 lg:px-8 py-8 lg:py-12 space-y-10 animate-fade-in">
-      <header>
-        <div className="flex items-center gap-3 mb-1">
-          <h1 className="font-display text-2xl font-extrabold text-slate-900 dark:text-white tracking-wide">
-            AI Power Estimation
-          </h1>
-          {/* Live pulsing indicator to show the model is active */}
-          <span className="relative flex h-3 w-3 mt-1">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-energy-cyan opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-3 w-3 bg-energy-cyan"></span>
-          </span>
+    <div className="max-w-7xl mx-auto px-6 py-8 space-y-8 animate-fade-in">
+      {/* Header */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-2 border-b border-slate-200/80 dark:border-void-700/60">
+        <div>
+          <div className="flex items-center gap-3">
+            <h1 className="font-display text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
+              AI Power Estimation & Forecast
+            </h1>
+            <span className="live-badge">
+              <span className="w-1.5 h-1.5 rounded-full bg-grid-500 animate-pulse" />
+              INFERENCE MODEL ONLINE
+            </span>
+          </div>
+          <p className="text-xs font-mono text-slate-500 dark:text-void-300 mt-1">
+            {algorithm} · 96-step forward horizon
+          </p>
         </div>
-        <p className="text-sm text-slate-600 dark:text-void-300 mt-1 font-mono uppercase tracking-wider">
-          {algorithm}
-        </p>
-      </header>
+      </div>
 
-      {/* Model Health Stats - Now Dynamic */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+      {/* Model Diagnostics Metric Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <ModelCard
-          title="Model Status"
-          value={loading ? "Connecting..." : "Online"}
+          title="Inference Engine"
+          value={loading ? "Connecting..." : "Online (Active)"}
           icon={Cpu}
-          color={loading ? "text-slate-400" : "text-energy-green"}
+          accent="green"
         />
         <ModelCard
-          title="Prediction Accuracy"
+          title="Backtest Accuracy (R²)"
           value={accuracy}
           icon={Target}
-          color="text-solar-400"
+          accent="solar"
         />
         <ModelCard
-          title="Training Data"
+          title="SCADA Training Corpus"
           value="1.2M+ Rows"
           icon={Network}
-          color="text-energy-cyan"
+          accent="cyan"
         />
         <ModelCard
-          title="Next ML Sync"
+          title="Next Checkpoint Sync"
           value={formatTime(syncTime)}
           icon={BrainCircuit}
-          color="text-slate-600 dark:text-void-300"
+          accent="slate"
         />
       </div>
 
-      {/* Existing Estimation Panel Component */}
-      <div className="bg-white dark:bg-void-800 border border-slate-300 dark:border-void-700 rounded-2xl p-8 shadow-card">
-        <h2 className="font-display font-bold text-slate-900 dark:text-white mb-8">
-          Generation Forecast
-        </h2>
-        {/* Render your existing EstimationPanel here */}
+      {/* Primary Forecast Chart Panel */}
+      <div className="card p-6">
+        <div className="mb-6">
+          <h2 className="font-display font-bold text-base text-slate-900 dark:text-white">
+            Forward Generation Curve
+          </h2>
+          <p className="text-xs text-slate-500 dark:text-void-300 font-mono mt-0.5">
+            Statistical confidence envelope (p10 / p50 / p90) mapped against baseline grid load
+          </p>
+        </div>
         <EstimationPanel />
       </div>
 
-      {/* Variables Section - Linked to Real Weather & Model Data */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        <div className="bg-slate-100 dark:bg-void-800/50 border border-slate-300 dark:border-void-700 rounded-2xl p-6 hover:border-solar-500/30 transition-colors">
-          <h3 className="text-sm font-bold text-slate-600 dark:text-void-200 uppercase tracking-widest mb-4">
-            Live Input Variables
+      {/* Inputs vs Horizon Confidence */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="card p-6">
+          <h3 className="stat-label mb-4">
+            Active Model Feature Matrix
           </h3>
-          <ul className="space-y-4 font-mono text-sm">
-            <li className="flex justify-between text-slate-600 dark:text-void-300 border-b border-slate-200 dark:border-void-700/50 pb-2">
-              <span className="text-slate-900 dark:text-white">
-                Cloud Cover (OpenWeather API)
-              </span>{" "}
+          <ul className="space-y-3 font-mono text-xs">
+            <li className="flex justify-between text-slate-600 dark:text-void-300 border-b border-slate-100 dark:border-void-700/60 pb-2">
+              <span>Cloud Cover (OpenWeather / NASA POWER)</span>
               <span className="text-solar-600 dark:text-solar-400 font-bold">{cloudCover}%</span>
             </li>
-            <li className="flex justify-between text-slate-600 dark:text-void-300 border-b border-slate-200 dark:border-void-700/50 pb-2">
-              <span className="text-slate-900 dark:text-white">
-                Panel Azimuth
-              </span>{" "}
-              <span>180° (South)</span>
+            <li className="flex justify-between text-slate-600 dark:text-void-300 border-b border-slate-100 dark:border-void-700/60 pb-2">
+              <span>Array Orientation & Tilt</span>
+              <span className="text-slate-900 dark:text-white font-medium">180° South · 18° Tilt</span>
             </li>
-            <li className="flex justify-between text-slate-600 dark:text-void-300 border-b border-slate-200 dark:border-void-700/50 pb-2">
-              <span className="text-slate-900 dark:text-white">
-                Base Array Capacity
-              </span>{" "}
-              <span>100 kWp</span>
+            <li className="flex justify-between text-slate-600 dark:text-void-300 border-b border-slate-100 dark:border-void-700/60 pb-2">
+              <span>Installed Microgrid Capacity</span>
+              <span className="text-slate-900 dark:text-white font-medium">100 kWp Monocrystalline</span>
             </li>
-            <li className="flex justify-between text-slate-600 dark:text-void-300 pb-2">
-              <span className="text-slate-900 dark:text-white">
-                AI Soiling Loss Penalty
-              </span>{" "}
+            <li className="flex justify-between text-slate-600 dark:text-void-300 pb-1">
+              <span>Soiling Derate Factor</span>
               <span className="text-energy-rose font-bold">{soilingPenalty}</span>
             </li>
           </ul>
         </div>
-        
-        <div className="bg-slate-100 dark:bg-void-800/50 border border-slate-300 dark:border-void-700 rounded-2xl p-6 hover:border-energy-cyan/30 transition-colors">
-          <h3 className="text-sm font-bold text-slate-600 dark:text-void-200 uppercase tracking-widest mb-4">
-            Model Horizon Confidence
+
+        <div className="card p-6">
+          <h3 className="stat-label mb-1">
+            Prediction Horizon Confidence
           </h3>
-          <p className="text-xs text-slate-500 dark:text-void-400 mb-4 font-mono">
-            * Prophet time-series confidence degrades predictably as the forecast horizon extends.
+          <p className="text-[11px] text-slate-400 dark:text-void-400 font-mono mb-4">
+            Confidence interval degradation across forecast timestamps
           </p>
-          <div className="space-y-5">
+
+          <div className="space-y-4">
             <div>
               <div className="flex justify-between text-xs font-mono text-slate-600 dark:text-void-300 mb-1">
-                <span>1-Hour Forecast</span>{" "}
-                <span className="text-energy-green font-bold">98%</span>
+                <span>1-Hour Short Horizon</span>
+                <span className="text-grid-600 dark:text-grid-400 font-bold">98.0%</span>
               </div>
-              <div className="w-full bg-slate-200 dark:bg-void-900 rounded-full h-2">
-                <div className="bg-energy-green h-2 rounded-full w-[98%] shadow-[0_0_8px_rgba(16,185,129,0.5)]"></div>
+              <div className="w-full bg-slate-100 dark:bg-void-700 rounded-full h-2 overflow-hidden">
+                <div className="bg-grid-500 h-full rounded-full w-[98%]" />
               </div>
             </div>
+
             <div>
               <div className="flex justify-between text-xs font-mono text-slate-600 dark:text-void-300 mb-1">
-                <span>6-Hour Forecast</span>{" "}
-                <span className="text-solar-400 font-bold">85%</span>
+                <span>6-Hour Intraday Horizon</span>
+                <span className="text-solar-500 font-bold">85.4%</span>
               </div>
-              <div className="w-full bg-slate-200 dark:bg-void-900 rounded-full h-2">
-                <div className="bg-solar-400 h-2 rounded-full w-[85%] shadow-[0_0_8px_rgba(251,191,36,0.5)]"></div>
+              <div className="w-full bg-slate-100 dark:bg-void-700 rounded-full h-2 overflow-hidden">
+                <div className="bg-solar-500 h-full rounded-full w-[85.4%]" />
               </div>
             </div>
+
             <div>
               <div className="flex justify-between text-xs font-mono text-slate-600 dark:text-void-300 mb-1">
-                <span>24-Hour Forecast</span>{" "}
-                <span className="text-energy-amber font-bold">72%</span>
+                <span>24-Hour Day-Ahead Horizon</span>
+                <span className="text-energy-amber font-bold">72.1%</span>
               </div>
-              <div className="w-full bg-slate-200 dark:bg-void-900 rounded-full h-2">
-                <div className="bg-energy-amber h-2 rounded-full w-[72%] shadow-[0_0_8px_rgba(245,158,11,0.5)]"></div>
+              <div className="w-full bg-slate-100 dark:bg-void-700 rounded-full h-2 overflow-hidden">
+                <div className="bg-energy-amber h-full rounded-full w-[72.1%]" />
               </div>
             </div>
           </div>
@@ -329,18 +182,27 @@ export default function Estimation() {
   );
 }
 
-function ModelCard({ title, value, icon: Icon, color }) {
+function ModelCard({ title, value, icon: Icon, accent }) {
+  const accentStyles = {
+    green: "text-grid-600 dark:text-grid-400 bg-grid-50 dark:bg-grid-500/10 border-grid-200 dark:border-grid-500/20",
+    solar: "text-solar-500 bg-solar-50 dark:bg-solar-500/10 border-solar-200 dark:border-solar-500/20",
+    cyan: "text-energy-cyan bg-cyan-50 dark:bg-cyan-500/10 border-cyan-200 dark:border-cyan-500/20",
+    slate: "text-slate-600 dark:text-void-300 bg-slate-100 dark:bg-void-700/60 border-slate-200 dark:border-void-600",
+  };
+
+  const badgeClass = accentStyles[accent] || accentStyles.slate;
+
   return (
-    <div className="bg-white dark:bg-void-800 border border-slate-300 dark:border-void-700 rounded-xl p-5 flex items-center justify-between shadow-sm hover:shadow-md transition-shadow">
+    <div className="card p-4 flex items-center justify-between">
       <div>
-        <h3 className="text-slate-600 dark:text-void-400 text-xs font-bold tracking-widest mb-1">
-          {title.toUpperCase()}
-        </h3>
-        <span className={`text-xl font-display font-bold ${color}`}>
+        <span className="stat-label truncate block">{title}</span>
+        <span className="stat-value text-xl text-slate-900 dark:text-white mt-1 block">
           {value}
         </span>
       </div>
-      <Icon className={`w-6 h-6 opacity-50 ${color}`} />
+      <div className={clsx("w-8 h-8 rounded-lg flex items-center justify-center border flex-shrink-0", badgeClass)}>
+        <Icon className="w-4 h-4" />
+      </div>
     </div>
   );
 }

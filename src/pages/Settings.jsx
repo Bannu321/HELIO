@@ -1,88 +1,103 @@
 import React from "react";
-import { Save } from "lucide-react";
+import { Save, Radio, Cpu, ShieldCheck, Check } from "lucide-react";
 
 export default function Settings() {
   return (
-    <div className="max-w-4xl mx-auto px-6 lg:px-8 py-8 lg:py-12 space-y-10 animate-fade-in pb-16">
-      <header className="flex justify-between items-end border-b border-slate-300 dark:border-void-700 pb-6">
+    <div className="max-w-5xl mx-auto px-6 py-8 space-y-8 animate-fade-in pb-16">
+      {/* Header */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-2 border-b border-slate-200/80 dark:border-void-700/60">
         <div>
-          <h1 className="font-display text-2xl font-extrabold text-slate-900 dark:text-white tracking-wide">
-            Platform Settings
+          <h1 className="font-display text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
+            System & SCADA Configuration
           </h1>
-          <p className="text-sm text-slate-600 dark:text-void-300 mt-1 font-mono">
-            Configure grid integrations and preferences
+          <p className="text-xs font-mono text-slate-500 dark:text-void-300 mt-1">
+            Configure DISCOM net-metering tariffs, IoT telemetry brokers, and inference parameters
           </p>
         </div>
-        <button className="bg-solar-500 hover:bg-solar-400 text-white dark:text-void-900 px-5 py-2 rounded-lg font-bold transition-colors flex items-center gap-2">
-          <Save className="w-4 h-4" /> Save Changes
+
+        <button className="btn-solar">
+          <Save className="w-3.5 h-3.5" /> Save Configuration
         </button>
-      </header>
+      </div>
 
-      {/* Grid Configuration */}
-      <section className="bg-white dark:bg-void-800 border border-slate-300 dark:border-void-700 rounded-2xl p-8 shadow-card space-y-6">
-        <h2 className="font-display font-bold text-slate-900 dark:text-white border-b border-slate-300 dark:border-void-700 pb-3">
-          Grid & Tariff Settings
-        </h2>
+      {/* Grid & Tariff Settings */}
+      <section className="card p-6 space-y-5">
+        <div className="border-b border-slate-100 dark:border-void-700/60 pb-3">
+          <h2 className="font-display font-bold text-base text-slate-900 dark:text-white">
+            Grid & Net-Metering Tariffs
+          </h2>
+          <p className="text-xs text-slate-500 dark:text-void-300 font-mono mt-0.5">
+            Base export feed-in credits and regional DISCOM regulatory mapping
+          </p>
+        </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="space-y-2">
-            <label className="text-xs font-bold text-slate-600 dark:text-void-300 uppercase tracking-widest">
-              Base Export Tariff (INR/kWh)
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <div className="space-y-1.5">
+            <label className="stat-label">
+              Base Feed-in Tariff (INR / kWh)
             </label>
             <input
               type="text"
-              defaultValue="3.50"
-              className="w-full bg-slate-100 dark:bg-void-900 border border-slate-300 dark:border-void-600 text-slate-900 dark:text-white rounded-xl px-4 py-2.5 outline-none focus:border-solar-500 transition-colors font-mono"
+              defaultValue="15.20"
+              className="field font-mono"
             />
           </div>
-          <div className="space-y-2">
-            <label className="text-xs font-bold text-slate-600 dark:text-void-300 uppercase tracking-widest">
+          <div className="space-y-1.5">
+            <label className="stat-label">
               Grid Provider (DISCOM)
             </label>
-            <select className="w-full bg-slate-100 dark:bg-void-900 border border-slate-300 dark:border-void-600 text-slate-900 dark:text-white rounded-xl px-4 py-2.5 outline-none focus:border-solar-500 transition-colors">
-              <option>APSPDCL</option>
-              <option>TSSPDCL</option>
-              <option>BESCOM</option>
+            <select className="field font-mono">
+              <option>APSPDCL — Southern Power Distribution</option>
+              <option>TSSPDCL — Telangana State Power</option>
+              <option>BESCOM — Bangalore Electricity</option>
+              <option>MSEDCL — Maharashtra State</option>
             </select>
           </div>
         </div>
       </section>
 
       {/* IoT Gateway Configuration */}
-      <section className="bg-white dark:bg-void-800 border border-slate-300 dark:border-void-700 rounded-2xl p-6 shadow-card space-y-4">
-        <h2 className="font-display font-bold text-slate-900 dark:text-white border-b border-slate-300 dark:border-void-700 pb-2">
-          IoT Gateway (ESP32 / Pi)
-        </h2>
+      <section className="card p-6 space-y-5">
+        <div className="border-b border-slate-100 dark:border-void-700/60 pb-3">
+          <h2 className="font-display font-bold text-base text-slate-900 dark:text-white">
+            IoT Edge Gateway & Modbus Ingestion
+          </h2>
+          <p className="text-xs text-slate-500 dark:text-void-300 font-mono mt-0.5">
+            Telemetry ingestion endpoints for ESP32 / Raspberry Pi edge devices
+          </p>
+        </div>
 
-        <div className="grid grid-cols-1 gap-6">
-          <div className="space-y-2">
-            <label className="text-xs font-bold text-slate-600 dark:text-void-300 uppercase tracking-widest">
-              MQTT Broker URL
+        <div className="space-y-5">
+          <div className="space-y-1.5">
+            <label className="stat-label">
+              MQTT Telemetry Broker Endpoint
             </label>
             <input
               type="text"
-              defaultValue="mqtt://broker.hivemq.com"
-              className="w-full bg-slate-100 dark:bg-void-900 border border-slate-300 dark:border-void-600 text-slate-900 dark:text-white rounded-xl px-4 py-2.5 outline-none focus:border-solar-500 transition-colors font-mono text-sm"
+              defaultValue="mqtt://broker.hivemq.com:1883/helio/scada/telemetry"
+              className="field font-mono text-xs"
             />
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="space-y-2">
-              <label className="text-xs font-bold text-slate-600 dark:text-void-300 uppercase tracking-widest">
-                Polling Rate
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <div className="space-y-1.5">
+              <label className="stat-label">
+                Sensor Polling Frequency
               </label>
-              <select className="w-full bg-slate-100 dark:bg-void-900 border border-slate-300 dark:border-void-600 text-slate-900 dark:text-white rounded-xl px-4 py-2.5 outline-none focus:border-solar-500 transition-colors">
-                <option>Every 1 minute</option>
-                <option selected>Every 5 minutes</option>
-                <option>Every 15 minutes</option>
+              <select className="field font-mono text-xs">
+                <option>Every 500 ms (High Precision)</option>
+                <option selected>Every 1 second (Standard Telemetry)</option>
+                <option>Every 5 seconds (Low Bandwidth)</option>
               </select>
             </div>
-            <div className="space-y-2 flex flex-col justify-center">
-              <label className="text-xs font-bold text-slate-600 dark:text-void-300 uppercase tracking-widest mb-3">
-                Gateway Status
+
+            <div className="space-y-1.5 flex flex-col justify-end">
+              <label className="stat-label mb-1">
+                Gateway Health Status
               </label>
-              <div className="flex items-center gap-2 text-energy-green text-sm font-mono bg-energy-green/10 border border-energy-green/20 px-4 py-2 rounded-lg w-fit">
-                <span className="w-2 h-2 rounded-full bg-energy-green animate-pulse"></span>{" "}
-                Connected
+              <div className="live-badge w-fit">
+                <span className="w-1.5 h-1.5 rounded-full bg-grid-500 animate-pulse" />
+                EDGE GATEWAY CONNECTED (PING: 14ms)
               </div>
             </div>
           </div>

@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useSolar } from "../../context/SolarContext";
 import { useAuth } from "../../context/AuthContext";
 import { useTheme } from "../../context/ThemeContext";
-import { Sun, Moon, Bell, RefreshCw, LogOut, Settings } from "lucide-react";
+import { Sun, Moon, Bell, RefreshCw, LogOut, Settings, ChevronRight, User } from "lucide-react";
 
 export default function Topbar() {
   const { refresh, lastRefresh } = useSolar();
@@ -15,9 +15,25 @@ export default function Topbar() {
   const navigate = useNavigate();
   const { isDark, toggleTheme } = useTheme();
 
-  // Dynamic breadcrumb generation based on current route
+  // Dynamic breadcrumb label mapping
   const path = location.pathname.split("/")[1];
-  const pageName = path ? path.charAt(0).toUpperCase() + path.slice(1) : "Home";
+  const routeNames = {
+    "": "Overview",
+    dashboard: "System Overview",
+    grid: "Grid Monitor",
+    panels: "Panel Health",
+    "grid-community": "Grid Community P2P",
+    "energy-dna": "Energy DNA Profile",
+    revenue: "Revenue & ROI Reports",
+    energy: "Energy Log & Telemetry",
+    weather: "Weather AI Intelligence",
+    estimation: "Generation AI Forecast",
+    flow: "Power Flow Mapping",
+    battery: "BESS Management",
+    alerts: "Alerts & Fault Log",
+    settings: "System Configuration",
+  };
+  const pageName = routeNames[path] || (path ? path.charAt(0).toUpperCase() + path.slice(1) : "Overview");
 
   useEffect(() => {
     const tick = () =>
@@ -30,7 +46,7 @@ export default function Topbar() {
   const handleRefresh = async () => {
     setRefreshing(true);
     if (refresh) await refresh();
-    setTimeout(() => setRefreshing(false), 800);
+    setTimeout(() => setRefreshing(false), 600);
   };
 
   const handleLogout = () => {
@@ -46,121 +62,117 @@ export default function Topbar() {
       .toUpperCase() || "U";
 
   return (
-    <header className="h-[72px] flex items-center justify-between px-6 lg:px-8 border-b border-slate-200 dark:border-void-800 bg-white dark:bg-void-900/80 backdrop-blur-md sticky top-0 z-50 transition-colors duration-300">
+    <header className="h-16 flex items-center justify-between px-6 border-b border-slate-200 dark:border-void-700/80 bg-white/95 dark:bg-void-900/95 backdrop-blur-md sticky top-0 z-40 transition-colors duration-200">
       {/* Left: Dynamic Breadcrumb */}
-      <div className="flex items-center gap-3 text-sm font-mono tracking-wide">
-        <span className="text-solar-600 dark:text-solar-400 font-bold">
-          {/* HELIO */}
-          VIT-Charge
+      <div className="flex items-center gap-2 text-xs font-mono">
+        <span className="font-bold text-slate-800 dark:text-white tracking-wider">
+          HELIO
         </span>
-        <span className="text-slate-400 dark:text-void-600">/</span>
-        <span className="text-slate-900 dark:text-white">{pageName}</span>
+        <ChevronRight className="w-3.5 h-3.5 text-slate-400 dark:text-void-400" />
+        <span className="font-medium text-slate-600 dark:text-void-200">
+          {pageName}
+        </span>
       </div>
 
-      {/* Center: Live status bar */}
-      <div className="hidden md:flex items-center gap-6">
-        <div className="flex items-center gap-2 bg-energy-green/10 border border-energy-green/20 px-3 py-1.5 rounded-full text-energy-green text-xs font-mono font-bold tracking-widest">
+      {/* Center: Real-time Telemetry Status Indicator */}
+      <div className="hidden md:flex items-center gap-5">
+        <div className="live-badge">
           <span className="relative flex h-2 w-2">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-energy-green opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-2 w-2 bg-energy-green"></span>
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-grid-500 opacity-60"></span>
+            <span className="relative inline-flex rounded-full h-2 w-2 bg-grid-500"></span>
           </span>
-          GRID LIVE
+          LIVE TELEMETRY
         </div>
-        <div className="text-xs font-mono text-slate-600 dark:text-void-300">
-          Last sync:{" "}
-          <span className="text-slate-900 dark:text-void-100">
+
+        <div className="text-xs font-mono text-slate-500 dark:text-void-300">
+          Last Synced:{" "}
+          <span className="text-slate-800 dark:text-void-100 font-semibold">
             {lastRefresh
               ? lastRefresh.toLocaleTimeString("en-IN", { hour12: false })
-              : "Just now"}
+              : "Active"}
           </span>
         </div>
       </div>
 
       {/* Right: Actions */}
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-3">
         {/* Digital Clock */}
-        <span className="hidden sm:block font-mono text-sm text-slate-600 dark:text-void-300 bg-slate-100 dark:bg-void-800/50 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-void-700 transition-colors min-w-[5ch] text-center">
+        <span className="hidden sm:block font-mono text-xs text-slate-600 dark:text-void-200 bg-slate-100 dark:bg-void-800 px-2.5 py-1.5 rounded-md border border-slate-200 dark:border-void-700 font-medium min-w-[70px] text-center">
           {time}
         </span>
 
-        {/* Refresh Button */}
+        {/* Manual Telemetry Sync */}
         <button
           onClick={handleRefresh}
           disabled={refreshing}
-          className={`flex items-center gap-2 text-slate-600 dark:text-void-300 hover:text-slate-900 dark:hover:text-white transition-colors px-2 py-1.5 ${
+          title="Sync Telemetry"
+          className={`p-2 rounded-lg text-slate-500 dark:text-void-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-void-800 transition-colors ${
             refreshing ? "opacity-60 cursor-not-allowed" : ""
           }`}
         >
           <RefreshCw
             className={`w-4 h-4 ${refreshing ? "animate-spin text-solar-500" : ""}`}
           />
-          <span className="hidden sm:inline text-sm font-medium">Refresh</span>
         </button>
 
         {/* Theme Toggle Button */}
         <button
           onClick={toggleTheme}
-          className="p-2 text-slate-500 hover:text-solar-600 dark:text-void-300 dark:hover:text-solar-400 transition-colors rounded-full hover:bg-slate-100 dark:hover:bg-void-700"
+          className="p-2 text-slate-500 dark:text-void-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-void-800 transition-colors rounded-lg"
           aria-label="Toggle Theme"
+          title={isDark ? "Switch to Light Theme" : "Switch to Dark Theme"}
         >
-          {isDark ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+          {isDark ? <Sun className="w-4 h-4 text-solar-400" /> : <Moon className="w-4 h-4 text-slate-600" />}
         </button>
 
-        {/* Notification Button */}
+        {/* Alerts Bell Button */}
         <button
-          className="relative p-2 text-slate-600 dark:text-void-300 hover:text-slate-900 dark:hover:text-white transition-colors"
+          className="relative p-2 text-slate-500 dark:text-void-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-void-800 transition-colors rounded-lg"
           onClick={() => navigate("/alerts")}
+          title="System Alerts"
         >
-          <Bell className="w-5 h-5" />
-          <span className="absolute top-1.5 right-2 w-2 h-2 rounded-full bg-energy-rose border border-white dark:border-void-900" />
+          <Bell className="w-4 h-4" />
+          <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-energy-rose" />
         </button>
 
-        {/* User Menu */}
-        <div className="relative">
+        {/* User Profile Menu */}
+        <div className="relative ml-1">
           <button
             onClick={() => setUserMenuOpen(!userMenuOpen)}
-            className="w-9 h-9 rounded-full bg-gradient-to-br from-solar-400 to-solar-600 flex items-center justify-center text-xs font-bold text-void-900 shadow-lg hover:shadow-solar-500/30 transition-all cursor-pointer"
-            title={user?.email}
+            className="w-8 h-8 rounded-lg bg-slate-200 dark:bg-void-700 hover:bg-solar-500/20 text-slate-700 dark:text-void-100 border border-slate-300 dark:border-void-600 flex items-center justify-center text-xs font-mono font-bold transition-all cursor-pointer"
+            title={user?.email || "Account"}
           >
             {userInitials}
           </button>
 
-          {/* Dropdown Menu */}
           {userMenuOpen && (
-            <div className="absolute right-0 top-12 w-56 bg-white dark:bg-void-800 border border-slate-200 dark:border-void-700 rounded-xl shadow-lg z-50 overflow-hidden">
-              {/* User Info */}
-              <div className="px-4 py-3 border-b border-slate-200 dark:border-void-700 bg-slate-50 dark:bg-void-900">
-                <div className="text-sm font-bold text-slate-900 dark:text-white">
-                  {user?.name || "User"}
+            <div className="absolute right-0 top-11 w-56 bg-white dark:bg-void-800 border border-slate-200 dark:border-void-700 rounded-xl shadow-lg z-50 overflow-hidden animate-fade-in">
+              <div className="px-4 py-3 border-b border-slate-100 dark:border-void-700/80 bg-slate-50/50 dark:bg-void-850/50">
+                <div className="text-xs font-bold text-slate-900 dark:text-white truncate">
+                  {user?.name || "Operator"}
                 </div>
-                <div className="text-xs text-slate-600 dark:text-void-300 font-mono mt-0.5">
-                  {user?.email}
+                <div className="text-[11px] text-slate-500 dark:text-void-300 font-mono truncate mt-0.5">
+                  {user?.email || "operator@helio.grid"}
                 </div>
-                {user?.installationId && (
-                  <div className="text-xs text-slate-500 dark:text-void-400 mt-1 font-mono">
-                    ID: {user.installationId}
-                  </div>
-                )}
               </div>
 
-              {/* Menu Items */}
-              <div className="py-2">
+              <div className="p-1.5 space-y-0.5">
                 <button
                   onClick={() => {
                     navigate("/settings");
                     setUserMenuOpen(false);
                   }}
-                  className="w-full px-4 py-2 text-left text-sm text-slate-700 dark:text-void-200 hover:bg-slate-100 dark:hover:bg-void-700 flex items-center gap-3 transition-colors"
+                  className="w-full px-3 py-2 text-left text-xs text-slate-700 dark:text-void-200 hover:bg-slate-100 dark:hover:bg-void-700 rounded-lg flex items-center gap-2.5 transition-colors font-medium"
                 >
-                  <Settings className="w-4 h-4" />
-                  Settings
+                  <Settings className="w-3.5 h-3.5 text-slate-400 dark:text-void-300" />
+                  Settings & APIs
                 </button>
 
                 <button
                   onClick={handleLogout}
-                  className="w-full px-4 py-2 text-left text-sm text-energy-rose hover:bg-energy-rose/10 dark:hover:bg-energy-rose/20 flex items-center gap-3 transition-colors border-t border-slate-200 dark:border-void-700"
+                  className="w-full px-3 py-2 text-left text-xs text-energy-rose hover:bg-rose-50 dark:hover:bg-rose-500/10 rounded-lg flex items-center gap-2.5 transition-colors font-medium border-t border-slate-100 dark:border-void-700/50"
                 >
-                  <LogOut className="w-4 h-4" />
+                  <LogOut className="w-3.5 h-3.5 opacity-80" />
                   Sign Out
                 </button>
               </div>

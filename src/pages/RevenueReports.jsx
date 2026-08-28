@@ -1,7 +1,8 @@
 import React from "react";
 import RevenueTable from "../components/reports/RevenueTable";
 import { useSolar } from "../context/SolarContext";
-import { IndianRupee, TrendingUp, Download, Zap } from "lucide-react";
+import { IndianRupee, TrendingUp, Download, Zap, FileSpreadsheet } from "lucide-react";
+import clsx from "clsx";
 
 export default function RevenueReports() {
   const { overview } = useSolar();
@@ -10,78 +11,101 @@ export default function RevenueReports() {
     v != null ? `₹${Number(v).toLocaleString("en-IN")}` : "—";
 
   return (
-    <div className="max-w-7xl mx-auto px-6 lg:px-8 py-8 lg:py-12 space-y-10 animate-fade-in">
+    <div className="max-w-7xl mx-auto px-6 py-8 space-y-8 animate-fade-in">
       {/* Header */}
-      <header className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-2 border-b border-slate-200/80 dark:border-void-700/60">
         <div>
-          <h1 className="font-display text-2xl font-extrabold text-slate-900 dark:text-white tracking-wide">
-            Revenue & Settlements
-          </h1>
-          <p className="text-sm text-slate-600 dark:text-void-300 mt-1 font-mono">
-            Energy export logs and net metering financials
+          <div className="flex items-center gap-3">
+            <h1 className="font-display text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
+              Revenue & Net Metering Settlements
+            </h1>
+            <span className="live-badge">
+              <span className="w-1.5 h-1.5 rounded-full bg-grid-500 animate-pulse" />
+              TARIFF ₹15.20 / UNIT
+            </span>
+          </div>
+          <p className="text-xs font-mono text-slate-500 dark:text-void-300 mt-1">
+            Feed-in tariff credits, peer-to-peer transaction settlements, and monthly yield ROI
           </p>
         </div>
-        <button className="bg-slate-300 dark:bg-void-800 hover:bg-slate-400 dark:hover:bg-void-700 border border-slate-400 dark:border-void-600 text-slate-900 dark:text-white px-4 py-2 rounded-lg font-medium transition-colors flex items-center gap-2">
-          <Download className="w-4 h-4" /> Export CSV
+
+        <button className="btn-ghost text-xs">
+          <Download className="w-3.5 h-3.5" /> Export Audit CSV
         </button>
-      </header>
+      </div>
 
       {/* Financial Overview Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <FinancialCard
-          title="Today's Earnings"
-          value={fmtINR(overview?.todayRevenue)}
+          title="Today's Feed-in Earnings"
+          value={fmtINR(overview?.todayRevenue || 6240)}
           icon={IndianRupee}
-          color="text-energy-green"
-          trend="+12.5% vs yesterday"
+          accent="green"
+          trend="+12.5% vs yesterday baseline"
+          trendUp={true}
         />
         <FinancialCard
-          title="Monthly Projection"
+          title="Month-to-Date Net Yield"
           value={fmtINR(overview?.monthlyRevenue || 45200)}
           icon={TrendingUp}
-          color="text-solar-400"
-          trend="On track based on irradiance"
+          accent="solar"
+          trend="On track for target ₹52,000"
+          trendUp={true}
         />
         <FinancialCard
-          title="Total Exported"
+          title="Green Energy Exported"
           value="845.2 kWh"
           icon={Zap}
-          color="text-energy-cyan"
-          trend="This month (Net positive)"
+          accent="cyan"
+          trend="Net positive microgrid contributor"
+          trendUp={true}
         />
       </div>
 
-      {/* Table Container */}
-      <div className="bg-white dark:bg-void-800 border border-slate-300 dark:border-void-700 rounded-2xl p-6 shadow-card">
-        <h2 className="font-display font-bold text-slate-900 dark:text-white mb-6">
-          Settlement Ledger
-        </h2>
+      {/* Ledger Table Container */}
+      <div className="card p-6">
+        <div className="flex items-center justify-between mb-6">
+          <div>
+            <h2 className="font-display font-bold text-base text-slate-900 dark:text-white">
+              Discom Settlement Ledger
+            </h2>
+            <p className="text-xs text-slate-500 dark:text-void-300 font-mono mt-0.5">
+              Verified bidirectional smart-meter transaction records
+            </p>
+          </div>
+        </div>
         <RevenueTable />
       </div>
     </div>
   );
 }
 
-// Minimal card for the top of the revenue page
-function FinancialCard({ title, value, icon: Icon, color, trend }) {
+function FinancialCard({ title, value, icon: Icon, accent, trend, trendUp }) {
+  const accentStyles = {
+    green: "text-grid-600 dark:text-grid-400 bg-grid-50 dark:bg-grid-500/10 border-grid-200 dark:border-grid-500/20",
+    solar: "text-solar-500 bg-solar-50 dark:bg-solar-500/10 border-solar-200 dark:border-solar-500/20",
+    cyan: "text-energy-cyan bg-cyan-50 dark:bg-cyan-500/10 border-cyan-200 dark:border-cyan-500/20",
+  };
+
+  const badgeClass = accentStyles[accent] || accentStyles.green;
+
   return (
-    <div className="bg-slate-100 dark:bg-void-800/50 border border-slate-300 dark:border-void-700 rounded-2xl p-6 shadow-card flex flex-col">
-      <div className="flex justify-between items-start mb-4">
-        <h3 className="text-slate-700 dark:text-void-300 text-sm font-medium">
-          {title}
-        </h3>
-        <div
-          className={`p-2 rounded-lg bg-slate-200 dark:bg-void-900 border border-slate-300 dark:border-void-700 ${color}`}
-        >
-          <Icon className="w-5 h-5" />
+    <div className="card p-5 flex flex-col justify-between">
+      <div className="flex justify-between items-start mb-3">
+        <span className="stat-label truncate">{title}</span>
+        <div className={clsx("w-7 h-7 rounded-md border flex items-center justify-center flex-shrink-0", badgeClass)}>
+          <Icon className="w-3.5 h-3.5" />
         </div>
       </div>
-      <div className="mt-auto">
-        <div className="text-3xl font-display font-bold text-slate-900 dark:text-white mb-1">
+      <div>
+        <div className="stat-value text-2xl lg:text-3xl text-slate-900 dark:text-white">
           {value}
         </div>
-        <div className="text-xs font-mono text-slate-600 dark:text-void-400">
-          {trend}
+        <div className="text-xs font-mono text-slate-500 dark:text-void-300 mt-2 flex items-center gap-1">
+          <span className={trendUp ? "text-grid-600 dark:text-grid-400" : "text-energy-rose"}>
+            {trendUp ? "↑" : "↓"}
+          </span>
+          <span>{trend}</span>
         </div>
       </div>
     </div>

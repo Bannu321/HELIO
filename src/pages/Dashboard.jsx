@@ -1,234 +1,26 @@
-// import React from "react";
-// import { Link } from "react-router-dom";
-// import StatCard from "../components/dashboard/StatCard";
-// import PowerChart from "../components/charts/PowerChart";
-// import WeatherWidget from "../components/weather/WeatherWidget";
-// import { useSolar } from "../context/SolarContext";
-// import { ArrowRight } from "lucide-react";
-
-// export default function Dashboard() {
-//   const { overview, loading } = useSolar();
-
-//   const fmt = (v, decimals = 1) =>
-//     v != null
-//       ? Number(v).toLocaleString("en-IN", {
-//           minimumFractionDigits: decimals,
-//           maximumFractionDigits: decimals,
-//         })
-//       : "—";
-
-//   const fmtINR = (v) =>
-//     v != null ? `₹${Number(v).toLocaleString("en-IN")}` : "—";
-
-//   return (
-//     <div className="max-w-7xl mx-auto px-6 lg:px-8 py-8 lg:py-12 space-y-10">
-//       {/* Page heading */}
-//       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
-//         <div>
-//           <h1 className="font-display text-2xl font-extrabold text-slate-900 dark:text-white tracking-wide">
-//             System Overview
-//           </h1>
-//           <p className="text-sm text-slate-600 dark:text-void-300 mt-1 font-mono">
-//             {new Date().toLocaleDateString("en-IN", {
-//               weekday: "long",
-//               year: "numeric",
-//               month: "long",
-//               day: "numeric",
-//             })}
-//           </p>
-//         </div>
-//         <div className="flex items-center gap-2 bg-slate-100 dark:bg-void-800/50 border border-slate-300 dark:border-void-700 py-2 px-4 rounded-xl text-sm font-mono text-slate-700 dark:text-void-200">
-//           <span className="text-solar-600 dark:text-solar-400">⚡</span>
-//           CO₂ Saved Today:{" "}
-//           <span className="text-energy-green font-bold">
-//             {overview?.co2Saved ?? "—"} t
-//           </span>
-//         </div>
-//       </div>
-
-//       {/* KPI Stats Row (The Vital Pulse) */}
-//       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-//         <Link to="/grid" className="block group">
-//           <StatCard
-//             label="Current Power"
-//             value={fmt(overview?.currentPower)}
-//             unit="kW"
-//             delta="+3.2% from last hour"
-//             deltaUp
-//             accent="solar"
-//             icon="⚡"
-//             loading={loading}
-//           />
-//         </Link>
-//         <Link to="/energy" className="block group">
-//           <StatCard
-//             label="Today's Energy"
-//             value={fmt(overview?.todayEnergy)}
-//             unit="kWh"
-//             delta="+12% vs daily avg"
-//             deltaUp
-//             accent="green"
-//             icon="🔋"
-//             loading={loading}
-//           />
-//         </Link>
-//         <Link to="/revenue" className="block group">
-//           <StatCard
-//             label="Revenue Today"
-//             value={fmtINR(overview?.todayRevenue)}
-//             delta="On track for ₹6,200"
-//             deltaUp
-//             accent="blue"
-//             icon="₹"
-//             loading={loading}
-//           />
-//         </Link>
-//         <Link to="/panels" className="block group">
-//           <StatCard
-//             label="Panel Health"
-//             value="98.5"
-//             unit="%"
-//             delta="Array B needs cleaning"
-//             deltaUp={false}
-//             accent="rose"
-//             icon="🔧"
-//             loading={loading}
-//           />
-//         </Link>
-//       </div>
-
-//       {/* Main Visuals Row */}
-//       <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
-//         {/* Main Chart */}
-//         <div className="xl:col-span-2 bg-white dark:bg-void-800 border border-slate-300 dark:border-void-700 rounded-2xl p-8 shadow-card flex flex-col">
-//           <div className="flex justify-between items-center mb-6">
-//             <h2 className="font-display font-bold text-slate-900 dark:text-white">
-//               Live Generation
-//             </h2>
-//             <Link
-//               to="/estimation"
-//               className="text-xs text-solar-400 hover:text-solar-300 flex items-center gap-1 transition-colors"
-//             >
-//               AI Forecast <ArrowRight className="w-3 h-3" />
-//             </Link>
-//           </div>
-//           <div className="flex-1 min-h-[300px]">
-//             <PowerChart />
-//           </div>
-//         </div>
-
-//         {/* Weather Intelligence */}
-//         <div className="bg-white dark:bg-void-800 border border-slate-300 dark:border-void-700 rounded-2xl p-8 shadow-card flex flex-col">
-//           <div className="flex justify-between items-center mb-6">
-//             <h2 className="font-display font-bold text-slate-900 dark:text-white">
-//               Grid Environment
-//             </h2>
-//             <Link
-//               to="/weather"
-//               className="text-xs text-energy-cyan hover:text-cyan-300 flex items-center gap-1 transition-colors"
-//             >
-//               Details <ArrowRight className="w-3 h-3" />
-//             </Link>
-//           </div>
-//           <div className="flex-1">
-//             <WeatherWidget />
-//           </div>
-//         </div>
-//       </div>
-
-//       {/* Architecture strip (Kept because it's a great visual anchor) */}
-//       <div className="bg-white dark:bg-void-800 border border-slate-300 dark:border-void-700 rounded-2xl p-8 shadow-card mt-12">
-//         <div className="font-display text-sm font-bold text-slate-900 dark:text-white mb-2">
-//           System Architecture
-//         </div>
-//         <div className="text-xs text-slate-600 dark:text-void-300 mb-6 font-mono">
-//           Data flow · MERN stack integration
-//         </div>
-//         <div className="flex items-center justify-between gap-2 flex-wrap">
-//           {[
-//             {
-//               icon: "☀️",
-//               layer: "INPUT",
-//               name: "Solar Array",
-//               sub: "24 × 400W panels",
-//             },
-//             {
-//               icon: "⚡",
-//               layer: "CONVERT",
-//               name: "Inverter",
-//               sub: "DC → AC 3-phase",
-//             },
-//             {
-//               icon: "🔋",
-//               layer: "STORE",
-//               name: "Battery Bank",
-//               sub: "48kWh LiFePO₄",
-//             },
-//             {
-//               icon: "📡",
-//               layer: "TRANSMIT",
-//               name: "IoT Gateway",
-//               sub: "MQTT + REST",
-//             },
-//             {
-//               icon: "🟢",
-//               layer: "BACKEND",
-//               name: "Node.js API",
-//               sub: "Express + MongoDB",
-//             },
-//             {
-//               icon: "⚛",
-//               layer: "FRONTEND",
-//               name: "React App",
-//               sub: "Tailwind + Recharts",
-//             },
-//             {
-//               icon: "📊",
-//               layer: "YOU ARE",
-//               // name: "HELIO UI",
-//               name: "VIT-Charge",
-//               sub: "This dashboard",
-//               highlight: true,
-//             },
-//           ].map((node, i, arr) => (
-//             <React.Fragment key={node.name}>
-//               <div
-//                 className={`flex flex-col items-center text-center px-3 py-3 rounded-xl border transition-all ${
-//                   node.highlight
-//                     ? "bg-solar-500/10 border-solar-500/30 flex-1"
-//                     : "bg-slate-200 dark:bg-void-900 border-slate-300 dark:border-void-700 flex-1"
-//                 }`}
-//               >
-//                 <div className="text-xl mb-1">{node.icon}</div>
-//                 <div className="text-[9px] font-mono text-slate-600 dark:text-void-400 tracking-widest">
-//                   {node.layer}
-//                 </div>
-//                 <div
-//                   className={`text-xs font-display font-bold mt-1 ${node.highlight ? "text-solar-600 dark:text-solar-400" : "text-slate-800 dark:text-void-100"}`}
-//                 >
-//                   {node.name}
-//                 </div>
-//               </div>
-//               {i < arr.length - 1 && (
-//                 <div className="text-slate-400 dark:text-void-500 text-sm font-mono flex-shrink-0">
-//                   →
-//                 </div>
-//               )}
-//             </React.Fragment>
-//           ))}
-//         </div>
-//       </div>
-//     </div>
-//   );
-// }
-
 import React from "react";
 import { Link } from "react-router-dom";
 import StatCard from "../components/dashboard/StatCard";
 import PowerChart from "../components/charts/PowerChart";
 import WeatherWidget from "../components/weather/WeatherWidget";
 import { useSolar } from "../context/SolarContext";
-import { ArrowRight, Activity } from "lucide-react";
+import {
+  Sun,
+  BatteryCharging,
+  IndianRupee,
+  Wrench,
+  Zap,
+  Activity,
+  ArrowRight,
+  Leaf,
+  Cpu,
+  Database,
+  Network,
+  Radio,
+  Sparkles,
+  Layers,
+} from "lucide-react";
+import clsx from "clsx";
 
 export default function Dashboard() {
   const { overview, loading } = useSolar();
@@ -244,219 +36,253 @@ export default function Dashboard() {
   const fmtINR = (v) =>
     v != null ? `₹${Number(v).toLocaleString("en-IN")}` : "—";
 
-  // Calculate CO2 saved mathematically if it's missing from the backend payload 
-  // (India grid average is ~0.82 kg CO2 per kWh)
-  const co2SavedKg = overview?.co2Saved ?? (overview?.todayEnergy ? (overview.todayEnergy * 0.82) : 0);
+  // Calculate CO2 avoided (India grid emission factor ~0.82 kg CO2/kWh)
+  const co2SavedKg =
+    overview?.co2Saved ??
+    (overview?.todayEnergy ? overview.todayEnergy * 0.82 : 0);
   const co2SavedTonnes = (co2SavedKg / 1000).toFixed(3);
 
+  const panelHealthVal = overview?.panelsFault > 0 ? (100 - (overview.panelsFault / (overview.panelsActive || 24)) * 100).toFixed(1) : "99.4";
+
   return (
-    <div className="max-w-7xl mx-auto px-6 lg:px-8 py-8 lg:py-12 space-y-10 animate-fade-in">
-      {/* Page heading */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+    <div className="max-w-7xl mx-auto px-6 py-8 space-y-8 animate-fade-in">
+      {/* ── Top Header & System Status ───────────────────────────── */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-2 border-b border-slate-200/80 dark:border-void-700/60">
         <div>
-          <div className="flex items-center gap-3 mb-1">
-            <h1 className="font-display text-2xl font-extrabold text-slate-900 dark:text-white tracking-wide">
+          <div className="flex items-center gap-3">
+            <h1 className="font-display text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
               System Overview
             </h1>
-            <div className="flex items-center gap-1.5 bg-energy-green/10 border border-energy-green/20 px-2 py-1 rounded-md">
-              <Activity className="w-3 h-3 text-energy-green animate-pulse" />
-              <span className="text-[10px] font-mono font-bold text-energy-green uppercase tracking-wider">
-                AI ENGINE ONLINE
-              </span>
-            </div>
+            <span className="live-badge">
+              <span className="w-1.5 h-1.5 rounded-full bg-grid-500 animate-pulse" />
+              MICROGRID ACTIVE
+            </span>
           </div>
-          <p className="text-sm text-slate-600 dark:text-void-300 font-mono">
+          <p className="text-xs font-mono text-slate-500 dark:text-void-300 mt-1">
             {new Date().toLocaleDateString("en-IN", {
               weekday: "long",
               year: "numeric",
               month: "long",
               day: "numeric",
-            })}
+            })} · Real-time SCADA Telemetry
           </p>
         </div>
-        <div className="flex items-center gap-2 bg-slate-100 dark:bg-void-800/50 border border-slate-300 dark:border-void-700 py-2 px-4 rounded-xl text-sm font-mono text-slate-700 dark:text-void-200 shadow-sm transition-transform hover:scale-105">
-          <span className="text-solar-600 dark:text-solar-400">⚡</span>
-          CO₂ Avoided Today:{" "}
-          <span className="text-energy-green font-bold">
-            {co2SavedTonnes} t
-          </span>
+
+        <div className="flex items-center gap-3 flex-wrap">
+          {/* Carbon Footprint Avoidance Badge */}
+          <div className="flex items-center gap-2.5 bg-grid-50/80 dark:bg-grid-500/10 border border-grid-200 dark:border-grid-500/20 px-3.5 py-2 rounded-lg text-xs font-mono">
+            <Leaf className="w-4 h-4 text-grid-600 dark:text-grid-400 flex-shrink-0" />
+            <div>
+              <span className="text-slate-600 dark:text-void-300">CO₂ Avoided: </span>
+              <span className="font-bold text-grid-700 dark:text-grid-400">
+                {co2SavedTonnes} t
+              </span>
+            </div>
+          </div>
+
+          <Link
+            to="/grid-community"
+            className="btn-ghost text-xs"
+          >
+            <Network className="w-3.5 h-3.5 text-energy-cyan" />
+            P2P Sandbox
+          </Link>
         </div>
       </div>
 
-      {/* KPI Stats Row (The Vital Pulse) */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        <Link to="/grid" className="block group">
+      {/* ── Primary KPI Metrics (The Vital Pulse) ──────────────────── */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <Link to="/grid" className="block outline-none focus-visible:ring-2 focus-visible:ring-solar-500 rounded-xl">
           <StatCard
-            label="Current Power"
+            label="Instant Power Flow"
             value={fmt(overview?.currentPower)}
             unit="kW"
-            delta="+3.2% from last hour"
+            delta="+3.2% vs 1h ago"
             deltaUp={true}
             accent="solar"
-            icon="⚡"
+            icon={Sun}
             loading={loading}
+            variant="hero"
           />
         </Link>
-        <Link to="/energy" className="block group">
+
+        <Link to="/energy" className="block outline-none focus-visible:ring-2 focus-visible:ring-grid-500 rounded-xl">
           <StatCard
-            label="Today's Energy"
+            label="Today's Generation"
             value={fmt(overview?.todayEnergy)}
             unit="kWh"
-            delta="+12% vs daily avg"
+            delta="+12.4% vs daily avg"
             deltaUp={true}
             accent="green"
-            icon="🔋"
+            icon={Zap}
             loading={loading}
           />
         </Link>
-        <Link to="/revenue" className="block group">
+
+        <Link to="/revenue" className="block outline-none focus-visible:ring-2 focus-visible:ring-cyan-500 rounded-xl">
           <StatCard
-            label="Revenue Today"
-            value={fmtINR(overview?.todayRevenue || (overview?.todayEnergy ? overview.todayEnergy * 15.2 : 0))} // Fallback math if revenue missing
-            delta="On track for ₹6,200"
+            label="Gross Savings / ROI"
+            value={fmtINR(overview?.todayRevenue || (overview?.todayEnergy ? overview.todayEnergy * 15.2 : 0))}
+            delta="Tariff ₹15.20/unit"
             deltaUp={true}
             accent="blue"
-            icon="₹"
+            icon={IndianRupee}
             loading={loading}
           />
         </Link>
-        <Link to="/panels" className="block group">
+
+        <Link to="/panels" className="block outline-none focus-visible:ring-2 focus-visible:ring-rose-500 rounded-xl">
           <StatCard
-            label="Panel Health"
-            value="98.5"
+            label="PV Array Health"
+            value={panelHealthVal}
             unit="%"
-            delta="Array B needs cleaning"
-            deltaUp={false}
-            accent="rose"
-            icon="🔧"
+            delta={overview?.panelsFault > 0 ? `${overview.panelsFault} panel fault flagged` : "Optimal string health"}
+            deltaUp={!(overview?.panelsFault > 0)}
+            accent={overview?.panelsFault > 0 ? "rose" : "green"}
+            icon={Wrench}
             loading={loading}
           />
         </Link>
       </div>
 
-      {/* Main Visuals Row */}
-      <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
-        {/* Main Chart */}
-        <div className="xl:col-span-2 bg-white dark:bg-void-800 border border-slate-300 dark:border-void-700 rounded-2xl p-8 shadow-card flex flex-col transition-all hover:shadow-lg">
-          <div className="flex justify-between items-center mb-6">
-            <h2 className="font-display font-bold text-slate-900 dark:text-white">
-              Live Generation
-            </h2>
+      {/* ── Main Analytical Views (Charts & Environment) ──────────── */}
+      <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
+        {/* Real-time Generation Timeline */}
+        <div className="xl:col-span-2 card p-6 flex flex-col justify-between">
+          <div className="flex items-center justify-between mb-4">
+            <div>
+              <h2 className="font-display font-bold text-base text-slate-900 dark:text-white">
+                Live Generation Timeline
+              </h2>
+              <p className="text-xs text-slate-500 dark:text-void-300 font-mono mt-0.5">
+                MPPT active power curve vs grid dispatch limit
+              </p>
+            </div>
             <Link
               to="/estimation"
-              className="text-xs text-solar-400 hover:text-solar-300 flex items-center gap-1 transition-colors font-bold uppercase tracking-wider"
+              className="inline-flex items-center gap-1.5 text-xs font-mono font-semibold text-solar-600 dark:text-solar-400 hover:text-solar-700 dark:hover:text-solar-300 transition-colors"
             >
-              AI Forecast <ArrowRight className="w-3 h-3" />
+              AI Forecast <ArrowRight className="w-3.5 h-3.5" />
             </Link>
           </div>
+
           <div className="flex-1 min-h-[300px]">
             <PowerChart />
           </div>
         </div>
 
-        {/* Weather Intelligence */}
-        <div className="bg-white dark:bg-void-800 border border-slate-300 dark:border-void-700 rounded-2xl p-8 shadow-card flex flex-col transition-all hover:shadow-lg">
-          <div className="flex justify-between items-center mb-6">
-            <h2 className="font-display font-bold text-slate-900 dark:text-white">
-              Grid Environment
-            </h2>
+        {/* Environmental & Solar Weather Widget */}
+        <div className="card p-6 flex flex-col justify-between">
+          <div className="flex items-center justify-between mb-4">
+            <div>
+              <h2 className="font-display font-bold text-base text-slate-900 dark:text-white">
+                Solar Environment
+              </h2>
+              <p className="text-xs text-slate-500 dark:text-void-300 font-mono mt-0.5">
+                Irradiance, ambient temp, & UV index
+              </p>
+            </div>
             <Link
               to="/weather"
-              className="text-xs text-energy-cyan hover:text-cyan-300 flex items-center gap-1 transition-colors font-bold uppercase tracking-wider"
+              className="inline-flex items-center gap-1.5 text-xs font-mono font-semibold text-energy-cyan hover:text-cyan-400 transition-colors"
             >
-              Details <ArrowRight className="w-3 h-3" />
+              Sensors <ArrowRight className="w-3.5 h-3.5" />
             </Link>
           </div>
+
           <div className="flex-1">
             <WeatherWidget />
           </div>
         </div>
       </div>
 
-      {/* System Architecture Strip */}
-      <div className="bg-white dark:bg-void-800 border border-slate-300 dark:border-void-700 rounded-2xl p-8 shadow-card mt-12 overflow-x-auto">
-        <div className="font-display text-sm font-bold text-slate-900 dark:text-white mb-2">
-          System Architecture
+      {/* ── System Architecture & Node Pipeline ────────────────────── */}
+      <div className="card p-6">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-5">
+          <div>
+            <h2 className="font-display font-bold text-base text-slate-900 dark:text-white">
+              End-to-End System Architecture
+            </h2>
+            <p className="text-xs text-slate-500 dark:text-void-300 font-mono mt-0.5">
+              Live telemetry pipeline · Edge Sensors → Cloud Ingestion → AI Forecasting Engine
+            </p>
+          </div>
+          <span className="inline-flex items-center gap-1.5 text-[11px] font-mono text-grid-600 dark:text-grid-400 font-medium">
+            <span className="w-2 h-2 rounded-full bg-grid-500 animate-pulse" />
+            6 / 6 NODES HEALTHY
+          </span>
         </div>
-        <div className="text-xs text-slate-600 dark:text-void-300 mb-6 font-mono">
-          Data flow · MERN + ML Stack Integration
-        </div>
-        <div className="flex items-center justify-between gap-2 min-w-[800px]">
+
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
           {[
             {
-              icon: "☀️",
-              layer: "INPUT",
-              name: "Solar Array",
-              sub: "24 × 400W panels",
+              icon: Sun,
+              stage: "01. GENERATE",
+              name: "PV Array",
+              meta: "24 × 400W Monocrystalline",
+              accent: "text-solar-500 bg-solar-50 dark:bg-solar-500/10 border-solar-200 dark:border-solar-500/20",
             },
             {
-              icon: "🔋",
-              layer: "STORE",
-              name: "Battery Bank",
-              sub: "48kWh LiFePO₄",
+              icon: BatteryCharging,
+              stage: "02. STORE",
+              name: "BESS Storage",
+              meta: "48kWh LiFePO4 Rack",
+              accent: "text-energy-blue bg-blue-50 dark:bg-blue-500/10 border-blue-200 dark:border-blue-500/20",
             },
             {
-              icon: "📡",
-              layer: "TRANSMIT",
+              icon: Radio,
+              stage: "03. INGEST",
               name: "IoT Gateway",
-              sub: "MQTT + REST",
+              meta: "MQTT + Modbus RS-485",
+              accent: "text-slate-700 dark:text-void-200 bg-slate-100 dark:bg-void-700/60 border-slate-200 dark:border-void-600",
             },
             {
-              icon: "🟢",
-              layer: "BACKEND",
-              name: "Node.js API",
-              sub: "Express + MongoDB",
+              icon: Database,
+              stage: "04. BACKEND",
+              name: "Node API",
+              meta: "Express + MongoDB Cluster",
+              accent: "text-slate-700 dark:text-void-200 bg-slate-100 dark:bg-void-700/60 border-slate-200 dark:border-void-600",
             },
             {
-              icon: "🧠", // <-- Added the ML Engine!
-              layer: "AI CORE",
+              icon: Cpu,
+              stage: "05. AI CORE",
               name: "Python ML",
-              sub: "Flask + Prophet",
-              highlight: true, 
-              color: "bg-energy-cyan/10 border-energy-cyan/30 text-energy-cyan",
+              meta: "Prophet + Neural Forecast",
+              accent: "text-energy-cyan bg-cyan-50 dark:bg-cyan-500/10 border-cyan-200 dark:border-cyan-500/20",
             },
             {
-              icon: "⚛",
-              layer: "FRONTEND",
-              name: "React App",
-              sub: "Tailwind + Recharts",
+              icon: Layers,
+              stage: "06. CLIENT",
+              name: "HELIO UI",
+              meta: "Vite + Tailwind + Recharts",
+              accent: "text-grid-600 dark:text-grid-400 bg-grid-50 dark:bg-grid-500/10 border-grid-200 dark:border-grid-500/20",
             },
-            {
-              icon: "📊",
-              layer: "YOU ARE",
-              name: "VIT-Charge",
-              sub: "This dashboard",
-              highlight: true,
-              color: "bg-solar-500/10 border-solar-500/30 text-solar-600 dark:text-solar-400",
-            },
-          ].map((node, i, arr) => (
-            <React.Fragment key={node.name}>
+          ].map((node) => {
+            const NodeIcon = node.icon;
+            return (
               <div
-                className={`flex flex-col items-center text-center px-3 py-3 rounded-xl border transition-all flex-1 ${
-                  node.highlight
-                    ? node.color
-                    : "bg-slate-200 dark:bg-void-900 border-slate-300 dark:border-void-700"
-                }`}
+                key={node.name}
+                className="p-3.5 rounded-lg border border-slate-200 dark:border-void-700/70 bg-slate-50/50 dark:bg-void-850/50 flex flex-col justify-between"
               >
-                <div className="text-xl mb-1">{node.icon}</div>
-                <div className="text-[9px] font-mono text-slate-600 dark:text-void-400 tracking-widest">
-                  {node.layer}
+                <div>
+                  <div className="flex items-center justify-between mb-2">
+                    <div className={clsx("w-7 h-7 rounded-md flex items-center justify-center border", node.accent)}>
+                      <NodeIcon className="w-3.5 h-3.5" />
+                    </div>
+                    <span className="text-[10px] font-mono text-slate-500 dark:text-void-300 font-semibold">
+                      {node.stage.split(".")[0]}
+                    </span>
+                  </div>
+                  <div className="font-semibold text-xs text-slate-900 dark:text-white">
+                    {node.name}
+                  </div>
                 </div>
-                <div
-                  className={`text-xs font-display font-bold mt-1 ${
-                    node.highlight ? "" : "text-slate-800 dark:text-void-100"
-                  }`}
-                >
-                  {node.name}
+                <div className="text-[10px] font-mono text-slate-500 dark:text-void-300 truncate mt-2">
+                  {node.meta}
                 </div>
               </div>
-              {i < arr.length - 1 && (
-                <div className="text-slate-400 dark:text-void-500 text-sm font-mono flex-shrink-0">
-                  →
-                </div>
-              )}
-            </React.Fragment>
-          ))}
+            );
+          })}
         </div>
       </div>
     </div>

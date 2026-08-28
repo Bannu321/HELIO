@@ -40,5 +40,5 @@ app.get("/api/health", (req, res) =>
 );
 
 app.listen(PORT, () =>
-  console.log(`🌞 VIT-Charge API running on http://localhost:${PORT}`),
+  console.log(`🌞 HELIO API running on http://localhost:${PORT}`),
 );

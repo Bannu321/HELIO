@@ -1,103 +1,83 @@
-@import url("https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300..800;1,9..40,300..700&family=JetBrains+Mono:wght@400;500;600;700&family=Syne:wght@600;700;800&display=swap");
 
 @import "tailwindcss";
-@config "../tailwind.config.js";
 
-/* Enable class-based dark mode (Tailwind v4 requires this — replaces darkMode:'class' from v3 config) */
+/* Enable class-based dark mode */
 @custom-variant dark (&:where(.dark, .dark *));
 
 /* ============================================================
-   TAILWIND v4 THEME — Mirrored from tailwind.config.js (source of truth)
+   TAILWIND v4 THEME — HELIO Energy-Tech Design System
    ============================================================ */
 @theme {
-  /* ── Fonts ──────────────────────────────────────────────── */
-  --font-display: "Syne", sans-serif;
-  --font-body:    "DM Sans", sans-serif;
-  --font-mono:    "Space Mono", monospace;
+  /* ── Typography ─────────────────────────────────────────── */
+  --font-display: "Syne", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-body:    "DM Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-mono:    "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 
-  /* ── solar (amber/gold) ─────────────────────────────────── */
-  --color-solar-50:  #fffbeb;
-  --color-solar-100: #fef3c7;
-  --color-solar-200: #fde68a;
-  --color-solar-300: #fcd34d;
-  --color-solar-400: #fbbf24;
-  --color-solar-500: #f59e0b;
-  --color-solar-600: #d97706;
-  --color-solar-700: #b45309;
-  --color-solar-800: #92400e;
-  --color-solar-900: #78350f;
+  /* ── Void / Slate Base (Deep Industrial Dark Surfaces) ───── */
+  --color-void-950: #040609;
+  --color-void-900: #070A0F;
+  --color-void-850: #0A0E17;
+  --color-void-800: #0E1420;
+  --color-void-700: #141C2C;
+  --color-void-600: #1B263A;
+  --color-void-500: #26354E;
+  --color-void-400: #3D4F6E;
+  --color-void-300: #627799;
+  --color-void-200: #93A6C4;
+  --color-void-100: #CBD7E8;
+  --color-void-50:  #EDF3FA;
 
-  /* ── void (dark UI base) ────────────────────────────────── */
-  --color-void-900: #06080C;
-  --color-void-800: #0A0D14;
-  --color-void-700: #0F1520;
-  --color-void-600: #141C2A;
-  --color-void-500: #1A2336;
-  --color-void-400: #222D42;
-  --color-void-300: #2D3A52;
-  --color-void-200: #3D4E6A;
-  --color-void-100: #536080;
+  /* ── Solar (Amber / Daylight Generation) ─────────────────── */
+  --color-solar-50:  #FFFBEB;
+  --color-solar-100: #FEF3C7;
+  --color-solar-200: #FDE68A;
+  --color-solar-300: #FCD34D;
+  --color-solar-400: #FBBF24;
+  --color-solar-500: #F59E0B;
+  --color-solar-600: #D97706;
+  --color-solar-700: #B45309;
+  --color-solar-800: #92400E;
+  --color-solar-900: #78350F;
 
-  /* ── grid (green accent) ────────────────────────────────── */
-  --color-grid-50:  #f0fdf4;
-  --color-grid-100: #dcfce7;
-  --color-grid-200: #bbf7d0;
-  --color-grid-300: #86efac;
-  --color-grid-400: #4ade80;
-  --color-grid-500: #22c55e;
-  --color-grid-600: #16a34a;
+  /* ── Grid (Emerald / Sustainability / Efficiency) ────────── */
+  --color-grid-50:  #ECFDF5;
+  --color-grid-100: #D1FAE5;
+  --color-grid-200: #A7F3D0;
+  --color-grid-300: #6EE7B7;
+  --color-grid-400: #34D399;
+  --color-grid-500: #10B981;
+  --color-grid-600: #059669;
+  --color-grid-700: #047857;
 
-  /* ── energy accents ─────────────────────────────────────── */
-  --color-energy-cyan:   #00E5FF;
-  --color-energy-green:  #00E5A0;
-  --color-energy-amber:  #FFB800;
-  --color-energy-orange: #FF7A00;
-  --color-energy-rose:   #FF4C6A;
-  --color-energy-blue:   #3FA9F5;
+  /* ── Energy Accents (Data & System States) ───────────────── */
+  --color-energy-cyan:   #06B6D4;
+  --color-energy-blue:   #3B82F6;
+  --color-energy-green:  #10B981;
+  --color-energy-amber:  #F59E0B;
+  --color-energy-orange: #F97316;
+  --color-energy-rose:   #EF4444;
 
-  /* ── Shadows ────────────────────────────────────────────── */
-  --shadow-solar: 0 0 20px rgba(251,191,36,0.25), 0 0 60px rgba(251,191,36,0.1);
-  --shadow-green: 0 0 20px rgba(0,229,160,0.2);
-  --shadow-card:  0 4px 24px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.04);
+  /* ── Shadows & Depth ────────────────────────────────────── */
+  --shadow-subtle: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-card:   0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
+  --shadow-panel:  0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+  --shadow-solar:  0 0 15px rgba(245, 158, 11, 0.15);
+  --shadow-green:  0 0 15px rgba(16, 185, 129, 0.15);
 
   /* ── Animations ─────────────────────────────────────────── */
-  --animate-pulse-slow: pulse      3s  cubic-bezier(0.4,0,0.6,1) infinite;
-  --animate-spin-slow:  spin       12s linear infinite;
-  --animate-float:      float      6s  ease-in-out infinite;
-  --animate-glow:       glow       2s  ease-in-out infinite alternate;
-  --animate-slide-up:   slideUp    0.4s ease forwards;
-  --animate-fade-in:    fadeIn     0.5s ease forwards;
-  --animate-blink:      blink      1.2s ease-in-out infinite;
+  --animate-pulse-slow: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  --animate-fade-in:    fadeIn 0.25s ease-out forwards;
+  --animate-slide-up:   slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-/* ── Keyframes ───────────────────────────────────────────── */
-@keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50%       { transform: translateY(-6px); }
-}
-@keyframes glow {
-  from { box-shadow: 0 0 12px rgba(251,191,36,0.3); }
-  to   { box-shadow: 0 0 28px rgba(251,191,36,0.7); }
-}
-@keyframes slideUp {
-  from { opacity: 0; transform: translateY(16px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
 @keyframes fadeIn {
   from { opacity: 0; }
   to   { opacity: 1; }
 }
-@keyframes blink {
-  0%, 100% { opacity: 1; }
-  50%       { opacity: 0.2; }
-}
-
-/* ── Custom background utilities ─────────────────────────── */
-.bg-solar-glow {
-  background: radial-gradient(ellipse at top, rgba(251,191,36,0.08) 0%, transparent 60%);
-}
-.bg-grid-glow {
-  background: radial-gradient(ellipse at bottom right, rgba(0,229,160,0.06) 0%, transparent 60%);
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
 /* ============================================================
@@ -110,185 +90,148 @@
     padding: 0;
   }
   html {
-    @apply transition-colors duration-300;
+    @apply transition-colors duration-200;
   }
   body {
-    @apply bg-slate-50 text-slate-900 dark:bg-void-900 dark:text-white font-body;
+    @apply bg-slate-50 text-slate-900 dark:bg-void-900 dark:text-void-100 font-body antialiased;
     font-size: 14px;
-    -webkit-font-smoothing: antialiased;
+    line-height: 1.5;
   }
   ::-webkit-scrollbar {
-    width: 4px;
-    height: 4px;
+    width: 6px;
+    height: 6px;
   }
   ::-webkit-scrollbar-track {
-    @apply bg-slate-100 dark:bg-void-800;
+    @apply bg-transparent;
   }
   ::-webkit-scrollbar-thumb {
-    @apply bg-slate-300 dark:bg-void-400 rounded-full;
+    @apply bg-slate-300 dark:bg-void-600 rounded-full;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-slate-400 dark:bg-void-500;
   }
 }
 
 /* ============================================================
-   COMPONENT LAYER
+   COMPONENT LAYER — HELIO Energy-Tech Primitives
    ============================================================ */
 @layer components {
-  .card,
-  .card-glow,
-  .card-green {
-    @apply bg-white dark:bg-void-700 border border-slate-200 dark:border-void-500 rounded-2xl transition-all duration-300;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  /* Standard Surface Card */
+  .card {
+    @apply bg-white dark:bg-void-800/90 border border-slate-200 dark:border-void-700/80 rounded-xl transition-all duration-200;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.02);
   }
   .dark .card {
-    box-shadow:
-      0 4px 24px rgba(0, 0, 0, 0.4),
-      inset 0 1px 0 rgba(255, 255, 255, 0.04);
-    background-image: linear-gradient(
-      135deg,
-      rgba(255, 255, 255, 0.03) 0%,
-      transparent 60%
-    );
-  }
-  .dark .card-glow {
-    border-color: rgba(251, 191, 36, 0.2);
-    box-shadow:
-      0 4px 24px rgba(0, 0, 0, 0.4),
-      0 0 0 1px rgba(251, 191, 36, 0.08),
-      inset 0 1px 0 rgba(255, 255, 255, 0.04);
-  }
-  .dark .card-green {
-    border-color: rgba(0, 229, 160, 0.2);
-    box-shadow:
-      0 4px 24px rgba(0, 0, 0, 0.4),
-      0 0 0 1px rgba(0, 229, 160, 0.08),
-      inset 0 1px 0 rgba(255, 255, 255, 0.04);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.03);
   }
 
+  /* Accent Highlight Cards */
+  .card-glow {
+    @apply bg-white dark:bg-void-800/90 rounded-xl border border-solar-500/30 dark:border-solar-500/30 transition-all duration-200;
+  }
+  .card-green {
+    @apply bg-white dark:bg-void-800/90 rounded-xl border border-grid-500/30 dark:border-grid-500/30 transition-all duration-200;
+  }
+  .card-blue {
+    @apply bg-white dark:bg-void-800/90 rounded-xl border border-energy-cyan/30 dark:border-energy-cyan/30 transition-all duration-200;
+  }
+
+  /* Metric Value Styles */
+  .stat-value {
+    @apply font-mono font-bold tracking-tight text-slate-900 dark:text-white;
+  }
+  .stat-label {
+    @apply font-mono text-[11px] uppercase tracking-wider text-slate-600 dark:text-void-300 font-medium;
+  }
+
+  /* Badges & Status */
   .stat-up {
-    @apply text-energy-green text-xs font-mono;
+    @apply text-grid-600 dark:text-grid-400 text-xs font-mono font-medium flex items-center gap-1;
   }
   .stat-down {
-    @apply text-energy-rose text-xs font-mono;
+    @apply text-energy-rose text-xs font-mono font-medium flex items-center gap-1;
   }
-
-  .btn-solar {
-    @apply bg-solar-500 hover:bg-solar-400 text-void-900 font-display font-bold text-xs tracking-widest px-5 py-2.5 rounded-lg transition-all duration-200 cursor-pointer;
-  }
-
-  .btn-ghost {
-    @apply border border-slate-300 dark:border-void-400 hover:border-slate-400 dark:hover:border-void-200 text-slate-600 dark:text-void-100 hover:text-slate-900 dark:hover:text-white font-mono text-xs tracking-wider px-4 py-2 rounded-lg transition-all duration-200;
-  }
-
   .live-badge {
-    @apply flex items-center gap-1.5 text-energy-green text-xs font-mono px-3 py-1.5 rounded-full;
-    background: rgba(0, 229, 160, 0.08);
-    border: 1px solid rgba(0, 229, 160, 0.2);
+    @apply inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-mono font-semibold tracking-wide border;
+    @apply bg-grid-50 text-grid-700 border-grid-200 dark:bg-grid-500/10 dark:text-grid-400 dark:border-grid-500/20;
+  }
+  .warning-badge {
+    @apply inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-mono font-semibold tracking-wide border;
+    @apply bg-amber-50 text-amber-800 border-amber-200 dark:bg-amber-500/10 dark:text-amber-400 dark:border-amber-500/20;
+  }
+  .critical-badge {
+    @apply inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-mono font-semibold tracking-wide border;
+    @apply bg-rose-50 text-rose-800 border-rose-200 dark:bg-rose-500/10 dark:text-rose-400 dark:border-rose-500/20;
   }
 
+  /* Buttons */
+  .btn-solar {
+    @apply inline-flex items-center justify-center gap-2 bg-solar-500 hover:bg-solar-400 active:bg-solar-600 text-void-950 font-display font-bold text-xs uppercase tracking-wider px-4 py-2.5 rounded-lg transition-all duration-150 cursor-pointer shadow-sm;
+  }
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 border border-slate-300 dark:border-void-600 hover:border-slate-400 dark:hover:border-void-400 bg-white/50 dark:bg-void-800/50 hover:bg-slate-100 dark:hover:bg-void-700 text-slate-700 dark:text-void-100 font-mono text-xs tracking-wider px-3.5 py-2 rounded-lg transition-all duration-150;
+  }
+
+  /* Navigation Items */
   .nav-item {
-    @apply flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-600 dark:text-void-100 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-void-600 cursor-pointer transition-all duration-200 text-sm;
+    @apply flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-slate-600 dark:text-void-200 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-void-700/60 cursor-pointer transition-colors duration-150 text-sm font-medium;
   }
   .nav-item.active {
-    @apply text-solar-600 dark:text-solar-400 bg-solar-50 dark:bg-solar-500/10 border border-solar-200 dark:border-solar-500/20;
+    @apply text-solar-700 dark:text-solar-400 bg-solar-50 dark:bg-solar-500/15 border-l-2 border-solar-500 font-semibold;
   }
 
+  /* Data Table */
   .data-table {
-    @apply w-full;
+    @apply w-full text-left;
   }
   .data-table th {
-    @apply text-slate-500 dark:text-void-200 text-xs font-mono tracking-widest uppercase px-4 py-3 text-left border-b border-slate-200 dark:border-void-500;
+    @apply text-slate-500 dark:text-void-300 text-[11px] font-mono tracking-wider uppercase px-4 py-3 border-b border-slate-200 dark:border-void-700 bg-slate-50/50 dark:bg-void-850/50;
   }
   .data-table td {
-    @apply px-4 py-3.5 border-b border-slate-100 dark:border-void-600 text-sm text-slate-700 dark:text-void-100 transition-colors;
+    @apply px-4 py-3 border-b border-slate-100 dark:border-void-700/50 text-sm text-slate-800 dark:text-void-100 font-mono;
   }
-  .data-table tr:last-child td {
-    @apply border-b-0;
+  .data-table tr:hover td {
+    @apply bg-slate-50 dark:bg-void-700/40;
   }
 
+  /* Form Fields */
   .field {
-    @apply bg-slate-50 dark:bg-void-600 border border-slate-300 dark:border-void-400 rounded-lg px-4 py-2.5 text-sm text-slate-900 dark:text-white focus:outline-none placeholder:text-slate-400 dark:placeholder:text-void-200 transition-all duration-200 w-full;
-  }
-  .field:focus {
-    border-color: #f59e0b;
-    box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.15);
+    @apply bg-white dark:bg-void-850 border border-slate-300 dark:border-void-600 rounded-lg px-3.5 py-2 text-sm text-slate-900 dark:text-white focus:outline-none focus:border-solar-500 focus:ring-1 focus:ring-solar-500 placeholder:text-slate-400 dark:placeholder:text-void-400 transition-all duration-150 w-full;
   }
 }
 
 /* ============================================================
-   AMBIENT GLOW EFFECTS
-   ============================================================ */
-.ambient-top::before {
-  content: "";
-  position: fixed;
-  top: -200px;
-  left: 0;
-  right: 0;
-  height: 400px;
-  background: radial-gradient(ellipse at 30% 0%, rgba(251, 191, 36, 0.04) 0%, transparent 70%);
-  pointer-events: none;
-  z-index: 0;
-  transition: background 300ms ease;
-}
-.dark .ambient-top::before {
-  content: "";
-  position: fixed;
-  top: -200px;
-  left: 0;
-  right: 0;
-  height: 400px;
-  background: radial-gradient(ellipse at 30% 0%, rgba(251, 191, 36, 0.07) 0%, transparent 70%);
-  pointer-events: none;
-  z-index: 0;
-}
-.ambient-top::after {
-  content: "";
-  position: fixed;
-  bottom: 0;
-  right: -100px;
-  width: 500px;
-  height: 500px;
-  background: radial-gradient(circle, rgba(0, 229, 160, 0.02) 0%, transparent 70%);
-  pointer-events: none;
-  z-index: 0;
-  transition: background 300ms ease;
-}
-.dark .ambient-top::after {
-  content: "";
-  position: fixed;
-  bottom: 0;
-  right: -100px;
-  width: 500px;
-  height: 500px;
-  background: radial-gradient(circle, rgba(0, 229, 160, 0.05) 0%, transparent 70%);
-  pointer-events: none;
-  z-index: 0;
-}
-
-/* ============================================================
-   RECHARTS OVERRIDES
+   RECHARTS OVERRIDES — High-Legibility Technical Charts
    ============================================================ */
 .recharts-default-tooltip {
-  background: #f8f8f8 !important;
-  color: #333 !important;
-  border: 1px solid rgba(0, 0, 0, 0.1) !important;
+  background: #FFFFFF !important;
+  color: #0F172A !important;
+  border: 1px solid #E2E8F0 !important;
   border-radius: 8px !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08) !important;
+  padding: 8px 12px !important;
+  font-family: var(--font-mono) !important;
+  font-size: 11px !important;
 }
 .dark .recharts-default-tooltip {
-  background: #141c2a !important;
-  color: #fff !important;
-  border: 1px solid rgba(251, 191, 36, 0.2) !important;
-  border-radius: 8px !important;
+  background: #0E1420 !important;
+  color: #F1F5F9 !important;
+  border: 1px solid #1B263A !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5) !important;
 }
 .recharts-cartesian-grid-horizontal line,
 .recharts-cartesian-grid-vertical line {
-  stroke: rgba(255, 255, 255, 0.04) !important;
+  stroke: rgba(148, 163, 184, 0.15) !important;
 }
 .dark .recharts-cartesian-grid-horizontal line,
 .dark .recharts-cartesian-grid-vertical line {
-  stroke: rgba(255, 255, 255, 0.04) !important;
+  stroke: rgba(255, 255, 255, 0.05) !important;
 }
 .recharts-text {
-  fill: #536080 !important;
-  font-family: "Space Mono", monospace !important;
+  fill: #64748B !important;
+  font-family: var(--font-mono) !important;
   font-size: 10px !important;
+}
+.dark .recharts-text {
+  fill: #93A6C4 !important;
 }

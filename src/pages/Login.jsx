@@ -62,7 +62,7 @@ export default function Login() {
             </div>
             <span className="font-display text-3xl font-extrabold text-solar-600 dark:text-solar-400 tracking-[3px]">
               {/* HELIO */}
-              VIT-Charge
+              HELIO
             </span>
           </div>
           <h2 className="text-2xl font-bold text-slate-900 dark:text-white">Welcome Back</h2>

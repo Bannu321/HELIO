@@ -131,17 +131,25 @@ function resolveEnergyPriority(house, flows, allHouses) {
   // 3. Battery covers leftover → "Battery backup" or "Battery Only"
   const battCap = getBatteryCapacityKwh(house);
   const battKwhAvail = house.battery_kwh != null ? house.battery_kwh : ((house.battery || 0) / 100) * battCap;
-  const batteryUsed = Math.min(remaining, battKwhAvail);
+  
+  // Only allow battery discharge down to 10% DoD (Depth of Discharge)
+  const minReserveKwh = battCap * 0.1;
+  const usableBattKwh = Math.max(0, battKwhAvail - minReserveKwh);
+  const batteryUsed = Math.min(remaining, usableBattKwh);
   remaining -= batteryUsed;
 
-  const batteryOnly = solar < 0.5 && tradedKwh < 0.5 && battKwhAvail > 0;
+  // 4. Fallback to Live Power Supply (Grid Import) if still remaining
+  const gridUsed = remaining > 0.1 ? remaining : 0;
+  remaining -= gridUsed;
+
+  const batteryOnly = solar < 0.5 && tradedKwh < 0.5 && battKwhAvail > minReserveKwh;
   const isDraining = batteryUsed > 0.1;
   const isCharging = solar > consumption && house.battery < 100;
-  const blackout = remaining > 0.1; // unmet demand
+  const blackout = remaining > 0.1; // Should be 0 now due to grid fallback
 
   // Time remaining on battery at current draw rate (hours)
   const batteryDrawRate = batteryUsed > 0 ? batteryUsed : (batteryOnly ? consumption : 0); // kWh/h equivalent
-  const hoursLeft = batteryDrawRate > 0 ? battKwhAvail / batteryDrawRate : Infinity;
+  const hoursLeft = batteryDrawRate > 0 ? usableBattKwh / batteryDrawRate : Infinity;
   const minutesLeft = isFinite(hoursLeft) ? Math.round(hoursLeft * 60) : null;
 
   // C-rate estimate (discharge power / capacity)
@@ -151,6 +159,7 @@ function resolveEnergyPriority(house, flows, allHouses) {
     solarCoverage: +solarCoverage.toFixed(2),
     tradedKwh: +tradedKwh.toFixed(2),
     batteryUsed: +batteryUsed.toFixed(2),
+    gridUsed: +gridUsed.toFixed(2),
     batteryDrawRate: +batteryDrawRate.toFixed(2),
     battKwhAvail: +battKwhAvail.toFixed(2),
     battCap: +battCap.toFixed(1),
@@ -164,6 +173,7 @@ function resolveEnergyPriority(house, flows, allHouses) {
       ...(solarCoverage > 0 ? [{ label: "Solar", kwh: solarCoverage, color: "#fbbf24", Icon: Sun }] : []),
       ...(tradeCoverage > 0 ? [{ label: "Trade", kwh: tradeCoverage, color: "#22d3ee", Icon: ArrowRightLeft }] : []),
       ...(batteryUsed > 0 ? [{ label: "Battery", kwh: batteryUsed, color: "#818cf8", Icon: Battery }] : []),
+      ...(gridUsed > 0 ? [{ label: "Grid", kwh: gridUsed, color: "#9ca3af", Icon: Zap }] : []),
     ],
   };
 }
@@ -284,7 +294,21 @@ function HouseNode({ house, priority, position, isSelected, onSelect, isDark }) 
         </div>
 
         {/* Live Draw State Indicator */}
-        {priority.isDraining && (
+        {priority.gridUsed > 0.1 ? (
+          <div style={{
+            display: "flex", alignItems: "center", justifyContent: "space-between",
+            background: "rgba(156,163,175,0.15)", border: "1px solid rgba(156,163,175,0.4)",
+            borderRadius: "6px", padding: "3px 6px", marginBottom: "6px",
+            animation: "battPulse 1.8s ease-in-out infinite",
+          }}>
+            <span style={{ fontSize: "8px", fontWeight: 700, color: "#9ca3af", display: "flex", alignItems: "center", gap: "3px" }}>
+              <Zap style={{ width: "8px", height: "8px" }} /> LIVE GRID IMPORT
+            </span>
+            <span style={{ fontSize: "8.5px", fontFamily: "monospace", fontWeight: 800, color: "#9ca3af" }}>
+              {priority.gridUsed.toFixed(1)} kW
+            </span>
+          </div>
+        ) : priority.isDraining ? (
           <div style={{
             display: "flex", alignItems: "center", justifyContent: "space-between",
             background: "rgba(129,140,248,0.15)", border: "1px solid rgba(129,140,248,0.4)",
@@ -298,7 +322,7 @@ function HouseNode({ house, priority, position, isSelected, onSelect, isDark }) 
               -{priority.batteryDrawRate.toFixed(1)} kW
             </span>
           </div>
-        )}
+        ) : null}
 
         {/* Priority breakdown badges */}
         <div style={{ display: "flex", gap: "3px", marginBottom: "7px", flexWrap: "wrap" }}>
@@ -623,9 +647,12 @@ export default function GridCommunity() {
   }, []);
 
   useEffect(() => {
+    // Only fetch once on mount to establish baseline if no scenario is active
     fetchHouses();
-    const t = setInterval(() => fetchHouses(true), 10000);
-    return () => clearInterval(t);
+    
+    // Polling disabled to prevent overwriting local simulation scenarios.
+    // const t = setInterval(() => fetchHouses(true), 10000);
+    // return () => clearInterval(t);
   }, [fetchHouses]);
 
   // ── Real-Time Live Battery Drain & Charge Physics Simulation Engine ──────────
@@ -697,24 +724,19 @@ export default function GridCommunity() {
   ];
 
   // ── Theme tokens ───────────────────────────────────────────────────────────
-  const pageBg       = isDark ? "linear-gradient(135deg,#020617 0%,#0f172a 50%,#0a0f1e 100%)" : "linear-gradient(135deg,#f0f9ff 0%,#e8f4fd 50%,#f0fdf4 100%)";
-  const panelBg      = isDark ? "rgba(15,23,42,0.7)"  : "rgba(255,255,255,0.85)";
-  const panelBorder  = isDark ? "rgba(148,163,184,0.1)" : "rgba(100,116,139,0.15)";
-  const labelMuted   = isDark ? "#475569" : "#64748b";
-  const labelVMuted  = isDark ? "#334155" : "#94a3b8";
-  const textPrimary  = isDark ? "#f8fafc"  : "#0f172a";
-  const textSec      = isDark ? "#94a3b8"  : "#475569";
-  const statCardBg   = isDark ? "rgba(15,23,42,0.8)" : "rgba(255,255,255,0.92)";
+  const panelBg      = isDark ? "rgba(14,20,32,0.9)"  : "rgba(255,255,255,0.95)";
+  const panelBorder  = isDark ? "rgba(20,28,44,0.9)" : "rgba(226,232,240,0.9)";
+  const labelMuted   = isDark ? "#627799" : "#64748b";
+  const labelVMuted  = isDark ? "#3d4f6e" : "#94a3b8";
+  const textPrimary  = isDark ? "#ffffff"  : "#0f172a";
+  const textSec      = isDark ? "#93a6c4"  : "#475569";
+  const statCardBg   = isDark ? "rgba(14,20,32,0.95)" : "rgba(255,255,255,0.95)";
   const todColor     = isDark ? "rgba(148,163,184,0.07)" : "rgba(100,116,139,0.1)";
-  const transTagBg   = isDark ? "rgba(255,255,255,0.03)" : "rgba(248,250,252,0.85)";
-  const transTagBord = isDark ? "rgba(148,163,184,0.08)" : "rgba(100,116,139,0.15)";
+  const transTagBg   = isDark ? "rgba(20,28,44,0.6)" : "rgba(248,250,252,0.85)";
+  const transTagBord = isDark ? "rgba(27,38,58,0.8)" : "rgba(226,232,240,0.9)";
 
   return (
-    <div style={{
-      minHeight: "100vh", background: pageBg,
-      padding: "22px", fontFamily: "'Inter',sans-serif",
-      position: "relative", overflowX: "hidden", transition: "background 0.3s",
-    }}>
+    <div className="max-w-7xl mx-auto px-6 py-8 space-y-6 animate-fade-in font-body">
       <style>{`
         @keyframes flowDash { from{stroke-dashoffset:0} to{stroke-dashoffset:-28} }
         @keyframes spin { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }

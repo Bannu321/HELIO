@@ -25,7 +25,7 @@ export default function LandingPage() {
             </div>
             <div className="font-display text-2xl font-extrabold text-solar-600 dark:text-solar-400 tracking-[3px]">
               {/* HELIO */}
-              VIT-Charge
+              HELIO
             </div>
           </div>
           <button
@@ -151,7 +151,7 @@ export default function LandingPage() {
         <div className="max-w-6xl mx-auto px-6 lg:px-8">
           <h2 className="font-display text-4xl font-extrabold mb-16 text-center">
             {/* Why Choose HELIO? */}
-            Why Choose VIT-Charge?
+            Why Choose HELIO?
           </h2>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
@@ -238,7 +238,7 @@ export default function LandingPage() {
           <p className="text-xl text-white/90 mb-10 max-w-2xl mx-auto">
             {/* Join 1000+ solar installations making smarter decisions with HELIO */}
             Join 1000+ solar installations making smarter decisions with
-            VIT-Charge
+            HELIO
           </p>
           <button
             onClick={() => navigate("/login")}
@@ -259,7 +259,7 @@ export default function LandingPage() {
                 <div className="w-8 h-8 rounded-full bg-solar-500"></div>
                 {/* <span className="font-display font-bold text-lg">HELIO</span> */}
                 <span className="font-display font-bold text-lg">
-                  VIT-Charge
+                  HELIO
                 </span>
               </div>
               <p className="text-slate-600 dark:text-void-300 text-sm">
@@ -295,7 +295,7 @@ export default function LandingPage() {
             <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
               <div className="text-slate-600 dark:text-void-300 text-sm font-mono">
                 {/* © 2026 HELIO Solar. All rights reserved. */}© 2026
-                VIT-Charge Solar. All rights reserved.
+                HELIO Solar. All rights reserved.
               </div>
               <div className="flex gap-6">
                 {["Privacy", "Terms", "Cookies"].map((item, i) => (
