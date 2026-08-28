@@ -21,6 +21,7 @@ import Settings from "./pages/Settings";
 import EnergyDNA from "./pages/EnergyDNA";
 import EnergyFlow from "./pages/EnergyFlow";
 import BatteryManagementModule from "./pages/BatteryManagementModule";
+import GridCommunity from "./pages/GridCommunity";
 
 // Page 404 fallback
 const NotFound = () => (
@@ -219,6 +220,16 @@ function AppContent() {
           <ProtectedRoute>
             <DashboardLayout>
               <BatteryManagementModule />
+            </DashboardLayout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/grid-community"
+        element={
+          <ProtectedRoute>
+            <DashboardLayout>
+              <GridCommunity />
             </DashboardLayout>
           </ProtectedRoute>
         }

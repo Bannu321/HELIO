@@ -1,132 +1,57 @@
 # ⚡ HELIO — Solar Grid Intelligence Platform
-### MERN Stack · Tailwind CSS · Recharts · MongoDB · Express · React · Node.js
 
----
+HELIO is a comprehensive Solar Grid Intelligence Platform that combines real-time IoT telemetry, AI-driven forecasting, and peer-to-peer (P2P) grid simulation into a single cohesive ecosystem. 
 
-## Project Structure
+## Project Architecture
 
-```
-helio-solar/
-├── src/                          # React Frontend
-│   ├── components/
-│   │   ├── layout/               # Sidebar, Topbar
-│   │   ├── dashboard/            # StatCard, EstimationPanel, PanelGrid
-│   │   ├── charts/               # PowerChart, EnergyRevenueChart
-│   │   ├── weather/              # WeatherWidget
-│   │   └── reports/              # RevenueTable
-│   ├── pages/                    # Dashboard.jsx (+ future pages)
-│   ├── context/                  # SolarContext (global state)
-│   ├── services/                 # api.js (axios calls → Express)
-│   └── index.css                 # Tailwind + custom design system
-├── server/                       # Node.js + Express Backend
-│   ├── models/index.js           # MongoDB Mongoose models
-│   ├── routes/
-│   │   ├── grid.js               # /api/grid/overview|series|reading
-│   │   ├── revenue.js            # /api/revenue + /api/revenue/summary
-│   │   ├── weather.js            # /api/weather/current|history
-│   │   ├── panels.js             # /api/panels
-│   │   └── estimation.js        # /api/estimation/forecast (Perez model)
-│   ├── index.js                  # Express app entry
-│   └── .env.example              # Environment template
-├── tailwind.config.js            # Custom solar theme
-└── package.json
-```
+HELIO consists of three major components:
 
----
+### 1. HELIO Main Frontend (React / Vite)
+Located in `src/`. This is the primary user interface.
+- **Tech:** React 18, Tailwind CSS, Recharts, React Router v6
+- **Features:** Real-time dashboards (`Dashboard.jsx`), P2P simulation visualization (`GridCommunity.jsx`), weather intelligence (`WeatherAI.jsx`), and panel health monitoring (`PanelHealth.jsx`).
+- **State Management:** Uses React Context (`SolarContext.jsx`) and a centralized API service layer (`services/api.jsx`).
+
+### 2. HELIO Main Backend Ecosystem
+Located in `server/`. A hybrid environment for traditional data persistence and advanced machine learning.
+- **Node.js Express Server:** Manages MongoDB collections (`powerreadings`, `revenuesessions`, `weathers`, `panels`) and exposes REST endpoints.
+- **Python ML Server:** Handles AI logic, including demand forecasting, anomaly detection, and energy optimization (`ml_api.py`, `main.py`).
+
+### 3. Solar Guardian Simulation Sandbox
+Located in `Solar-guardian/`. A dedicated module simulating real-world physics, battery degradation, and dynamic grid events.
+- **Backend (FastAPI):** `Solar-guardian/backend/main.py` manages real-time states (e.g., `battery_kwh`, `battery_capacity_kwh`) and handles the logic for P2P energy distribution based on simulated deficits and surpluses.
+- **Frontend (React):** `Solar-guardian/frontend/` provides a localized dashboard for manipulating the simulation parameters (solar generation, house load) and visualizing real-time flow (`EnergyFlowDiagram.jsx`).
+
+## Key Features & Recent Updates
+
+- **Real-Time Battery Physics:** Fully implemented C-rate monitoring, dynamic time-to-empty calculations, and precise storage telemetry using kWh instead of percentages.
+- **Dynamic P2P Sharing:** Surplus/deficit balancing algorithm that intelligently distributes power among nodes in the grid.
+- **Scenario Engine:** Interactive real-world test cases including Midday P2P, Evening Deficit, Isolated House Deficit, and Storm Blackouts.
+- **Centralized Telemetry Pipeline (Planned):** An upcoming architecture to unify Weather AI, Grid Sensors, and Panel Health into a single real-time data endpoint for the entire platform.
 
 ## Quick Start
 
-### 1. Frontend (React)
+### HELIO Main App
 ```bash
-cd helio-solar
+# Start Frontend
 npm install
-npm start          # Runs on http://localhost:3000
+npm run dev
+
+# Start Node.js Backend
+cd server
+npm install
+npm run dev
 ```
 
-### 2. Backend (Node.js + Express)
+### Solar Guardian Sandbox
 ```bash
-cd helio-solar/server
+# Start FastAPI Backend
+cd Solar-guardian/backend
+pip install -r requirements.txt
+uvicorn main:app --reload --port 8000
+
+# Start Frontend
+cd Solar-guardian/frontend
 npm install
-cp .env.example .env
-# Edit .env with your MongoDB URI and OpenWeatherMap API key
-npm run dev        # Runs on http://localhost:5000
+npm run dev
 ```
-
-### 3. Connect Frontend to Backend
-In `src/services/api.js`, replace mock functions with real axios calls:
-```js
-import axios from 'axios';
-const BASE = 'http://localhost:5000/api';
-
-export const fetchGridOverview = () =>
-  axios.get(`${BASE}/grid/overview`).then(r => r.data);
-
-export const fetchWeather = () =>
-  axios.get(`${BASE}/weather/current`).then(r => r.data);
-
-export const fetchRevenueReport = (page = 1) =>
-  axios.get(`${BASE}/revenue?page=${page}`).then(r => r.data);
-
-export const fetchEstimation = () =>
-  axios.get(`${BASE}/estimation/forecast`).then(r => r.data);
-
-export const fetchPowerSeries = (range = '24h') =>
-  axios.get(`${BASE}/grid/series?range=${range}`).then(r => r.data);
-```
-
----
-
-## API Reference
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | /api/grid/overview | Current power, today's energy, efficiency |
-| GET | /api/grid/series?range=24h | Time-series power data |
-| POST | /api/grid/reading | Ingest IoT inverter data |
-| GET | /api/revenue?page=1 | Paginated energy sale sessions |
-| GET | /api/revenue/summary | Monthly aggregated revenue |
-| GET | /api/weather/current | Current weather + irradiance |
-| GET | /api/weather/history?days=7 | Historical weather data |
-| GET | /api/panels | All panel statuses |
-| PUT | /api/panels/:id | Update panel reading |
-| GET | /api/estimation/forecast | AI power forecast (Perez model) |
-
----
-
-## MongoDB Collections
-
-| Collection | Purpose |
-|-----------|---------|
-| powerreadings | 15-min interval data from inverter |
-| revenuesessions | Energy sold, rate, revenue per session |
-| weathers | Weather snapshots (cached from OWM) |
-| panels | Individual panel status + health |
-| dailysummaries | Aggregated daily statistics |
-
----
-
-## IoT Integration
-
-The system expects your inverter/ESP32 to POST to `/api/grid/reading` every 15 minutes:
-```json
-{
-  "powerKW": 42.7,
-  "energyKWh": 318.5,
-  "voltage": 220,
-  "current": 194,
-  "panelBlock": "BLOCK-A",
-  "irradiance": 912,
-  "efficiency": 87.4
-}
-```
-
----
-
-## Tech Stack
-
-- **Frontend**: React 18, Tailwind CSS 3, Recharts, React Router v6
-- **Backend**: Node.js, Express.js, Mongoose
-- **Database**: MongoDB (Atlas or local)
-- **Weather API**: OpenWeatherMap (free tier, 1000 calls/day)
-- **Forecast Model**: Perez Irradiance + Historical Regression
-- **Fonts**: Syne (display) · Space Mono (data) · DM Sans (body)
