@@ -44,20 +44,31 @@ export default function PowerChart() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const loadData = async () => {
+    let intervalId;
+    const loadData = async (isBackground = false) => {
       try {
-        setLoading(true);
+        if (!isBackground) setLoading(true);
         setError(null);
         const d = await fetchPowerSeries(tab);
         setData(d);
       } catch (err) {
-        setError("Failed to load power data");
+        if (!isBackground) setError("Failed to load power data");
         console.error("Power series error:", err);
       } finally {
-        setLoading(false);
+        if (!isBackground) setLoading(false);
       }
     };
+
     loadData();
+
+    // Only poll in real-time for the 24H view
+    if (tab === "24H") {
+      intervalId = setInterval(() => loadData(true), 5000);
+    }
+
+    return () => {
+      if (intervalId) clearInterval(intervalId);
+    };
   }, [tab]);
 
   const now = new Date().getHours();

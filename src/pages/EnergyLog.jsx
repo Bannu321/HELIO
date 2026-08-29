@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Battery, CalendarDays, Zap, DownloadCloud, AlertCircle } from "lucide-react";
+import { Battery, CalendarDays, Zap, DownloadCloud, AlertCircle, FileText, FileSpreadsheet } from "lucide-react";
 import PowerChart from "../components/charts/PowerChart";
 import clsx from "clsx";
+import jsPDF from "jspdf";
+import "jspdf-autotable";
 
 export default function EnergyLog() {
   const [logData, setLogData] = useState(null);
@@ -49,6 +51,63 @@ export default function EnergyLog() {
     { date: "2026-08-24", yield: "405.1 kWh", peak: "47.8 kW", weather: "Clear Sky" },
   ];
 
+  const handleExportCSV = () => {
+    const dataToExport = logData?.tableData || tableData;
+    if (!dataToExport || dataToExport.length === 0) return;
+
+    const headers = Object.keys(dataToExport[0]).join(",");
+    const rows = dataToExport.map(row => Object.values(row).join(",")).join("\n");
+    const csvContent = `${headers}\n${rows}`;
+
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const link = document.createElement("a");
+    const url = URL.createObjectURL(blob);
+    link.setAttribute("href", url);
+    link.setAttribute("download", "HELIO_Energy_Log.csv");
+    link.style.visibility = "hidden";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  const handleExportPDF = () => {
+    const dataToExport = logData?.tableData || tableData;
+    if (!dataToExport || dataToExport.length === 0) return;
+
+    const doc = new jsPDF();
+    
+    // Header
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(16);
+    doc.text("HELIO Energy Generation Log", 14, 20);
+    
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(10);
+    doc.setTextColor(100);
+    doc.text(`Generated on: ${new Date().toLocaleString()}`, 14, 28);
+    
+    // Add summary stats
+    doc.setFontSize(11);
+    doc.setTextColor(50);
+    doc.text(`Lifetime Yield: ${stats.lifetimeYieldMWh} MWh`, 14, 40);
+    doc.text(`Peak Power: ${stats.peakGeneration} kW on ${stats.peakDate}`, 14, 46);
+    doc.text(`Avg Daily Yield: ${stats.avgDailyYield} kWh`, 14, 52);
+
+    const tableColumn = Object.keys(dataToExport[0]).map(key => key.toUpperCase());
+    const tableRows = dataToExport.map(row => Object.values(row));
+
+    doc.autoTable({
+      head: [tableColumn],
+      body: tableRows,
+      startY: 60,
+      styles: { fontSize: 10, cellPadding: 3, font: "helvetica" },
+      headStyles: { fillColor: [245, 158, 11], textColor: 255, fontStyle: "bold" }, 
+      alternateRowStyles: { fillColor: [248, 250, 252] },
+    });
+
+    doc.save("HELIO_Energy_Log.pdf");
+  };
+
   return (
     <div className="max-w-7xl mx-auto px-6 py-8 space-y-8 animate-fade-in">
       {/* Header */}
@@ -68,9 +127,14 @@ export default function EnergyLog() {
           </p>
         </div>
 
-        <button className="btn-ghost text-xs">
-          <DownloadCloud className="w-3.5 h-3.5" /> Export Historical CSV
-        </button>
+        <div className="flex items-center gap-2">
+          <button onClick={handleExportCSV} className="btn-ghost text-xs bg-slate-100 dark:bg-void-800 hover:bg-slate-200 dark:hover:bg-void-700">
+            <FileSpreadsheet className="w-3.5 h-3.5" /> CSV
+          </button>
+          <button onClick={handleExportPDF} className="btn-ghost text-xs bg-solar-500/10 text-solar-700 dark:text-solar-400 border border-solar-500/20 hover:bg-solar-500/20">
+            <FileText className="w-3.5 h-3.5" /> Export Report (PDF)
+          </button>
+        </div>
       </div>
 
       {/* Stats Cards */}

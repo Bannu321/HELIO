@@ -22,6 +22,7 @@ import EnergyDNA from "./pages/EnergyDNA";
 import EnergyFlow from "./pages/EnergyFlow";
 import BatteryManagementModule from "./pages/BatteryManagementModule";
 import GridCommunity from "./pages/GridCommunity";
+import HardwareStatus from "./pages/HardwareStatus";
 
 // Page 404 fallback
 const NotFound = () => (
@@ -250,6 +251,16 @@ function AppContent() {
           <ProtectedRoute>
             <DashboardLayout>
               <Settings />
+            </DashboardLayout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/hardware"
+        element={
+          <ProtectedRoute>
+            <DashboardLayout>
+              <HardwareStatus />
             </DashboardLayout>
           </ProtectedRoute>
         }

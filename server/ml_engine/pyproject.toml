@@ -9,5 +9,6 @@ dependencies = [
     "flask-cors==4.0.0",
     "numpy==1.26.3",
     "pandas==2.2.0",
+    "requests>=2.34.2",
     "scikit-learn==1.4.0",
 ]

@@ -8,6 +8,7 @@ import {
   Activity,
   CheckCheck,
   Filter,
+  ArrowRight
 } from "lucide-react";
 import clsx from "clsx";
 
@@ -22,44 +23,53 @@ export default function Alerts() {
 
         if (res.data && res.data.data) {
           const mlAnomalies = res.data.data;
-          const shuffled = mlAnomalies.sort(() => 0.5 - Math.random());
-          const selectedAnomalies = shuffled.slice(0, 5);
 
-          const mappedAlerts = selectedAnomalies.map((anomaly, index) => {
-            let uiType = "info";
-            if (anomaly.severity === "high") uiType = "critical";
-            if (anomaly.severity === "medium") uiType = "warning";
+          if (mlAnomalies && mlAnomalies.length > 0) {
+            const mappedAlerts = mlAnomalies.map((anomaly, index) => {
+              let uiType = "info";
+              if (anomaly.severity === "high") uiType = "critical";
+              if (anomaly.severity === "medium") uiType = "warning";
 
-            const title =
-              anomaly.anomaly_type === "sudden_spike"
-                ? `Active Power Spike: ${anomaly.building_id}`
-                : `Output Dip Detected: ${anomaly.building_id}`;
+              const title =
+                anomaly.anomaly_type === "hardware_fault"
+                  ? `Hardware Fault: ${anomaly.building_id}`
+                  : `Output Dip Detected: ${anomaly.building_id}`;
 
-            const desc = `Isolation Forest flagged anomalous telemetry. Expected ~${anomaly.expected_kwh} kWh, actual recorded ${anomaly.actual_kwh} kWh. Confidence score: ${anomaly.anomaly_score}`;
+              const timeFormatted = new Date(anomaly.timestamp).toLocaleTimeString([], {
+                hour: "2-digit",
+                minute: "2-digit",
+              });
+              
+              const deviation = anomaly.expected_kwh ? ((Math.abs(anomaly.expected_kwh - anomaly.actual_kwh) / anomaly.expected_kwh) * 100).toFixed(1) : 0;
 
-            const timeFormatted = new Date(anomaly.timestamp).toLocaleTimeString([], {
-              hour: "2-digit",
-              minute: "2-digit",
+              return {
+                id: `ml-${anomaly.timestamp}`,
+                type: uiType,
+                title: title,
+                time: `Today at ${timeFormatted}`,
+                expected: `${anomaly.expected_kwh} kWh`,
+                actual: `${anomaly.actual_kwh} kWh`,
+                deviation: `${deviation}%`,
+                causes: anomaly.causes || ["Unknown issue"],
+                action: anomaly.action || "Inspect system logs."
+              };
             });
 
-            return {
-              id: `ml-${index}`,
-              type: uiType,
-              title: title,
-              time: `Today at ${timeFormatted}`,
-              desc: desc,
-            };
-          });
-
-          mappedAlerts.push({
-            id: "system-success",
-            type: "success",
-            title: "Microgrid Stabilized & Phase Locked",
-            time: "Just now",
-            desc: "Automated P2P routing verified. Generation tracking within 1.8% of Prophet baseline. BESS state optimal.",
-          });
-
-          setAlertsData(mappedAlerts);
+            setAlertsData(mappedAlerts);
+          } else {
+            setAlertsData([{
+              id: "normal",
+              type: "success",
+              title: "System Normalized",
+              time: `Today at ${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`,
+              expected: null,
+              actual: null,
+              deviation: null,
+              desc: "Grid synchronization established successfully. No active anomalies detected by HELIO AI.",
+              causes: [],
+              action: null
+            }]);
+          }
         }
         setLoading(false);
       } catch (error) {
@@ -67,30 +77,47 @@ export default function Alerts() {
           {
             id: 1,
             type: "critical",
-            title: "Inverter Telemetry Loss (Node #02)",
+            title: "Low Generation Detected (Array C)",
             time: "10 mins ago",
-            desc: "Modbus communication timed out on Inverter A string bus. Auto-recovery active.",
+            expected: 4.8,
+            actual: 2.9,
+            deviation: "39.6%",
+            causes: ["Shading", "Panel soiling", "Faulty panel", "Inverter issue"],
+            action: "Inspect panel section C for soiling or shading."
           },
           {
             id: 2,
             type: "warning",
-            title: "Array B Dust Accumulation",
+            title: "Inverter Temperature Abnormality",
             time: "2 hours ago",
-            desc: "Soiling loss on Array B causing a 2.1% generation penalty. Scheduled wash recommended.",
+            expected: 45,
+            actual: 58,
+            deviation: "28.9%",
+            causes: ["Cooling fan failure", "Ambient temperature spike"],
+            action: "Verify cooling system on Inverter #02."
           },
           {
             id: 3,
             type: "info",
-            title: "Peak Feed-In Tariff Period",
+            title: "Generation Trending Below Forecast",
             time: "5 hours ago",
-            desc: "DISCOM high tariff window initiated (₹15.20/kWh). Reverse power export prioritized.",
+            expected: 31.4,
+            actual: 25.8,
+            deviation: "17.8%",
+            causes: ["Cloud cover exceeding forecast", "High humidity"],
+            action: "Shift flexible loads to evening hours."
           },
           {
             id: 4,
             type: "success",
-            title: "Daily Target Surpassed",
+            title: "System Normalized",
             time: "Yesterday",
-            desc: "Daily solar yield exceeded forward forecast by +4.2%. Zero grid draw required.",
+            expected: null,
+            actual: null,
+            deviation: null,
+            desc: "Grid synchronization established successfully.",
+            causes: [],
+            action: null
           },
         ]);
         setLoading(false);
@@ -98,7 +125,7 @@ export default function Alerts() {
     };
 
     fetchMLAlerts();
-    const interval = setInterval(fetchMLAlerts, 30000);
+    const interval = setInterval(fetchMLAlerts, 5000);
     return () => clearInterval(interval);
   }, []);
 
@@ -117,7 +144,7 @@ export default function Alerts() {
             </span>
           </div>
           <p className="text-xs font-mono text-slate-500 dark:text-void-300 mt-1">
-            Real-time Isolation Forest anomaly detection and SCADA safety fault logs
+            Real-time anomaly detection and actionable intelligence
           </p>
         </div>
 
@@ -127,7 +154,7 @@ export default function Alerts() {
       </div>
 
       {/* Alert Stream */}
-      <div className="space-y-3">
+      <div className="space-y-4">
         {loading ? (
           <div className="flex justify-center py-12">
             <div className="animate-spin rounded-full h-8 w-8 border-2 border-slate-300 dark:border-void-700 border-t-energy-cyan"></div>
@@ -145,58 +172,107 @@ function AlertRow({ alert }) {
     critical: {
       icon: ShieldAlert,
       tag: "CRITICAL FAULT",
-      badgeClass: "critical-badge",
-      iconColor: "text-energy-rose",
-      borderClass: "border-rose-200 dark:border-rose-500/20 bg-rose-50/40 dark:bg-rose-500/5",
+      badgeClass: "bg-energy-rose/10 text-energy-rose border-energy-rose/20",
+      iconColor: "text-energy-rose bg-energy-rose/10",
+      borderClass: "border-energy-rose/30 dark:border-energy-rose/20 bg-white dark:bg-void-800",
+      titleColor: "text-energy-rose",
     },
     warning: {
       icon: AlertTriangle,
       tag: "WARNING",
-      badgeClass: "warning-badge",
-      iconColor: "text-energy-amber",
-      borderClass: "border-amber-200 dark:border-amber-500/20 bg-amber-50/40 dark:bg-amber-500/5",
+      badgeClass: "bg-energy-amber/10 text-energy-amber border-energy-amber/20",
+      iconColor: "text-energy-amber bg-energy-amber/10",
+      borderClass: "border-energy-amber/30 dark:border-energy-amber/20 bg-white dark:bg-void-800",
+      titleColor: "text-energy-amber",
     },
     info: {
       icon: Info,
-      tag: "DISPATCH INFO",
-      badgeClass: "live-badge",
-      iconColor: "text-energy-cyan",
-      borderClass: "border-cyan-200 dark:border-cyan-500/20 bg-cyan-50/40 dark:bg-cyan-500/5",
+      tag: "INTELLIGENCE",
+      badgeClass: "bg-energy-cyan/10 text-energy-cyan border-energy-cyan/20",
+      iconColor: "text-energy-cyan bg-energy-cyan/10",
+      borderClass: "border-slate-200 dark:border-void-700 bg-white dark:bg-void-800",
+      titleColor: "text-slate-900 dark:text-white",
     },
     success: {
       icon: CheckCircle2,
-      tag: "STABILIZED",
-      badgeClass: "live-badge",
-      iconColor: "text-grid-600 dark:text-grid-400",
-      borderClass: "border-grid-200 dark:border-grid-500/20 bg-grid-50/40 dark:bg-grid-500/5",
+      tag: "NORMAL",
+      badgeClass: "bg-grid-500/10 text-grid-600 dark:text-grid-400 border-grid-500/20",
+      iconColor: "text-grid-600 dark:text-grid-400 bg-grid-500/10",
+      borderClass: "border-slate-200 dark:border-void-700 bg-white dark:bg-void-800",
+      titleColor: "text-slate-900 dark:text-white",
     },
   };
 
-  const { icon: Icon, tag, badgeClass, iconColor, borderClass } = config[alert.type] || config.info;
+  const { icon: Icon, tag, badgeClass, iconColor, borderClass, titleColor } = config[alert.type] || config.info;
 
   return (
-    <div className={clsx("card p-4 flex items-start gap-4 border transition-all", borderClass)}>
-      <div className={clsx("w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5", iconColor)}>
-        <Icon className="w-5 h-5" />
-      </div>
-
-      <div className="flex-1 min-w-0">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 mb-1">
-          <div className="flex items-center gap-2">
-            <span className={clsx("text-[10px] font-mono font-bold px-2 py-0.5 rounded border", badgeClass)}>
-              {tag}
-            </span>
-            <h3 className="font-semibold text-sm text-slate-900 dark:text-white truncate">
-              {alert.title}
-            </h3>
-          </div>
-          <span className="text-[11px] font-mono text-slate-500 dark:text-void-400 flex-shrink-0">
-            {alert.time}
-          </span>
+    <div className={clsx("rounded-xl p-5 border shadow-sm transition-all", borderClass)}>
+      <div className="flex items-start gap-4">
+        <div className={clsx("w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0", iconColor)}>
+          <Icon className="w-5 h-5" />
         </div>
-        <p className="text-xs font-mono text-slate-600 dark:text-void-200 mt-1 leading-relaxed">
-          {alert.desc}
-        </p>
+
+        <div className="flex-1 min-w-0 space-y-4">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <div className="flex items-center gap-3">
+              <h3 className={clsx("font-display font-bold text-lg", titleColor)}>
+                {alert.title}
+              </h3>
+              <span className={clsx("text-[10px] font-mono font-bold px-2 py-0.5 rounded border uppercase", badgeClass)}>
+                {tag}
+              </span>
+            </div>
+            <span className="text-[11px] font-mono text-slate-500 dark:text-void-400 flex-shrink-0">
+              {alert.time}
+            </span>
+          </div>
+
+          {alert.desc && (
+            <p className="text-sm text-slate-600 dark:text-void-300">
+              {alert.desc}
+            </p>
+          )}
+
+          {alert.expected !== null && alert.expected !== undefined && (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-slate-50 dark:bg-void-900/50 p-4 rounded-lg border border-slate-100 dark:border-void-800">
+              <div className="space-y-4">
+                <div className="grid grid-cols-3 gap-4">
+                  <div>
+                    <div className="text-[10px] font-mono text-slate-500 dark:text-void-400 mb-1 uppercase tracking-wider">Expected</div>
+                    <div className="font-mono font-medium text-slate-900 dark:text-white">{alert.expected}</div>
+                  </div>
+                  <div>
+                    <div className="text-[10px] font-mono text-slate-500 dark:text-void-400 mb-1 uppercase tracking-wider">Actual</div>
+                    <div className="font-mono font-medium text-slate-900 dark:text-white">{alert.actual}</div>
+                  </div>
+                  <div>
+                    <div className="text-[10px] font-mono text-slate-500 dark:text-void-400 mb-1 uppercase tracking-wider">Deviation</div>
+                    <div className="font-mono font-bold text-energy-rose">{alert.deviation}</div>
+                  </div>
+                </div>
+
+                <div>
+                  <div className="text-[10px] font-mono text-slate-500 dark:text-void-400 mb-1.5 uppercase tracking-wider">Possible Causes</div>
+                  <ul className="list-disc list-inside text-xs text-slate-600 dark:text-void-300 space-y-1">
+                    {alert.causes.map((cause, i) => (
+                      <li key={i}>{cause}</li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+
+              <div className="bg-solar-50 dark:bg-solar-500/10 p-4 rounded-lg border border-solar-200 dark:border-solar-500/20 flex flex-col justify-center">
+                <div className="text-[10px] font-mono text-solar-700 dark:text-solar-400 mb-2 uppercase tracking-wider font-bold">Recommended Action</div>
+                <div className="flex items-start gap-2">
+                  <ArrowRight className="w-4 h-4 text-solar-500 mt-0.5 flex-shrink-0" />
+                  <span className="text-sm font-medium text-slate-900 dark:text-solar-50">
+                    {alert.action}
+                  </span>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

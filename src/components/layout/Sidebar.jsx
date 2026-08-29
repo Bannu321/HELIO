@@ -17,6 +17,7 @@ import {
   Sun,
   ShieldCheck,
   CheckCircle2,
+  Cpu,
 } from "lucide-react";
 import clsx from "clsx";
 import { useSolar } from "../../context/SolarContext";
@@ -46,6 +47,7 @@ const navGroups = [
   {
     label: "System",
     items: [
+      { icon: Cpu, label: "Hardware & IoT", path: "/hardware" },
       { icon: Bell, label: "Alerts & Faults", path: "/alerts" },
       { icon: Settings, label: "Configuration", path: "/settings" },
     ],

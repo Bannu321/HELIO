@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import StatCard from "../components/dashboard/StatCard";
 import PowerChart from "../components/charts/PowerChart";
@@ -19,11 +19,29 @@ import {
   Radio,
   Sparkles,
   Layers,
+  X,
+  TreePine,
+  Factory,
+  BrainCircuit,
+  ShieldAlert,
+  TrendingUp,
+  Plug
 } from "lucide-react";
 import clsx from "clsx";
+import { fetchAIDecision } from "../services/api";
 
 export default function Dashboard() {
   const { overview, loading } = useSolar();
+  const [showImpactModal, setShowImpactModal] = useState(false);
+  const [aiDecision, setAiDecision] = useState(null);
+
+  // Poll AI decision every 60s; fire immediately on mount
+  useEffect(() => {
+    const load = () => fetchAIDecision().then(d => { if (d) setAiDecision(d); });
+    load();
+    const t = setInterval(load, 60000);
+    return () => clearInterval(t);
+  }, []);
 
   const fmt = (v, decimals = 1) =>
     v != null
@@ -70,7 +88,10 @@ export default function Dashboard() {
 
         <div className="flex items-center gap-3 flex-wrap">
           {/* Carbon Footprint Avoidance Badge */}
-          <div className="flex items-center gap-2.5 bg-grid-50/80 dark:bg-grid-500/10 border border-grid-200 dark:border-grid-500/20 px-3.5 py-2 rounded-lg text-xs font-mono">
+          <button 
+            onClick={() => setShowImpactModal(true)}
+            className="flex items-center gap-2.5 bg-grid-50/80 dark:bg-grid-500/10 border border-grid-200 dark:border-grid-500/20 px-3.5 py-2 rounded-lg text-xs font-mono hover:bg-grid-100 dark:hover:bg-grid-500/20 transition-colors"
+          >
             <Leaf className="w-4 h-4 text-grid-600 dark:text-grid-400 flex-shrink-0" />
             <div>
               <span className="text-slate-600 dark:text-void-300">CO₂ Avoided: </span>
@@ -78,7 +99,7 @@ export default function Dashboard() {
                 {co2SavedTonnes} t
               </span>
             </div>
-          </div>
+          </button>
 
           <Link
             to="/grid-community"
@@ -144,6 +165,45 @@ export default function Dashboard() {
           />
         </Link>
       </div>
+
+      {/* ── AI Energy Commander Panel ───────────────────────────── */}
+      {aiDecision && (() => {
+        const STRAT = {
+          BATTERY_PRIORITY: { label: 'Battery Priority', color: 'text-amber-400', bg: 'bg-amber-500/10 border-amber-500/20', icon: BatteryCharging },
+          TRADE:            { label: 'P2P Trading',       color: 'text-grid-400',  bg: 'bg-grid-500/10 border-grid-500/20',  icon: TrendingUp },
+          GRID_IMPORT:      { label: 'Grid Import',       color: 'text-rose-400',  bg: 'bg-rose-500/10 border-rose-500/20',  icon: Plug },
+          BALANCED:         { label: 'Balanced',          color: 'text-sky-400',   bg: 'bg-sky-500/10 border-sky-500/20',    icon: Activity },
+        };
+        const cfg = STRAT[aiDecision.strategy] || STRAT.BALANCED;
+        const Icon = cfg.icon;
+        return (
+          <Link to="/flow" className="block">
+            <div className="card p-4 flex flex-col md:flex-row md:items-center gap-4 hover:border-violet-500/40 transition-colors">
+              <div className="flex items-center gap-3 flex-1 min-w-0">
+                <div className="p-2 bg-violet-500/10 border border-violet-500/20 rounded-lg flex-shrink-0">
+                  <BrainCircuit className="w-5 h-5 text-violet-400" />
+                </div>
+                <div className="min-w-0">
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <span className="text-xs font-mono font-bold text-slate-900 dark:text-white">AI Energy Commander</span>
+                    <span className={`text-xs font-mono px-2 py-0.5 rounded border ${cfg.bg} ${cfg.color}`}>{cfg.label}</span>
+                    {aiDecision.override_greedy && (
+                      <span className="text-xs font-mono px-2 py-0.5 rounded border bg-amber-500/10 text-amber-400 border-amber-500/20 flex items-center gap-1">
+                        <ShieldAlert className="w-3 h-3" /> Override Active
+                      </span>
+                    )}
+                  </div>
+                  <p className="text-xs text-void-300 mt-0.5 truncate">{aiDecision.primary_action}</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-2 text-xs text-void-400 flex-shrink-0">
+                <span className="hidden md:block">{Math.round((aiDecision.confidence || 0) * 100)}% confidence</span>
+                <ArrowRight className="w-4 h-4" />
+              </div>
+            </div>
+          </Link>
+        );
+      })()}
 
       {/* ── Main Analytical Views (Charts & Environment) ──────────── */}
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
@@ -285,6 +345,73 @@ export default function Dashboard() {
           })}
         </div>
       </div>
+
+      {/* Sustainability Impact Modal */}
+      {showImpactModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-void-950/60 backdrop-blur-sm animate-fade-in">
+          <div className="bg-white dark:bg-void-900 border border-slate-200 dark:border-void-700 rounded-2xl w-full max-w-2xl overflow-hidden shadow-2xl relative">
+            <button 
+              onClick={() => setShowImpactModal(false)}
+              className="absolute top-4 right-4 p-2 text-slate-400 hover:text-slate-600 dark:hover:text-void-300 bg-slate-100 dark:bg-void-800 rounded-full transition-colors"
+            >
+              <X className="w-5 h-5" />
+            </button>
+            
+            <div className="p-8">
+              <div className="flex items-center gap-3 mb-2">
+                <div className="p-2 bg-grid-500/20 rounded-lg text-grid-500">
+                  <Leaf className="w-6 h-6" />
+                </div>
+                <h2 className="font-display text-2xl font-bold text-slate-900 dark:text-white">
+                  Environmental Impact
+                </h2>
+              </div>
+              <p className="text-sm text-slate-500 dark:text-void-300 mb-8">
+                Your microgrid's contribution to sustainability and grid independence.
+              </p>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="bg-slate-50 dark:bg-void-800/50 border border-slate-100 dark:border-void-700 p-5 rounded-xl">
+                  <div className="flex items-center gap-2 mb-3 text-slate-500 dark:text-void-400">
+                    <Factory className="w-4 h-4" />
+                    <span className="text-xs font-mono uppercase font-bold tracking-wider">CO₂ Emissions Avoided</span>
+                  </div>
+                  <div className="text-3xl font-display font-bold text-slate-900 dark:text-white">
+                    {co2SavedTonnes} <span className="text-lg text-slate-500 dark:text-void-400">tonnes</span>
+                  </div>
+                  <p className="text-xs text-slate-500 mt-2">Calculated using India Grid emission factor (0.82 kg/kWh).</p>
+                </div>
+
+                <div className="bg-grid-50 dark:bg-grid-500/10 border border-grid-100 dark:border-grid-500/20 p-5 rounded-xl">
+                  <div className="flex items-center gap-2 mb-3 text-grid-700 dark:text-grid-400">
+                    <TreePine className="w-4 h-4" />
+                    <span className="text-xs font-mono uppercase font-bold tracking-wider">Equivalent Trees Planted</span>
+                  </div>
+                  <div className="text-3xl font-display font-bold text-grid-700 dark:text-grid-400">
+                    {Math.round(co2SavedKg / 21)} <span className="text-lg opacity-70">trees</span>
+                  </div>
+                  <p className="text-xs text-grid-700/70 dark:text-grid-400/70 mt-2">Based on avg 21kg CO₂ absorbed per tree annually.</p>
+                </div>
+
+                <div className="bg-solar-50 dark:bg-solar-500/10 border border-solar-100 dark:border-solar-500/20 p-5 rounded-xl col-span-1 md:col-span-2 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                  <div>
+                    <div className="flex items-center gap-2 mb-1 text-solar-700 dark:text-solar-400">
+                      <Zap className="w-4 h-4" />
+                      <span className="text-xs font-mono uppercase font-bold tracking-wider">Renewable Energy Mix</span>
+                    </div>
+                    <div className="text-2xl font-display font-bold text-solar-700 dark:text-solar-400">
+                      78.4%
+                    </div>
+                  </div>
+                  <div className="h-2 w-full md:w-64 bg-slate-200 dark:bg-void-700 rounded-full overflow-hidden">
+                    <div className="h-full bg-solar-500 rounded-full" style={{ width: '78.4%' }}></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

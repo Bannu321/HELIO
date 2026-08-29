@@ -33,7 +33,7 @@ export function SolarProvider({ children }) {
 
   useEffect(() => {
     refresh();
-    const interval = setInterval(refresh, 15000); // refresh every 15s
+    const interval = setInterval(refresh, 5000); // refresh every 5s for real-time demo feel
     return () => clearInterval(interval);
   }, [refresh]);
 

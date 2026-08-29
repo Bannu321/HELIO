@@ -1,4 +1,4 @@
-// server/index.js — HELIO Solar Grid API (Node.js + Express + MongoDB)
+// server/server.js — HELIO Solar Grid API (Node.js + Express + MongoDB)
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
@@ -7,10 +7,29 @@ const dotenv = require("dotenv");
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+// Express runs on 3001 — Python ML Flask API runs on 5000 (no conflict)
+const PORT = process.env.PORT || 3001;
 
 // ——— MIDDLEWARE ———
-app.use(cors({ origin: process.env.CLIENT_URL || "http://localhost:3000" }));
+// Accept requests from Vite dev server (:5173), CRA (:3000), and any preview build
+const allowedOrigins = [
+  "http://localhost:5173",
+  "http://localhost:5174",
+  "http://localhost:3000",
+  "http://localhost:4173",
+  process.env.CLIENT_URL,
+].filter(Boolean);
+
+app.use(
+  cors({
+    origin: (origin, cb) => {
+      // Allow requests with no origin (e.g. curl, Postman, same-origin)
+      if (!origin || allowedOrigins.includes(origin)) return cb(null, true);
+      cb(new Error(`CORS blocked: ${origin}`));
+    },
+    credentials: true,
+  })
+);
 app.use(express.json());
 
 // ——— MONGODB CONNECTION ———
@@ -29,6 +48,7 @@ app.use("/api/revenue", require("./routes/revenue"));
 app.use("/api/panels", require("./routes/panels"));
 app.use("/api/estimation", require("./routes/estimation"));
 app.use("/api/dna", require("./routes/dna"));
+app.use("/api/ai", require("./routes/ai"));          // ← AI Energy Manager
 
 // additional endpoints used for building/energy analytics
 app.use("/api/buildings", require("./routes/buildings"));
@@ -36,9 +56,9 @@ app.use("/api/energy", require("./routes/energy"));
 
 // ——— HEALTH CHECK ———
 app.get("/api/health", (req, res) =>
-  res.json({ status: "ok", timestamp: new Date().toISOString() }),
+  res.json({ status: "ok", port: PORT, timestamp: new Date().toISOString() })
 );
 
 app.listen(PORT, () =>
-  console.log(`🌞 HELIO API running on http://localhost:${PORT}`),
+  console.log(`🌞 HELIO API running on http://localhost:${PORT}`)
 );

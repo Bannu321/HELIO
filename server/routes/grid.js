@@ -47,6 +47,16 @@ router.get('/overview', async (req, res) => {
   }
 });
 
+// GET /api/grid/telemetry/latest
+router.get('/telemetry/latest', async (req, res) => {
+  try {
+    const latest = await PowerReading.findOne().sort({ timestamp: -1 });
+    res.json(latest || {});
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // GET /api/grid/series?range=24h|7d|30d
 router.get('/series', async (req, res) => {
   try {

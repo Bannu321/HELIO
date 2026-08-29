@@ -111,7 +111,7 @@ function computeEnergySharing(houses) {
 // ─── Energy Priority Resolution per house ────────────────────────────────────
 // Priority: 1) Solar self-gen  2) Traded power from surplus neighbours
 //           3) Battery backup   → BATTERY ONLY if no solar & no supplier
-function resolveEnergyPriority(house, flows, allHouses) {
+function resolveEnergyPriority(house, flows, allHouses, isGovGridImport = false) {
   const solar = house.solar || 0;
   const consumption = house.consumption || 1;
   const hIdx = allHouses.findIndex((h) => h.id === house.id);
@@ -128,7 +128,14 @@ function resolveEnergyPriority(house, flows, allHouses) {
   const tradeCoverage = Math.min(tradedKwh, remaining);
   remaining -= tradeCoverage;
 
-  // 3. Battery covers leftover → "Battery backup" or "Battery Only"
+  // 3. Fallback to Gov Grid if manually forced
+  let gridUsed = 0;
+  if (isGovGridImport) {
+    gridUsed = remaining;
+    remaining -= gridUsed;
+  }
+
+  // 4. Battery covers leftover → "Battery backup" or "Battery Only"
   const battCap = getBatteryCapacityKwh(house);
   const battKwhAvail = house.battery_kwh != null ? house.battery_kwh : ((house.battery || 0) / 100) * battCap;
   
@@ -138,11 +145,12 @@ function resolveEnergyPriority(house, flows, allHouses) {
   const batteryUsed = Math.min(remaining, usableBattKwh);
   remaining -= batteryUsed;
 
-  // 4. Fallback to Live Power Supply (Grid Import) if still remaining
-  const gridUsed = remaining > 0.1 ? remaining : 0;
-  remaining -= gridUsed;
+  // 5. Fallback to Live Power Supply (Grid Import) if still remaining
+  const fallbackGridUsed = remaining > 0.1 ? remaining : 0;
+  gridUsed += fallbackGridUsed;
+  remaining -= fallbackGridUsed;
 
-  const batteryOnly = solar < 0.5 && tradedKwh < 0.5 && battKwhAvail > minReserveKwh;
+  const batteryOnly = solar < 0.5 && tradedKwh < 0.5 && battKwhAvail > minReserveKwh && !isGovGridImport;
   const isDraining = batteryUsed > 0.1;
   const isCharging = solar > consumption && house.battery < 100;
   const blackout = remaining > 0.1; // Should be 0 now due to grid fallback
@@ -598,6 +606,7 @@ export default function GridCommunity() {
   
   // Real-time Simulation Engine State
   const [activeScenario, setActiveScenario] = useState("midday_p2p");
+  const [isGovGridImport, setIsGovGridImport] = useState(false);
   const [simSpeed, setSimSpeed] = useState(5); // 1x, 5x, 20x multiplier for visible drain
   const [isSimRunning, setIsSimRunning] = useState(true);
   const simIntervalRef = useRef(null);
@@ -667,7 +676,7 @@ export default function GridCommunity() {
         const { flows } = computeEnergySharing(prevHouses);
 
         return prevHouses.map((h) => {
-          const priority = resolveEnergyPriority(h, flows, prevHouses);
+          const priority = resolveEnergyPriority(h, flows, prevHouses, isGovGridImport);
           const battCap = getBatteryCapacityKwh(h);
           let currentKwh = h.battery_kwh != null ? h.battery_kwh : (h.battery / 100) * battCap;
 
@@ -703,7 +712,7 @@ export default function GridCommunity() {
 
   // ── Derived: flows + priority per house ────────────────────────────────────
   const { flows } = computeEnergySharing(houses);
-  const priorities = houses.map((h) => resolveEnergyPriority(h, flows, houses));
+  const priorities = houses.map((h) => resolveEnergyPriority(h, flows, houses, isGovGridImport));
 
   const totalSolar    = houses.reduce((s, h) => s + (h.solar || 0), 0).toFixed(1);
   const totalLoad     = houses.reduce((s, h) => s + (h.consumption || 0), 0).toFixed(1);
@@ -814,6 +823,19 @@ export default function GridCommunity() {
           >
             {isSimRunning ? <Pause style={{ width: "10px", height: "10px" }} /> : <Play style={{ width: "10px", height: "10px" }} />}
             {isSimRunning ? "DRAIN ACTIVE" : "PAUSED"}
+          </button>
+          <button
+            onClick={() => setIsGovGridImport(!isGovGridImport)}
+            style={{
+              display: "flex", alignItems: "center", gap: "5px",
+              background: isGovGridImport ? "rgba(156,163,175,0.2)" : "transparent",
+              border: `1px solid ${isGovGridImport ? "#9ca3af" : panelBorder}`,
+              borderRadius: "8px", padding: "5px 10px", fontSize: "10px", fontWeight: 700, fontFamily: "monospace",
+              color: isGovGridImport ? "#d1d5db" : textSec, cursor: "pointer",
+            }}
+          >
+            <Zap style={{ width: "10px", height: "10px", color: isGovGridImport ? "#9ca3af" : textSec }} />
+            {isGovGridImport ? "GOV GRID ACTIVE" : "GOV GRID"}
           </button>
         </div>
       </div>
