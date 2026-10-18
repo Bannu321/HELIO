@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { API_BASE } from '../services/api';
 import { Dna, Building2, Zap, Users, ThermometerSun, Cpu, TrendingDown, LineChart as ChartIcon, Globe, Map, Activity, Plus } from 'lucide-react';
 import { AreaChart, Area, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 
@@ -11,28 +12,69 @@ export default function EnergyDNA() {
   useEffect(() => {
     const fetchDNA = async () => {
       try {
-        const res = await axios.get('http://localhost:5000/api/dna/profiles');
+        const res = await axios.get(`${API_BASE}/dna/profiles`);
         setBlueprintData(res.data.data.blueprint);
         setTimeSeriesDNA(res.data.data.timeSeries);
         setLoading(false);
       } catch (error) {
         // Fallback default campus load signature
         setBlueprintData([
-          { name: 'Hostels', value: 3200, color: '#EF4444' },
-          { name: 'Central Block', value: 2400, color: '#06B6D4' },
-          { name: 'Academic Block 1', value: 1850, color: '#F59E0B' },
-          { name: 'Academic Block 2', value: 1600, color: '#FBBF24' },
-          { name: 'Central Library', value: 950, color: '#10B981' },
+          { name: 'Eco Villa 101', value: 3200, color: '#F59E0B' },
+          { name: 'Solar Haven 202', value: 2400, color: '#22D3EE' },
+          { name: 'Green Horizon 303', value: 1850, color: '#A78BFA' },
+          { name: 'Sunridge Home 404', value: 1600, color: '#34D399' },
         ]);
         setTimeSeriesDNA([
-          { time: '00:00', Library: 15, AB1: 20, CB: 40, AB2: 15, Hostels: 180 },
-          { time: '04:00', Library: 10, AB1: 15, CB: 30, AB2: 10, Hostels: 120 },
-          { time: '08:00', Library: 40, AB1: 150, CB: 200, AB2: 140, Hostels: 250 },
-          { time: '12:00', Library: 120, AB1: 320, CB: 450, AB2: 300, Hostels: 90 },
-          { time: '16:00', Library: 150, AB1: 280, CB: 380, AB2: 250, Hostels: 110 },
-          { time: '20:00', Library: 180, AB1: 60, CB: 120, AB2: 50, Hostels: 350 },
-          { time: '23:59', Library: 30, AB1: 25, CB: 50, AB2: 20, Hostels: 220 },
-        ]);
+  {
+    time: '00:00',
+    EcoVilla101: 15,
+    SolarHaven202: 20,
+    GreenHorizon303: 40,
+    SunridgeHome404: 15,
+  },
+  {
+    time: '04:00',
+    EcoVilla101: 10,
+    SolarHaven202: 15,
+    GreenHorizon303: 30,
+    SunridgeHome404: 10,
+  },
+  {
+    time: '08:00',
+    EcoVilla101: 40,
+    SolarHaven202: 150,
+    GreenHorizon303: 200,
+    SunridgeHome404: 140,
+  },
+  {
+    time: '12:00',
+    EcoVilla101: 120,
+    SolarHaven202: 320,
+    GreenHorizon303: 450,
+    SunridgeHome404: 300,
+  },
+  {
+    time: '16:00',
+    EcoVilla101: 150,
+    SolarHaven202: 280,
+    GreenHorizon303: 380,
+    SunridgeHome404: 250,
+  },
+  {
+    time: '20:00',
+    EcoVilla101: 180,
+    SolarHaven202: 60,
+    GreenHorizon303: 120,
+    SunridgeHome404: 50,
+  },
+  {
+    time: '23:59',
+    EcoVilla101: 30,
+    SolarHaven202: 25,
+    GreenHorizon303: 50,
+    SunridgeHome404: 20,
+  },
+]);
         setLoading(false);
       }
     };
@@ -58,7 +100,7 @@ export default function EnergyDNA() {
           </div>
           <span className="stat-label">Campus Microgrid Profile</span>
         </div>
-        <h1 className="font-display text-2xl md:text-3xl font-bold tracking-tight text-slate-900 dark:text-white mb-2">
+        <h1 className="font-display text-2xl md:text-3xl font-bold tracking-tight text-solar-700 dark:text-solar-400 mb-2">
           Energy DNA & Building Load Signatures
         </h1>
         <p className="text-sm font-mono text-slate-600 dark:text-void-200 max-w-2xl">
@@ -122,18 +164,43 @@ export default function EnergyDNA() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          <DNAChartCard timeSeriesDNA={timeSeriesDNA} title="Hostels & Living Quarters" dataKey="Hostels" color="#EF4444" desc="Bimodal peak (07:00 morning rush & 20:00 evening return)." />
-          <DNAChartCard timeSeriesDNA={timeSeriesDNA} title="Central Research Block (CB)" dataKey="CB" color="#06B6D4" desc="Sharp midday bell curve. Heavy HVAC & supercomputing loads." />
-          <DNAChartCard timeSeriesDNA={timeSeriesDNA} title="Academic Block 01 (AB1)" dataKey="AB1" color="#F59E0B" desc="Standard daylight academic profile. Strongly matches PV generation." />
-          <DNAChartCard timeSeriesDNA={timeSeriesDNA} title="Academic Block 02 (AB2)" dataKey="AB2" color="#FBBF24" desc="Secondary afternoon lecture curve with evening lab sessions." />
-          <DNAChartCard timeSeriesDNA={timeSeriesDNA} title="Central University Library" dataKey="Library" color="#10B981" desc="Gradual ramp up with extended late-night study periods." />
+          <DNAChartCard
+  timeSeriesDNA={timeSeriesDNA}
+  title="Eco Villa 101"
+  dataKey="EcoVilla101"
+  color="#F59E0B"
+  desc="Residential load profile with morning and evening demand peaks."
+/>
 
+<DNAChartCard
+  timeSeriesDNA={timeSeriesDNA}
+  title="Solar Haven 202"
+  dataKey="SolarHaven202"
+  color="#22D3EE"
+  desc="High-capacity solar home with strong daytime and HVAC demand."
+/>
+
+<DNAChartCard
+  timeSeriesDNA={timeSeriesDNA}
+  title="Green Horizon 303"
+  dataKey="GreenHorizon303"
+  color="#A78BFA"
+  desc="Higher deficit-prone profile with significant daytime and evening demand."
+/>
+
+<DNAChartCard
+  timeSeriesDNA={timeSeriesDNA}
+  title="Sunridge Home 404"
+  dataKey="SunridgeHome404"
+  color="#34D399"
+  desc="Large-capacity home with high solar generation and evening demand."
+/>
           <div className="card p-6 flex flex-col items-center justify-center text-center border-dashed border-2 bg-transparent hover:bg-slate-50 dark:hover:bg-void-800/50 cursor-pointer transition-colors group">
             <div className="w-9 h-9 rounded-lg bg-slate-100 dark:bg-void-700 flex items-center justify-center mb-2 group-hover:bg-solar-500 group-hover:text-void-950 transition-colors">
               <Plus className="w-4 h-4 text-slate-500 dark:text-void-300 group-hover:text-void-950" />
             </div>
-            <span className="font-semibold text-xs text-slate-900 dark:text-white">Connect IoT Substation</span>
-            <p className="text-[11px] font-mono text-slate-400 dark:text-void-400 mt-0.5">Map telemetry to new building</p>
+            {/* <span className="font-semibold text-xs text-slate-900 dark:text-white">Connect IoT Substation</span> */}
+            {/* <p className="text-[11px] font-mono text-slate-400 dark:text-void-400 mt-0.5">Map telemetry to new building</p> */}
           </div>
         </div>
       </div>

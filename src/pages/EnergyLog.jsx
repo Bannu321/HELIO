@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { API_BASE } from "../services/api";
 import { Battery, CalendarDays, Zap, DownloadCloud, AlertCircle, FileText, FileSpreadsheet } from "lucide-react";
 import PowerChart from "../components/charts/PowerChart";
 import clsx from "clsx";
@@ -14,7 +15,7 @@ export default function EnergyLog() {
   useEffect(() => {
     const fetchLogData = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/grid/log");
+        const res = await axios.get(`${API_BASE}/grid/log`);
         setLogData(res.data);
         setLoading(false);
       } catch (err) {
@@ -114,7 +115,7 @@ export default function EnergyLog() {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-2 border-b border-slate-200/80 dark:border-void-700/60">
         <div>
           <div className="flex items-center gap-3">
-            <h1 className="font-display text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
+            <h1 className="font-display text-2xl font-bold tracking-tight text-solar-700 dark:text-solar-400">
               Energy Generation & Yield Log
             </h1>
             <span className="live-badge">
@@ -122,7 +123,7 @@ export default function EnergyLog() {
               DATABASE SYNCED
             </span>
           </div>
-          <p className="text-xs font-mono text-slate-500 dark:text-void-300 mt-1">
+          <p className="page-description mt-1 max-w-2xl">
             Historical generation metrics, daily yield summaries, and inverter performance logs
           </p>
         </div>
@@ -172,7 +173,7 @@ export default function EnergyLog() {
             <h2 className="font-display font-bold text-base text-slate-900 dark:text-white">
               Historical Output Trend
             </h2>
-            <p className="text-xs text-slate-500 dark:text-void-300 font-mono mt-0.5">
+            <p className="text-xs text-slate-500 dark:text-void-300 font-body font-medium mt-0.5">
               Daily generation distribution against reference baseline
             </p>
           </div>
@@ -194,7 +195,7 @@ export default function EnergyLog() {
             <h2 className="font-display font-bold text-base text-slate-900 dark:text-white">
               Daily Generation Summaries
             </h2>
-            <p className="text-xs text-slate-500 dark:text-void-300 font-mono mt-0.5">
+            <p className="text-xs text-slate-500 dark:text-void-300 font-body font-medium mt-0.5">
               Verified daily telemetry aggregate logs
             </p>
           </div>
@@ -262,7 +263,7 @@ function LogCard({ title, value, unit, subtext, icon: Icon, accent }) {
           </span>
         </div>
         {subtext && (
-          <div className="text-xs font-mono text-slate-500 dark:text-void-300 mt-2 truncate">
+          <div className="text-xs font-body font-medium text-slate-500 dark:text-void-300 mt-2 truncate">
             {subtext}
           </div>
         )}

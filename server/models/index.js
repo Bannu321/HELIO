@@ -89,6 +89,26 @@ const DailySummarySchema = new Schema(
   { timestamps: true },
 );
 
+// ——— AI Decision Audit (immutable recommendation trail) ———
+const DecisionAuditSchema = new Schema(
+  {
+    decisionId: { type: String, required: true, unique: true, index: true },
+    status: { type: String, enum: ["approved", "review_required"], required: true },
+    source: { type: String, required: true },
+    strategy: { type: String, required: true },
+    urgency: { type: String, required: true },
+    confidence: { type: Number, required: true },
+    requiresOperatorReview: { type: Boolean, required: true },
+    fallbackUsed: { type: Boolean, default: false },
+    contextSnapshot: { type: Schema.Types.Mixed, required: true },
+    providerDecision: { type: Schema.Types.Mixed },
+    policy: { type: Schema.Types.Mixed, required: true },
+    explanation: { type: String, required: true },
+    explanationSource: { type: String, required: true },
+  },
+  { timestamps: true },
+);
+
 // Export helper models from separate files as well (required by some controllers)
 const Building = require("./Building");
 const EnergyReading = require("./EnergyReading");
@@ -100,6 +120,7 @@ module.exports = {
   Weather: mongoose.model("Weather", WeatherSchema),
   Panel: mongoose.model("Panel", PanelSchema),
   DailySummary: mongoose.model("DailySummary", DailySummarySchema),
+  DecisionAudit: mongoose.model("DecisionAudit", DecisionAuditSchema),
   // convenience exports for other parts of the codebase
   Building,
   EnergyReading,

@@ -55,3 +55,15 @@ cd Solar-guardian/frontend
 npm install
 npm run dev
 ```
+
+## Cloud MVP deployment
+
+The cloud-ready deployment uses two Google Cloud Run services: `helio-api` for the Express API, Jev decision layer, NVIDIA explanation layer, and audit API; and `helio-ml` for the Python ML models. Dockerfiles, Cloud Build configuration, Secret Manager guidance, and smoke tests are in [`gcp/README.md`](gcp/README.md).
+
+The decision flow is:
+
+```text
+ML context → Jev typed strategy → deterministic safety policy → NVIDIA explanation → React UI
+```
+
+If Jev or NVIDIA credentials are unavailable, HELIO returns a deterministic/template fallback and clearly labels its source. No automated hardware actuation is performed by the MVP.

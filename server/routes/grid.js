@@ -166,7 +166,8 @@ router.get('/flow', async (req, res) => {
     let batteryLevel = 342.35; // Fallback state
     let batteryCapacity = 500.0;
     try {
-        const mlRes = await axios.get('http://127.0.0.1:5000/api/ml/solar-optimization');
+        const mlEngineUrl = (process.env.ML_ENGINE_URL || 'http://127.0.0.1:5000').replace(/\/$/, '');
+        const mlRes = await axios.get(`${mlEngineUrl}/api/ml/solar-optimization`);
         if (mlRes.data?.data?.battery_storage) {
             batteryLevel = mlRes.data.data.battery_storage.current_level_kwh;
             batteryCapacity = mlRes.data.data.battery_storage.capacity_kwh;

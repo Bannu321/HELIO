@@ -8,9 +8,7 @@ import {
   CloudRain, Sunset, CheckCircle2,
 } from "lucide-react";
 import { useTheme } from "../context/ThemeContext";
-
-// ─── Solar Guardian API ───────────────────────────────────────────────────────
-const API_BASE = "http://localhost:8000";
+import { API_BASE, fetchOperationalDecision } from "../services/api";
 
 // Exact usable battery capacity per house (kWh)
 const getBatteryCapacityKwh = (house) => {
@@ -610,6 +608,8 @@ export default function GridCommunity() {
   const [simSpeed, setSimSpeed] = useState(5); // 1x, 5x, 20x multiplier for visible drain
   const [isSimRunning, setIsSimRunning] = useState(true);
   const simIntervalRef = useRef(null);
+  const [operationalDecision, setOperationalDecision] = useState(null);
+  const [decisionLoading, setDecisionLoading] = useState(false);
 
   const mergeWithMeta = (rawHouses) =>
     rawHouses.map((h, i) => {
@@ -641,7 +641,7 @@ export default function GridCommunity() {
   const fetchHouses = useCallback(async (silent = false) => {
     if (!silent) setApiStatus("loading");
     try {
-      const res = await fetch(`${API_BASE}/api/houses`, { signal: AbortSignal.timeout(4000) });
+     const res = await fetch(`${API_BASE}/community/houses`, { signal: AbortSignal.timeout(4000) });
       if (!res.ok) throw new Error("non-2xx");
       const data = await res.json();
       setHouses(mergeWithMeta(data));
@@ -709,6 +709,29 @@ export default function GridCommunity() {
   }, [isSimRunning, simSpeed]);
 
   const handleSelect = (id) => setSelectedHouse((prev) => (prev === id ? null : id));
+
+  const runOperationalDecision = async () => {
+    if (houses.length === 0) return;
+    setDecisionLoading(true);
+    try {
+      const result = await fetchOperationalDecision({
+        mode: "simulation",
+        gridOutage: activeScenario === "storm_blackout",
+        homes: houses.map((h) => ({
+          id: h.id,
+          name: h.name,
+          solar: h.solar,
+          consumption: h.consumption,
+          battery: h.battery,
+          battery_capacity_kwh: h.battery_capacity_kwh,
+          battery_kwh: h.battery_kwh,
+        })),
+      });
+      setOperationalDecision(result);
+    } finally {
+      setDecisionLoading(false);
+    }
+  };
 
   // ── Derived: flows + priority per house ────────────────────────────────────
   const { flows } = computeEnergySharing(houses);
@@ -837,6 +860,20 @@ export default function GridCommunity() {
             <Zap style={{ width: "10px", height: "10px", color: isGovGridImport ? "#9ca3af" : textSec }} />
             {isGovGridImport ? "GOV GRID ACTIVE" : "GOV GRID"}
           </button>
+          <button
+            onClick={runOperationalDecision}
+            disabled={decisionLoading || houses.length === 0}
+            style={{
+              display: "flex", alignItems: "center", gap: "5px",
+              background: decisionLoading ? "rgba(34,211,238,0.08)" : "rgba(34,211,238,0.15)",
+              border: "1px solid rgba(34,211,238,0.4)",
+              borderRadius: "8px", padding: "5px 10px", fontSize: "10px", fontWeight: 700, fontFamily: "monospace",
+              color: "#22d3ee", cursor: decisionLoading ? "wait" : "pointer", opacity: houses.length === 0 ? 0.5 : 1,
+            }}
+          >
+            <ShieldCheck style={{ width: "10px", height: "10px" }} />
+            {decisionLoading ? "EVALUATING..." : "RUN AI DECISION"}
+          </button>
         </div>
       </div>
 
@@ -856,6 +893,34 @@ export default function GridCommunity() {
             <div style={{ fontSize: "9.5px", color: labelMuted }}>
               Solar generation and P2P trade suppliers are insufficient to meet total demand. Remaining deficit is actively discharging from onboard lithium battery storage.
             </div>
+          </div>
+        </div>
+      )}
+      {operationalDecision && (
+        <div style={{
+          background: isDark ? "rgba(8,47,73,0.32)" : "rgba(236,254,255,0.92)",
+          border: `1px solid ${operationalDecision.requiresOperatorReview ? "rgba(251,113,133,0.45)" : "rgba(34,211,238,0.35)"}`,
+          borderRadius: "12px", padding: "12px 16px", marginBottom: "14px",
+        }}>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "12px", flexWrap: "wrap" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+              <ShieldCheck style={{ width: "16px", height: "16px", color: operationalDecision.requiresOperatorReview ? "#fb7185" : "#22d3ee" }} />
+              <span style={{ fontSize: "11px", fontWeight: 800, color: operationalDecision.requiresOperatorReview ? "#fb7185" : "#22d3ee" }}>
+                AI DECISION: {operationalDecision.strategy.replaceAll("_", " ").toUpperCase()}
+              </span>
+              <span style={{ fontSize: "8px", fontFamily: "monospace", color: labelMuted }}>
+                {operationalDecision.source} · {Math.round((operationalDecision.confidence || 0) * 100)}% confidence
+              </span>
+            </div>
+            <span style={{ fontSize: "8px", fontFamily: "monospace", fontWeight: 700, color: operationalDecision.requiresOperatorReview ? "#fb7185" : "#34d399" }}>
+              {operationalDecision.requiresOperatorReview ? "OPERATOR REVIEW REQUIRED" : "POLICY APPROVED · NO AUTO-ACTUATION"}
+            </span>
+          </div>
+          <div style={{ fontSize: "10px", lineHeight: 1.45, color: textSec, marginTop: "7px" }}>
+            {operationalDecision.explanation}
+          </div>
+          <div style={{ fontSize: "8px", fontFamily: "monospace", color: labelVMuted, marginTop: "6px" }}>
+            Explanation: {operationalDecision.explanationSource} · Decision ID: {operationalDecision.decisionId}
           </div>
         </div>
       )}

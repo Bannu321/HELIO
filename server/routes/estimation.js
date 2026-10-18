@@ -42,7 +42,8 @@ router.get('/forecast', async (req, res) => {
 
     // 🧠 ASK THE PYTHON ML ENGINE FOR THE PREDICTION
     try {
-        const mlResponse = await axios.post('http://localhost:5000/api/ml/predict-weather-yield', {
+        const mlEngineUrl = (process.env.ML_ENGINE_URL || 'http://127.0.0.1:5000').replace(/\/$/, '');
+        const mlResponse = await axios.post(`${mlEngineUrl}/api/ml/predict-weather-yield`, {
             hours: requestedHours
         });
         predictions = mlResponse.data.predictions;
