@@ -213,6 +213,37 @@ function IdleLine({ x1, y1, x2, y2, isDark }) {
   );
 }
 
+function GridPowerCard({ gridImport, isDark }) {
+  const active = gridImport > 0.1;
+  const accent = active ? "#9ca3af" : isDark ? "#475569" : "#94a3b8";
+
+  return (
+    <div style={{ position: "absolute", left: "50%", bottom: "4%", transform: "translateX(-50%)", width: "188px", zIndex: 25, pointerEvents: "none" }}>
+      <div style={{
+        background: isDark ? "rgba(15,23,42,0.96)" : "rgba(255,255,255,0.97)",
+        border: `1.5px solid ${active ? "rgba(156,163,175,0.75)" : isDark ? "rgba(148,163,184,0.18)" : "rgba(100,116,139,0.2)"}`,
+        borderRadius: "12px", padding: "8px 10px",
+        boxShadow: active ? "0 0 20px rgba(156,163,175,0.3)" : "0 4px 14px rgba(0,0,0,0.12)",
+        animation: active ? "battPulse 1.8s ease-in-out infinite" : "none",
+      }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "7px" }}>
+          <div style={{ width: "24px", height: "24px", borderRadius: "7px", background: `${accent}18`, border: `1px solid ${accent}55`, display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <Zap style={{ width: "12px", height: "12px", color: accent }} />
+          </div>
+          <div style={{ flex: 1 }}>
+            <div style={{ fontSize: "9px", fontWeight: 800, color: accent, letterSpacing: "0.7px" }}>{active ? "LIVE POWER GRID IMPORT" : "POWER GRID STANDBY"}</div>
+            <div style={{ fontSize: "8px", color: isDark ? "#64748b" : "#94a3b8", marginTop: "2px" }}>{active ? "Supplying community deficit" : "No grid energy requested"}</div>
+          </div>
+          <div style={{ textAlign: "right" }}>
+            <div style={{ fontSize: "13px", fontWeight: 800, fontFamily: "monospace", color: accent }}>{gridImport.toFixed(1)}</div>
+            <div style={{ fontSize: "7px", color: isDark ? "#64748b" : "#94a3b8" }}>kW</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // ─── House Node Card (topology map) ──────────────────────────────────────────
 function HouseNode({ house, priority, position, isSelected, onSelect, isDark }) {
   const net = (house.solar || 0) - (house.consumption || 0);
@@ -744,6 +775,7 @@ export default function GridCommunity() {
   const totalCO2      = houses.reduce((s, h) => s + ((h.solar || 0) * 0.85), 0).toFixed(1);
   const totalBattKwh  = priorities.reduce((s, p) => s + (p.battKwhAvail || 0), 0).toFixed(1);
   const totalBattCap  = priorities.reduce((s, p) => s + (p.battCap || 0), 0).toFixed(1);
+  const totalGridImport = priorities.reduce((s, p) => s + (p.gridUsed || 0), 0);
   const drainingCount = priorities.filter((p) => p.isDraining).length;
 
   const summaryStats = [
@@ -988,6 +1020,7 @@ export default function GridCommunity() {
                 return <IdleLine key={idx} x1={pA.x} y1={pA.y} x2={pB.x} y2={pB.y} isDark={isDark} />;
               })}
               <circle cx="50%" cy="50%" r="13" fill={isDark ? "rgba(245,158,11,0.1)" : "rgba(245,158,11,0.15)"} stroke="rgba(245,158,11,0.3)" strokeWidth="1.5" />
+              {totalGridImport > 0.1 && <FlowLine x1={50} y1={50} x2={50} y2={88} color="#9ca3af" amount={totalGridImport} />}
               <circle cx="50%" cy="50%" r="5.5" fill={isDark ? "rgba(245,158,11,0.7)" : "rgba(245,158,11,0.9)"} />
               {HOUSE_POSITIONS.map((pos, i) => (
                 <line key={i} x1="50%" y1="50%" x2={`${pos.x}%`} y2={`${pos.y}%`} stroke={isDark ? "rgba(245,158,11,0.05)" : "rgba(245,158,11,0.12)"} strokeWidth="1" strokeDasharray="3 7" />
@@ -1000,6 +1033,7 @@ export default function GridCommunity() {
                 onSelect={handleSelect} isDark={isDark}
               />
             ))}
+            <GridPowerCard gridImport={totalGridImport} isDark={isDark} />
           </div>
 
           {/* Active energy transfers */}
