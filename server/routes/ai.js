@@ -1,5 +1,5 @@
 // HELIO decision orchestration.
-// ML produces facts, Jev selects from fixed strategies, local policy enforces
+// ML produces facts, NVIDIA NIM selects from fixed strategies, local policy enforces
 // safety, and NVIDIA NIM explains the approved result. No provider can actuate
 // a battery, grid connection, or load from this service.
 
@@ -8,13 +8,11 @@ const axios = require("axios");
 const crypto = require("crypto");
 const mongoose = require("mongoose");
 const { DecisionAudit } = require("../models");
-
-const ML_ENGINE_URL = (process.env.ML_ENGINE_URL || "http://127.0.0.1:5000").replace(/\/$/, "");
-const JEV_API_URL = process.env.JEV_API_URL || "https://jevtypesafeai.com/api/v1/decide";
-const JEV_MODEL = process.env.JEV_MODEL || "jev-latest";
+const { ML_ENGINE_URL, requestMl } = require("../services/mlClient");
 const NVIDIA_API_URL = process.env.NVIDIA_API_URL || "https://integrate.api.nvidia.com/v1/chat/completions";
+const NVIDIA_API_KEY = process.env.NVIDIA_API_KEY || "";
 const NVIDIA_MODEL = process.env.NVIDIA_MODEL || "openai/gpt-oss-120b";
-const CONFIDENCE_THRESHOLD = Number(process.env.JEV_CONFIDENCE_THRESHOLD || 0.75);
+const CONFIDENCE_THRESHOLD = Number(process.env.NVIDIA_CONFIDENCE_THRESHOLD || 0.75);
 const MAX_HISTORY = 25;
 const memoryHistory = [];
 
@@ -77,56 +75,44 @@ function validateContext(context) {
   );
 }
 
-function createJevRequest(context) {
+function createNvidiaDecisionRequest(context) {
   return {
-    model: JEV_MODEL,
-    state: summarizeContext(context),
-    questions: {
-      strategy: {
-        type: "choice",
-        instructions: "Choose the safest energy-routing strategy for the next 15-minute operating window.",
-        criteria: STRATEGIES,
+    model: NVIDIA_MODEL,
+    temperature: 0.1,
+    max_tokens: 800,
+    stream: false,
+    reasoning_effort: "low",
+    response_format: { type: "json_object" },
+    messages: [
+      {
+        role: "system",
+        content: "You are HELIO's structured energy decision engine. Return only valid JSON with exactly these fields: strategy, urgency, operatorReview, confidence. strategy must be one of self_solar, peer_to_peer_trade, battery_preservation, grid_import, critical_protection. urgency must be one of normal, watch, warning, critical. operatorReview must be required or not_required. confidence must be a number from 0 to 1. Use only the supplied state. Do not control hardware.",
       },
-      urgency: {
-        type: "choice",
-        instructions: "Classify operational urgency for the next 15-minute operating window.",
-        criteria: URGENCY,
-      },
-      operatorReview: {
-        type: "choice",
-        instructions: "Determine whether a human must approve this recommendation.",
-        criteria: {
-          not_required: "Recommendation is informational and is within configured safety limits.",
-          required: "Human approval is required because of uncertainty, grid import, low battery, outage, or anomaly risk.",
-        },
-      },
-    },
+      { role: "user", content: JSON.stringify(summarizeContext(context)) },
+    ],
   };
 }
 
-async function callJev(context) {
-  if (!process.env.JEV_API_KEY) return null;
-  const response = await axios.post(JEV_API_URL, createJevRequest(context), {
-    headers: {
-      Authorization: `Bearer ${process.env.JEV_API_KEY}`,
-      "Content-Type": "application/json",
-    },
-    timeout: 5000,
+async function callNvidiaDecision(context) {
+  if (!NVIDIA_API_KEY) return null;
+  const response = await axios.post(NVIDIA_API_URL, createNvidiaDecisionRequest(context), {
+    headers: { Authorization: `Bearer ${NVIDIA_API_KEY}`, "Content-Type": "application/json" },
+    timeout: 30000,
   });
-  const answers = response.data?.answers;
-  if (!answers || !STRATEGIES[answers.strategy?.choice] || !URGENCY[answers.urgency?.choice]) {
-    throw new Error("Jev returned an incomplete decision response.");
+  const message = response.data?.choices?.[0]?.message || {};
+  const raw = (message.content || message.reasoning_content || response.data?.choices?.[0]?.text || "").trim();
+  if (!raw) throw new Error("NVIDIA returned no decision content.");
+  const json = raw.replace(/^```(?:json)?\s*/i, "").replace(/\s*```$/, "");
+  const decision = JSON.parse(json);
+  if (!STRATEGIES[decision.strategy] || !URGENCY[decision.urgency] || !["required", "not_required"].includes(decision.operatorReview)) {
+    throw new Error("NVIDIA returned an invalid decision contract.");
   }
   return {
-    strategy: answers.strategy.choice,
-    urgency: answers.urgency.choice,
-    operatorReview: answers.operatorReview?.choice === "required" ? "required" : "not_required",
-    confidence: Math.min(
-      clamp(answers.strategy?.confidence, 0, 1),
-      clamp(answers.urgency?.confidence, 0, 1),
-      clamp(answers.operatorReview?.confidence, 0, 1),
-    ),
-    providerDecision: answers,
+    strategy: decision.strategy,
+    urgency: decision.urgency,
+    operatorReview: decision.operatorReview,
+    confidence: clamp(decision.confidence, 0, 1),
+    providerDecision: decision,
   };
 }
 
@@ -267,7 +253,7 @@ async function explainWithNvidia(decision, context) {
       },
       {
         headers: { Authorization: `Bearer ${process.env.NVIDIA_API_KEY}`, "Content-Type": "application/json" },
-        timeout: 10000,
+        timeout: 30000,
       },
     );
     const explanation = response.data?.choices?.[0]?.message?.content?.trim();
@@ -291,8 +277,8 @@ async function persistDecision(record) {
 }
 
 async function fetchMlContext(overrides = {}) {
-  const response = await axios.post(`${ML_ENGINE_URL}/api/ml/context`, overrides, { timeout: 8000 });
-  const context = response.data?.data;
+  const response = await requestMl("POST", "/api/ml/context", overrides);
+  const context = response?.data;
   if (!validateContext(context)) throw new Error("ML service returned an invalid context contract.");
   return context;
 }
@@ -300,20 +286,20 @@ async function fetchMlContext(overrides = {}) {
 async function runDecision(overrides) {
   const context = await fetchMlContext(overrides);
   let providerDecision;
-  let source = "jev";
+  let source = "nvidia_nim";
   let fallbackUsed = false;
   try {
-    providerDecision = await callJev(context);
+    providerDecision = await callNvidiaDecision(context);
     if (!providerDecision) {
       fallbackUsed = true;
       source = "deterministic_fallback";
-      providerDecision = deterministicDecision(context, "jev_key_not_configured");
+      providerDecision = deterministicDecision(context, "nvidia_key_not_configured");
     }
   } catch (error) {
-    console.warn("Jev decision fallback:", error.message);
+    console.warn("NVIDIA decision fallback:", error.message);
     fallbackUsed = true;
     source = "deterministic_fallback";
-    providerDecision = deterministicDecision(context, "jev_unavailable");
+      providerDecision = deterministicDecision(context, "nvidia_unavailable");
   }
 
   const safeDecision = applySafetyPolicy(providerDecision, context);
@@ -356,7 +342,7 @@ function toLegacyDecision(record) {
     confidence: record.confidence,
     expires_minutes: 15,
     override_greedy: record.requiresOperatorReview,
-    source: record.source === "jev" ? "llm" : "rule_engine",
+    source: record.source === "nvidia_nim" ? "llm" : "rule_engine",
     operationalDecision: record,
   };
 }
@@ -390,6 +376,16 @@ router.get("/context", async (req, res) => {
   }
 });
 
+// Keep the ML service private in cloud deployments. The browser only talks to
+// the public API, while this server forwards the request with Cloud Run auth.
+router.get("/anomalies/latest", async (_req, res) => {
+  try {
+    res.json(await requestMl("GET", "/api/ml/anomalies/latest"));
+  } catch (error) {
+    res.status(503).json({ status: "error", message: "ML anomaly service is unavailable." });
+  }
+});
+
 router.get("/decisions/latest", async (_req, res) => {
   const latest = mongoose.connection.readyState === 1 ? await DecisionAudit.findOne().sort({ createdAt: -1 }).lean() : memoryHistory[0];
   if (!latest) return res.status(404).json({ status: "error", message: "No decisions have been evaluated yet." });
@@ -416,8 +412,7 @@ router.get("/providers/status", (_req, res) => {
     status: "success",
     data: {
       mlEngineUrlConfigured: Boolean(ML_ENGINE_URL),
-      jevConfigured: Boolean(process.env.JEV_API_KEY),
-      nvidiaConfigured: Boolean(process.env.NVIDIA_API_KEY),
+      nvidiaConfigured: Boolean(NVIDIA_API_KEY),
       confidenceThreshold: CONFIDENCE_THRESHOLD,
     },
   });

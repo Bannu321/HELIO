@@ -54,9 +54,9 @@ module.exports = {
         }
       },
       fontFamily: {
-        display: ['Syne', 'sans-serif'],
-        mono:    ['Space Mono', 'monospace'],
-        body:    ['DM Sans', 'sans-serif'],
+        display: ['Sora', 'sans-serif'],
+        mono:    ['JetBrains Mono', 'monospace'],
+        body:    ['Manrope', 'sans-serif'],
       },
       backgroundImage: {
         'solar-glow': 'radial-gradient(ellipse at top, rgba(251,191,36,0.08) 0%, transparent 60%)',

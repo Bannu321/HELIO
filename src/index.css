@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300..800;1,9..40,300..700&family=JetBrains+Mono:wght@400;500;600;700&family=Syne:wght@600;700;800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&family=Sora:wght@500;600;700;800&display=swap");
 
 @import "tailwindcss";
 
@@ -10,59 +10,78 @@
    ============================================================ */
 @theme {
   /* ── Typography ─────────────────────────────────────────── */
-  --font-display: "Syne", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  --font-body:    "DM Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-display: "Sora", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-body:    "Manrope", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   --font-mono:    "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 
   /* ── Void / Slate Base (Deep Industrial Dark Surfaces) ───── */
-  --color-void-950: #040609;
-  --color-void-900: #070A0F;
-  --color-void-850: #0A0E17;
-  --color-void-800: #0E1420;
-  --color-void-700: #141C2C;
-  --color-void-600: #1B263A;
-  --color-void-500: #26354E;
-  --color-void-400: #3D4F6E;
-  --color-void-300: #627799;
-  --color-void-200: #93A6C4;
-  --color-void-100: #CBD7E8;
-  --color-void-50:  #EDF3FA;
+  --color-void-950: #07110E;
+  --color-void-900: #0B1713;
+  --color-void-850: #101E19;
+  --color-void-800: #142720;
+  --color-void-700: #1B342A;
+  --color-void-600: #254438;
+  --color-void-500: #32584A;
+  --color-void-400: #4A7060;
+  --color-void-300: #769487;
+  --color-void-200: #A7BDB3;
+  --color-void-100: #D6E2DC;
+  --color-void-50:  #EEF5F1;
 
   /* ── Solar (Amber / Daylight Generation) ─────────────────── */
-  --color-solar-50:  #FFFBEB;
-  --color-solar-100: #FEF3C7;
-  --color-solar-200: #FDE68A;
-  --color-solar-300: #FCD34D;
-  --color-solar-400: #FBBF24;
-  --color-solar-500: #F59E0B;
-  --color-solar-600: #D97706;
-  --color-solar-700: #B45309;
-  --color-solar-800: #92400E;
-  --color-solar-900: #78350F;
+  --color-solar-50:  #FFF9E8;
+  --color-solar-100: #FFF0C2;
+  --color-solar-200: #FFDC80;
+  --color-solar-300: #F8BF45;
+  --color-solar-400: #F0A926;
+  --color-solar-500: #E58A0B;
+  --color-solar-600: #B96805;
+  --color-solar-700: #884A05;
+  --color-solar-800: #653708;
+  --color-solar-900: #472706;
 
   /* ── Grid (Emerald / Sustainability / Efficiency) ────────── */
-  --color-grid-50:  #ECFDF5;
-  --color-grid-100: #D1FAE5;
-  --color-grid-200: #A7F3D0;
-  --color-grid-300: #6EE7B7;
-  --color-grid-400: #34D399;
-  --color-grid-500: #10B981;
-  --color-grid-600: #059669;
-  --color-grid-700: #047857;
+  --color-grid-50:  #EBF7F3;
+  --color-grid-100: #D0EDE4;
+  --color-grid-200: #A6DBCA;
+  --color-grid-300: #75C5AB;
+  --color-grid-400: #45AD8B;
+  --color-grid-500: #208B6B;
+  --color-grid-600: #126E54;
+  --color-grid-700: #0C543F;
+
+  /* AI/forecasting uses violet; it must never represent a system health state. */
+  --color-insight-50:  #F2F0FB;
+  --color-insight-100: #E2DDF6;
+  --color-insight-200: #C9BEEC;
+  --color-insight-300: #AB99DF;
+  --color-insight-400: #8B73CD;
+  --color-insight-500: #7259BB;
+  --color-insight-600: #594498;
+  --color-insight-700: #433373;
 
   /* ── Energy Accents (Data & System States) ───────────────── */
-  --color-energy-cyan:   #06B6D4;
-  --color-energy-blue:   #3B82F6;
-  --color-energy-green:  #10B981;
-  --color-energy-amber:  #F59E0B;
-  --color-energy-orange: #F97316;
-  --color-energy-rose:   #EF4444;
+  --color-energy-cyan:   #3E9EBA;
+  --color-energy-blue:   #547BB4;
+  --color-energy-green:  #208B6B;
+  --color-energy-amber:  #A87626;
+  --color-energy-orange: #C66D38;
+  --color-energy-rose:   #CC5963;
+
+  /* Theme-aware semantic surfaces; use these for product UI, not raw palette hues. */
+  --color-helio-canvas: var(--helio-canvas);
+  --color-helio-surface: var(--helio-surface);
+  --color-helio-surface-raised: var(--helio-surface-raised);
+  --color-helio-border: var(--helio-border);
+  --color-helio-ink: var(--helio-ink);
+  --color-helio-muted: var(--helio-muted);
+  --color-helio-focus: var(--helio-focus);
 
   /* ── Shadows & Depth ────────────────────────────────────── */
   --shadow-subtle: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
   --shadow-card:   0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
   --shadow-panel:  0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
-  --shadow-solar:  0 0 15px rgba(245, 158, 11, 0.15);
+  --shadow-solar:  0 0 15px rgba(229, 138, 11, 0.2);
   --shadow-green:  0 0 15px rgba(16, 185, 129, 0.15);
 
   /* ── Animations ─────────────────────────────────────────── */
@@ -80,6 +99,26 @@
   to   { opacity: 1; transform: translateY(0); }
 }
 
+:root {
+  --helio-canvas: #F7FAF4;
+  --helio-surface: #FFFFFF;
+  --helio-surface-raised: #FBFCF8;
+  --helio-border: #D9E4D6;
+  --helio-ink: #1C281D;
+  --helio-muted: #657567;
+  --helio-focus: #7259BB;
+}
+
+.dark {
+  --helio-canvas: #0B1713;
+  --helio-surface: #142720;
+  --helio-surface-raised: #1B342A;
+  --helio-border: #254438;
+  --helio-ink: #F0F6F2;
+  --helio-muted: #A7BDB3;
+  --helio-focus: #AB99DF;
+}
+
 /* ============================================================
    BASE LAYER
    ============================================================ */
@@ -93,9 +132,10 @@
     @apply transition-colors duration-200;
   }
   body {
-    @apply bg-slate-50 text-slate-900 dark:bg-void-900 dark:text-void-100 font-body antialiased;
+    @apply bg-helio-canvas text-helio-ink font-body antialiased;
     font-size: 14px;
     line-height: 1.5;
+    font-feature-settings: "kern", "liga", "calt";
   }
   ::-webkit-scrollbar {
     width: 6px;
@@ -118,7 +158,7 @@
 @layer components {
   /* Standard Surface Card */
   .card {
-    @apply bg-white dark:bg-void-800/90 border border-slate-200 dark:border-void-700/80 rounded-xl transition-all duration-200;
+    @apply bg-helio-surface border border-helio-border rounded-xl transition-all duration-200;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.02);
   }
   .dark .card {
@@ -142,6 +182,11 @@
   }
   .stat-label {
     @apply font-mono text-[11px] uppercase tracking-wider text-slate-600 dark:text-void-300 font-medium;
+  }
+
+  /* Page context is product copy, not machine telemetry. */
+  .page-description {
+    @apply text-sm font-body font-medium text-slate-500 dark:text-void-300 leading-relaxed;
   }
 
   /* Badges & Status */
@@ -196,7 +241,7 @@
 
   /* Form Fields */
   .field {
-    @apply bg-white dark:bg-void-850 border border-slate-300 dark:border-void-600 rounded-lg px-3.5 py-2 text-sm text-slate-900 dark:text-white focus:outline-none focus:border-solar-500 focus:ring-1 focus:ring-solar-500 placeholder:text-slate-400 dark:placeholder:text-void-400 transition-all duration-150 w-full;
+    @apply bg-helio-surface border border-helio-border rounded-lg px-3.5 py-2 text-sm text-helio-ink focus:outline-none focus:border-solar-500 focus:ring-1 focus:ring-solar-500 placeholder:text-slate-400 dark:placeholder:text-void-400 transition-all duration-150 w-full;
   }
 }
 

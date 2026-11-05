@@ -71,7 +71,7 @@ export default function Sidebar() {
             <Sun className="w-5 h-5" />
           </div>
           <div>
-            <div className="font-display text-base font-bold tracking-widest text-slate-900 dark:text-white group-hover:text-solar-500 transition-colors">
+            <div className="font-display text-base font-bold tracking-widest text-solar-700 dark:text-solar-400 group-hover:text-solar-500 transition-colors">
               HELIO
             </div>
             <div className="text-[10px] font-mono font-medium tracking-wider text-slate-500 dark:text-void-300">

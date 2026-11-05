@@ -65,7 +65,7 @@ export default function Topbar() {
     <header className="h-16 flex items-center justify-between px-6 border-b border-slate-200 dark:border-void-700/80 bg-white/95 dark:bg-void-900/95 backdrop-blur-md sticky top-0 z-40 transition-colors duration-200">
       {/* Left: Dynamic Breadcrumb */}
       <div className="flex items-center gap-2 text-xs font-mono">
-        <span className="font-bold text-slate-800 dark:text-white tracking-wider">
+        <span className="font-bold text-solar-700 dark:text-solar-400 tracking-wider">
           HELIO
         </span>
         <ChevronRight className="w-3.5 h-3.5 text-slate-400 dark:text-void-400" />

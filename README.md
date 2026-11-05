@@ -15,7 +15,7 @@ Located in `src/`. This is the primary user interface.
 ### 2. HELIO Main Backend Ecosystem
 Located in `server/`. A hybrid environment for traditional data persistence and advanced machine learning.
 - **Node.js Express Server:** Manages MongoDB collections (`powerreadings`, `revenuesessions`, `weathers`, `panels`) and exposes REST endpoints.
-- **Python ML Server:** Handles AI logic, including demand forecasting, anomaly detection, and energy optimization (`ml_api.py`, `main.py`).
+- **Python ML Server:** Handles AI logic, including demand forecasting, anomaly detection, and energy optimization (`server/ml_engine/ml_api.py`).
 
 ### 3. Solar Guardian Simulation Sandbox
 Located in `Solar-guardian/`. A dedicated module simulating real-world physics, battery degradation, and dynamic grid events.
@@ -39,9 +39,24 @@ npm run dev
 
 # Start Node.js Backend
 cd server
-npm install
-npm run dev
+pnpm install
+pnpm run dev
 ```
+
+### Reproducible local containers
+
+The complete MVP stack is defined in [`compose.yaml`](compose.yaml): MongoDB,
+the Python ML service, the Node decision API, and an Nginx-served frontend.
+
+```powershell
+.\scripts\docker-up.ps1
+.\scripts\smoke-test.ps1
+.\scripts\docker-down.ps1
+```
+
+Open `http://localhost:8080` after startup. Provider keys are optional for the
+demo; without them, the deterministic safety policy and explanation template
+keep the simulated decision loop usable.
 
 ### Solar Guardian Sandbox
 ```bash
@@ -58,12 +73,12 @@ npm run dev
 
 ## Cloud MVP deployment
 
-The cloud-ready deployment uses two Google Cloud Run services: `helio-api` for the Express API, Jev decision layer, NVIDIA explanation layer, and audit API; and `helio-ml` for the Python ML models. Dockerfiles, Cloud Build configuration, Secret Manager guidance, and smoke tests are in [`gcp/README.md`](gcp/README.md).
+The cloud-ready deployment uses two Google Cloud Run services: `helio-api` for the Express API, NVIDIA NIM decision and explanation layers, and audit API; and `helio-ml` for the Python ML models. Dockerfiles, Compose packaging, Cloud Build configuration, Secret Manager guidance, and smoke tests are in [`gcp/README.md`](gcp/README.md).
 
 The decision flow is:
 
 ```text
-ML context → Jev typed strategy → deterministic safety policy → NVIDIA explanation → React UI
+ML context → NVIDIA NIM structured decision → deterministic safety policy → NVIDIA explanation → React UI
 ```
 
-If Jev or NVIDIA credentials are unavailable, HELIO returns a deterministic/template fallback and clearly labels its source. No automated hardware actuation is performed by the MVP.
+If the NVIDIA NIM credential is unavailable, HELIO returns a deterministic/template fallback and clearly labels its source. No automated hardware actuation is performed by the MVP.

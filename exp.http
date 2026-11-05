@@ -1,0 +1,16 @@
+### Check API health
+GET http://localhost:3001/api/health
+
+
+### Check Clef configuration
+GET http://localhost:3001/api/ai/providers/status
+
+
+### Test HELIO AI decision
+POST http://localhost:3001/api/ai/decide
+Content-Type: application/json
+
+{
+  "mode": "simulation",
+  "scenario": "evening_deficit"
+}

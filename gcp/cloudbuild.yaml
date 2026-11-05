@@ -3,19 +3,20 @@ substitutions:
   _REPOSITORY: helio-containers
   _API_SERVICE: helio-api
   _ML_SERVICE: helio-ml
+  _IMAGE_TAG: latest
 
 steps:
   - name: gcr.io/cloud-builders/docker
-    args: ["build", "-f", "server/ml_engine/Dockerfile", "-t", "${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/helio-ml:$COMMIT_SHA", "."]
+    args: ["build", "-f", "server/ml_engine/Dockerfile", "-t", "${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/helio-ml:${_IMAGE_TAG}", "."]
   - name: gcr.io/cloud-builders/docker
-    args: ["push", "${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/helio-ml:$COMMIT_SHA"]
+    args: ["push", "${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/helio-ml:${_IMAGE_TAG}"]
   - name: gcr.io/cloud-builders/docker
-    args: ["build", "-f", "server/Dockerfile", "-t", "${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/helio-api:$COMMIT_SHA", "."]
+    args: ["build", "-f", "server/Dockerfile", "-t", "${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/helio-api:${_IMAGE_TAG}", "."]
   - name: gcr.io/cloud-builders/docker
-    args: ["push", "${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/helio-api:$COMMIT_SHA"]
+    args: ["push", "${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/helio-api:${_IMAGE_TAG}"]
 
 # Deployment is deliberately separate from image build. It is performed after
 # Cloud Run service accounts and Secret Manager bindings have been configured.
 images:
-  - "${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/helio-ml:$COMMIT_SHA"
-  - "${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/helio-api:$COMMIT_SHA"
+  - "${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/helio-ml:${_IMAGE_TAG}"
+  - "${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/helio-api:${_IMAGE_TAG}"

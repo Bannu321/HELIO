@@ -70,14 +70,14 @@ export default function EnergyRevenueChart() {
             <CartesianGrid strokeDasharray="3 3" vertical={false} />
             <XAxis
               dataKey="month"
-              tick={{ fontSize: 10, fontFamily: "Space Mono" }}
+              tick={{ fontSize: 10, fontFamily: "JetBrains Mono" }}
               tickLine={false}
               axisLine={false}
             />
             <YAxis
               yAxisId="left"
               unit=" kWh"
-              tick={{ fontSize: 10, fontFamily: "Space Mono" }}
+              tick={{ fontSize: 10, fontFamily: "JetBrains Mono" }}
               tickLine={false}
               axisLine={false}
               width={58}
@@ -87,7 +87,7 @@ export default function EnergyRevenueChart() {
               orientation="right"
               unit="k₹"
               tickFormatter={(v) => `${(v / 1000).toFixed(0)}`}
-              tick={{ fontSize: 10, fontFamily: "Space Mono" }}
+              tick={{ fontSize: 10, fontFamily: "JetBrains Mono" }}
               tickLine={false}
               axisLine={false}
               width={40}
@@ -96,7 +96,7 @@ export default function EnergyRevenueChart() {
             <Legend
               wrapperStyle={{
                 fontSize: 10,
-                fontFamily: "Space Mono",
+                fontFamily: "JetBrains Mono",
                 paddingTop: 8,
               }}
               iconType="circle"

@@ -7,7 +7,7 @@ export default function Settings() {
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-2 border-b border-slate-200/80 dark:border-void-700/60">
         <div>
-          <h1 className="font-display text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
+          <h1 className="font-display text-2xl font-bold tracking-tight text-solar-700 dark:text-solar-400">
             System & SCADA Configuration
           </h1>
           <p className="text-xs font-mono text-slate-500 dark:text-void-300 mt-1">

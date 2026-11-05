@@ -16,7 +16,7 @@ export default function RevenueReports() {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-2 border-b border-slate-200/80 dark:border-void-700/60">
         <div>
           <div className="flex items-center gap-3">
-            <h1 className="font-display text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
+            <h1 className="font-display text-2xl font-bold tracking-tight text-solar-700 dark:text-solar-400">
               Revenue & Net Metering Settlements
             </h1>
             <span className="live-badge">

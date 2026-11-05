@@ -139,14 +139,14 @@ export default function PowerChart() {
             <CartesianGrid strokeDasharray="3 3" vertical={false} />
             <XAxis
               dataKey="hour"
-              tick={{ fontSize: 10, fontFamily: "Space Mono" }}
+              tick={{ fontSize: 10, fontFamily: "JetBrains Mono" }}
               tickLine={false}
               axisLine={false}
               interval={3}
             />
             <YAxis
               unit=" kW"
-              tick={{ fontSize: 10, fontFamily: "Space Mono" }}
+              tick={{ fontSize: 10, fontFamily: "JetBrains Mono" }}
               tickLine={false}
               axisLine={false}
               width={50}
@@ -155,7 +155,7 @@ export default function PowerChart() {
             <Legend
               wrapperStyle={{
                 fontSize: 10,
-                fontFamily: "Space Mono",
+                fontFamily: "JetBrains Mono",
                 paddingTop: 8,
               }}
               iconType="circle"

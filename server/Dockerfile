@@ -2,8 +2,10 @@ FROM node:20-alpine
 
 WORKDIR /app
 
-COPY server/package*.json ./server/
-RUN cd server && npm ci --omit=dev
+RUN corepack enable && corepack prepare pnpm@11.25.0 --activate
+
+COPY server/package.json server/pnpm-lock.yaml ./server/
+RUN cd server && pnpm install --frozen-lockfile --prod
 
 COPY server ./server
 

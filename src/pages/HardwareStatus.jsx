@@ -28,7 +28,7 @@ export default function HardwareStatus() {
     <div className="max-w-7xl mx-auto px-6 py-8 space-y-8 animate-fade-in">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-2 border-b border-slate-200/80 dark:border-void-700/60">
         <div>
-          <h1 className="font-display text-2xl font-bold tracking-tight text-slate-900 dark:text-white flex items-center gap-3">
+          <h1 className="font-display text-2xl font-bold tracking-tight text-solar-700 dark:text-solar-400 flex items-center gap-3">
             <Cpu className="w-6 h-6 text-solar-500" />
             Hardware & IoT Monitoring
           </h1>
