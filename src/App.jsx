@@ -62,11 +62,11 @@ const ProtectedRoute = ({ children }) => {
 
 // Dashboard Layout Component
 const DashboardLayout = ({ children }) => (
-  <div className="ambient-top min-h-screen flex flex-col bg-slate-50 text-slate-900 dark:bg-void-900 dark:text-void-100 transition-colors duration-300">
+  <div className="ambient-top min-h-screen flex flex-col bg-helio-canvas text-helio-ink transition-colors duration-300">
     <Topbar />
     <div className="flex flex-1 relative z-10">
       <Sidebar className="overflow-y-auto" />
-      <main className="flex-1 overflow-y-auto relative bg-slate-50 dark:bg-void-800">
+      <main className="flex-1 overflow-y-auto relative bg-helio-canvas">
         <div className="absolute inset-0 bg-solar-glow pointer-events-none opacity-30 z-0" />
         <div className="relative z-10">{children}</div>
       </main>

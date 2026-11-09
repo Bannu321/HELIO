@@ -17,7 +17,7 @@ export default function PanelHealth() {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-2 border-b border-slate-200/80 dark:border-void-700/60">
         <div>
           <div className="flex items-center gap-3">
-            <h1 className="font-display text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
+            <h1 className="font-display text-2xl font-bold tracking-tight text-solar-700 dark:text-solar-400">
               Hardware & PV Array Health
             </h1>
             <span className={isOptimal ? "live-badge" : "warning-badge"}>
@@ -25,7 +25,7 @@ export default function PanelHealth() {
               {isOptimal ? "STRING SENSORS OPTIMAL" : "ATTENTION REQUIRED"}
             </span>
           </div>
-          <p className="text-xs font-mono text-slate-500 dark:text-void-300 mt-1">
+          <p className="page-description mt-1 max-w-2xl">
             Individual module telemetry, bypass diode diagnostics, and soiling loss detection
           </p>
         </div>
@@ -57,7 +57,7 @@ export default function PanelHealth() {
             <div className="text-xl font-bold font-display text-slate-900 dark:text-white mt-1">
               {isCritical ? "Degraded" : isOptimal ? "Optimal Condition" : "Sub-Optimal"}
             </div>
-            <p className="text-xs font-mono text-slate-500 dark:text-void-300 mt-1">
+            <p className="text-xs font-body font-medium text-slate-500 dark:text-void-300 mt-1">
               {loading ? "Scanning modules..." : `${overview?.panelsActive || 24}/24 Panels Online`}
             </p>
           </div>
@@ -73,7 +73,7 @@ export default function PanelHealth() {
             <div className="text-xl font-bold font-display text-slate-900 dark:text-white mt-1">
               Soiling Drop (2.1%)
             </div>
-            <p className="text-xs font-mono text-slate-500 dark:text-void-300 mt-1">
+            <p className="text-xs font-body font-medium text-slate-500 dark:text-void-300 mt-1">
               Array B dust accumulation detected
             </p>
           </div>
@@ -112,7 +112,7 @@ export default function PanelHealth() {
             <h2 className="font-display font-bold text-base text-slate-900 dark:text-white">
               Physical PV String Heatmap
             </h2>
-            <p className="text-xs text-slate-500 dark:text-void-300 font-mono mt-0.5">
+            <p className="text-xs text-slate-500 dark:text-void-300 font-body font-medium mt-0.5">
               Click individual panels to inspect string voltage, current output, and bypass state
             </p>
           </div>

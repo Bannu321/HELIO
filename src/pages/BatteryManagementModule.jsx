@@ -230,7 +230,7 @@ export default function BatteryManagementModule() {
                   dataKey="time"
                   stroke="#8892b0"
                   fontSize={10}
-                  fontFamily="Space Mono"
+                  fontFamily="JetBrains Mono"
                   tickLine={false}
                   axisLine={false}
                 />
@@ -238,7 +238,7 @@ export default function BatteryManagementModule() {
                   yAxisId="left"
                   stroke="#8892b0"
                   fontSize={10}
-                  fontFamily="Space Mono"
+                  fontFamily="JetBrains Mono"
                   tickLine={false}
                   axisLine={false}
                   unit="%"
@@ -248,7 +248,7 @@ export default function BatteryManagementModule() {
                   orientation="right"
                   stroke="#FF4C6A"
                   fontSize={10}
-                  fontFamily="Space Mono"
+                  fontFamily="JetBrains Mono"
                   tickLine={false}
                   axisLine={false}
                   unit="kW"

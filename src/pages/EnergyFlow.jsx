@@ -88,7 +88,7 @@ export default function EnergyFlow() {
       b = 0;
       g = 0;
       paths.push('solar-ai');
-      cap = "Perfect balance. Solar generation matches campus load exactly.";
+      cap = "Perfect balance. Solar generation matches House load exactly.";
     } else {
       // STATE 3: Solar Deficit
       const deficit = l - s;
@@ -105,7 +105,7 @@ export default function EnergyFlow() {
         g = 0;
         paths.push('solar-ai', 'battery-ai-discharge');
         batteryState = 'discharging';
-        cap = "Solar deficit. Discharging battery to meet campus load.";
+        cap = "Solar deficit. Discharging battery to meet house load.";
       } else {
         b = 15; // Max battery draw
         g = deficit - 15; // Draw rest from grid
@@ -204,7 +204,7 @@ export default function EnergyFlow() {
       <header>
         <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-2">
           <div>
-            <h1 className="font-display text-2xl font-extrabold text-slate-900 dark:text-white tracking-wide">
+            <h1 className="font-display text-2xl font-extrabold text-solar-700 dark:text-solar-400 tracking-wide">
               Energy Flow &amp; Routing
             </h1>
             <p className="text-sm text-slate-500 dark:text-void-300 mt-1 font-mono">
@@ -274,7 +274,7 @@ export default function EnergyFlow() {
 
               <div>
                 <div className="flex justify-between text-xs font-mono font-medium text-slate-600 dark:text-void-300 mb-2">
-                  <span>Campus Load (kW)</span>
+                  <span>House Load (kW)</span>
                   <span className="text-energy-green font-bold">{baseLoad} kW</span>
                 </div>
                 <input type="range" min="0" max="50" step="1" value={baseLoad} onChange={(e) => setBaseLoad(Number(e.target.value))} className="w-full accent-energy-green" />
@@ -358,7 +358,7 @@ export default function EnergyFlow() {
 
             <div className="absolute top-[25%] left-[80%] -translate-x-1/2 -translate-y-1/2 z-10">
               <FlowNode
-                icon={Leaf} label="Campus Load"
+                icon={Leaf} label="House Load"
                 value={`${metrics.load.toFixed(1)} kW`}
                 color="text-energy-green" borderColor="border-energy-green/30"
                 active={activePaths.includes("ai-load")}
@@ -400,10 +400,10 @@ export default function EnergyFlow() {
                 </linearGradient>
               </defs>
               <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(150,150,150,0.1)" />
-              <XAxis dataKey="time" stroke="#8892b0" fontSize={10} fontFamily="Space Mono" tickLine={false} axisLine={false} />
-              <YAxis stroke="#8892b0" fontSize={10} fontFamily="Space Mono" tickLine={false} axisLine={false} />
+              <XAxis dataKey="time" stroke="#8892b0" fontSize={10} fontFamily="JetBrains Mono" tickLine={false} axisLine={false} />
+              <YAxis stroke="#8892b0" fontSize={10} fontFamily="JetBrains Mono" tickLine={false} axisLine={false} />
               <Tooltip contentStyle={{ backgroundColor: "rgba(10, 13, 20, 0.9)", borderColor: "#222D42", borderRadius: "8px" }} />
-              <Legend wrapperStyle={{ fontSize: "12px", fontFamily: "Space Mono", paddingTop: "10px" }} />
+              <Legend wrapperStyle={{ fontSize: "12px", fontFamily: "JetBrains Mono", paddingTop: "10px" }} />
               <Area type="monotone" dataKey="solar" name="Solar Gen (kW)" stroke="#f59e0b" strokeWidth={2} fillOpacity={1} fill="url(#colorSolar)" />
               <Area type="monotone" dataKey="grid" name="Grid Usage (kW)" stroke="#FF4C6A" strokeWidth={2} fillOpacity={1} fill="url(#colorGrid)" />
               <Area type="monotone" dataKey="battery" name="Battery Charging (kW)" stroke="#3FA9F5" strokeWidth={2} fillOpacity={1} fill="url(#colorBattery)" />

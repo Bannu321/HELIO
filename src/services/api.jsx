@@ -1,20 +1,18 @@
 // services/api.jsx
 // HELIO Frontend API Layer
-// Connects to the Express server at localhost:3001.
+// Connects to the public HELIO API. Vercel supplies VITE_API_BASE in production.
 // Every function retains its original signature so consuming pages need zero changes.
 // Falls back to mock data if the backend is unreachable.
 
 import axios from 'axios';
 
-const EXPRESS_BASE = 'http://localhost:3001/api';
-const ML_BASE      = 'http://localhost:5000/api';
+export const API_BASE = (import.meta.env.VITE_API_BASE || 'http://localhost:3001/api').replace(/\/$/, '');
 
 // ──────────────────────────────────────────────
 // Helpers
 // ──────────────────────────────────────────────
 
-const api = axios.create({ baseURL: EXPRESS_BASE, timeout: 8000 });
-const ml  = axios.create({ baseURL: ML_BASE,      timeout: 8000 });
+const api = axios.create({ baseURL: API_BASE, timeout: 8000 });
 
 /** Returns the value or fallback silently if request throws */
 async function safeGet(client, url, params = {}) {
@@ -271,10 +269,17 @@ export const fetchPanelStatus = async () => {
  */
 export const fetchAIDecision = async (scenarioOverride = null) => {
   try {
-    const params = scenarioOverride
-      ? { irradiance: scenarioOverride.irradiance, temperature: scenarioOverride.temperature, load: scenarioOverride.load }
-      : {};
-    const res = await api.get('/ai/energy-decision', { params, timeout: 12000 });
+    const res = await api.post('/ai/energy-decision', scenarioOverride || {}, { timeout: 12000 });
+    return res.data?.data || null;
+  } catch {
+    return null;
+  }
+};
+
+/** Returns the cloud-ready, policy-approved operational decision contract. */
+export const fetchOperationalDecision = async (scenario = {}) => {
+  try {
+    const res = await api.post('/ai/decide', scenario, { timeout: 15000 });
     return res.data?.data || null;
   } catch {
     return null;

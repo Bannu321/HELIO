@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const { Weather } = require('../models');
-const axios = require('axios');
+const { requestMl } = require('../services/mlClient');
 
 // GET /api/estimation/forecast
 router.get('/forecast', async (req, res) => {
@@ -42,10 +42,10 @@ router.get('/forecast', async (req, res) => {
 
     // 🧠 ASK THE PYTHON ML ENGINE FOR THE PREDICTION
     try {
-        const mlResponse = await axios.post('http://localhost:5000/api/ml/predict-weather-yield', {
+        const mlResponse = await requestMl('POST', '/api/ml/predict-weather-yield', {
             hours: requestedHours
         });
-        predictions = mlResponse.data.predictions;
+        predictions = mlResponse.predictions;
     } catch (mlErr) {
         console.error("ML Engine unreachable", mlErr);
         predictions = requestedHours.map(h => ({ hour: h.hour, predicted_kwh: 0 }));

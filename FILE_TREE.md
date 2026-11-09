@@ -5,6 +5,9 @@
 - `server/`: Main Node.js/Express Backend and Python ML server.
 - `Solar-guardian/`: Independent interactive simulation app (React frontend + FastAPI backend) for real-time physics and P2P grid simulation.
 - `public/`, `dist/`: Build outputs and static assets.
+- `docker/`: Frontend production image and Nginx SPA configuration.
+- `scripts/`: Local container helpers, smoke test, and GCP deployment script.
+- `compose.yaml`: Full local MVP stack (MongoDB, ML, API, frontend).
 
 ## Main Application (Frontend & Backend)
 ### `src/` (React Frontend)
@@ -18,11 +21,20 @@
 - `index.css`, `tailwind.config.js`: Styling.
 
 ### `server/` (Backend Ecosystem)
-- `server.js`, `index.js`: Node.js Express entry points.
+- `server.js`: Node.js Express entry point.
 - `models/`: Mongoose schemas for MongoDB.
 - `routes/`: Express API endpoints (grid, weather, revenue, estimation).
-- `main.py`, `ml_api.py`: Python ML backends for forecasting and anomaly detection.
-- `models/` (Python): ML models for solar optimization and energy DNA.
+- `services/mlClient.js`: Shared local/Cloud Run ML client with optional GCP ID-token auth.
+- `ml_engine/ml_api.py`: Python ML API for forecasting, anomaly detection, and normalized decision context.
+- `ml_engine/requirements.txt`: Pinned Python runtime dependencies.
+- `Dockerfile`: Production Node API image.
+- `ml_engine/Dockerfile`: Production Python ML image.
+- `pnpm-lock.yaml`: Reproducible Node API dependency lockfile.
+
+### Deployment layout
+- `gcp/cloudbuild.yaml`: Builds and pushes API/ML images to Artifact Registry.
+- `gcp/README.md`: Cloud Run, Secret Manager, and IAM setup.
+- `scripts/gcp-deploy.ps1`: Deploys private ML and public API services after image build.
 
 ## Solar Guardian Simulation (`Solar-guardian/`)
 A dedicated sandbox environment for real-time physics simulation and AI telemetry integration.

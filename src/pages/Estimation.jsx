@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { API_BASE } from "../services/api";
 import EstimationPanel from "../components/dashboard/EstimationPanel";
 import { BrainCircuit, Cpu, Target, Network, Clock, ShieldCheck, Sparkles } from "lucide-react";
 import clsx from "clsx";
@@ -13,8 +14,8 @@ export default function Estimation() {
     const fetchModelDiagnostics = async () => {
       try {
         const [weatherRes, forecastRes] = await Promise.all([
-          axios.get("http://localhost:5000/api/weather/current"),
-          axios.get("http://localhost:5000/api/estimation/forecast"),
+          axios.get(`${API_BASE}/weather/current`),
+          axios.get(`${API_BASE}/estimation/forecast`),
         ]);
 
         setModelData({
@@ -56,7 +57,7 @@ export default function Estimation() {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-2 border-b border-slate-200/80 dark:border-void-700/60">
         <div>
           <div className="flex items-center gap-3">
-            <h1 className="font-display text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
+            <h1 className="font-display text-2xl font-bold tracking-tight text-solar-700 dark:text-solar-400">
               AI Power Estimation & Forecast
             </h1>
             <span className="live-badge">

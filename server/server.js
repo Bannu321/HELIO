@@ -12,12 +12,16 @@ const PORT = process.env.PORT || 3001;
 
 // ——— MIDDLEWARE ———
 // Accept requests from Vite dev server (:5173), CRA (:3000), and any preview build
+const configuredOrigins = (process.env.CORS_ORIGINS || process.env.CLIENT_URL || "")
+  .split(",")
+  .map((origin) => origin.trim())
+  .filter(Boolean);
 const allowedOrigins = [
   "http://localhost:5173",
   "http://localhost:5174",
   "http://localhost:3000",
   "http://localhost:4173",
-  process.env.CLIENT_URL,
+  ...configuredOrigins,
 ].filter(Boolean);
 
 app.use(
@@ -49,6 +53,7 @@ app.use("/api/panels", require("./routes/panels"));
 app.use("/api/estimation", require("./routes/estimation"));
 app.use("/api/dna", require("./routes/dna"));
 app.use("/api/ai", require("./routes/ai"));          // ← AI Energy Manager
+app.use("/api/community", require("./routes/community"));
 
 // additional endpoints used for building/energy analytics
 app.use("/api/buildings", require("./routes/buildings"));
@@ -56,8 +61,18 @@ app.use("/api/energy", require("./routes/energy"));
 
 // ——— HEALTH CHECK ———
 app.get("/api/health", (req, res) =>
-  res.json({ status: "ok", port: PORT, timestamp: new Date().toISOString() })
+  res.json({ status: "ok", service: "helio-api", timestamp: new Date().toISOString() })
 );
+
+app.get("/api/ready", (_req, res) => {
+  const databaseReady = mongoose.connection.readyState === 1;
+  res.status(databaseReady || process.env.ALLOW_DEMO_WITHOUT_DB === "true" ? 200 : 503).json({
+    status: databaseReady ? "ok" : "degraded",
+    service: "helio-api",
+    databaseReady,
+    demoMode: process.env.ALLOW_DEMO_WITHOUT_DB === "true",
+  });
+});
 
 app.listen(PORT, () =>
   console.log(`🌞 HELIO API running on http://localhost:${PORT}`)

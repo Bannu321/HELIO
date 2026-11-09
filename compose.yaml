@@ -1,0 +1,74 @@
+name: helio
+
+services:
+  mongo:
+    image: mongo:7
+    restart: unless-stopped
+    volumes:
+      - mongo-data:/data/db
+    healthcheck:
+      test: ["CMD-SHELL", "mongosh --quiet --eval 'db.adminCommand({ ping: 1 }).ok' | grep 1"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  ml:
+    build:
+      context: .
+      dockerfile: server/ml_engine/Dockerfile
+    restart: unless-stopped
+    environment:
+      PORT: 8080
+      HELIO_API_URL: http://api:8080
+    ports:
+      - "5000:8080"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8080/api/ml/ready', timeout=3)"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+
+  api:
+    build:
+      context: .
+      dockerfile: server/Dockerfile
+    restart: unless-stopped
+    environment:
+      PORT: 8080
+      NODE_ENV: production
+      MONGO_URI: mongodb://mongo:27017/helio_solar
+      ALLOW_DEMO_WITHOUT_DB: "false"
+      ML_ENGINE_URL: http://ml:8080
+      ML_ENGINE_AUTH: ""
+      CORS_ORIGINS: http://localhost:8080,http://localhost:5173
+      NVIDIA_CONFIDENCE_THRESHOLD: ${NVIDIA_CONFIDENCE_THRESHOLD:-0.75}
+      NVIDIA_API_KEY: ${NVIDIA_API_KEY:-}
+      NVIDIA_MODEL: ${NVIDIA_MODEL:-openai/gpt-oss-120b}
+    depends_on:
+      mongo:
+        condition: service_healthy
+      ml:
+        condition: service_healthy
+    ports:
+      - "3001:8080"
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:8080/api/ready').then(r => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+
+  web:
+    build:
+      context: .
+      dockerfile: docker/frontend.Dockerfile
+      args:
+        VITE_API_BASE: http://localhost:3001/api
+    restart: unless-stopped
+    depends_on:
+      api:
+        condition: service_healthy
+    ports:
+      - "8080:80"
+
+volumes:
+  mongo-data:

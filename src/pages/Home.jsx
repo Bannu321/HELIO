@@ -26,7 +26,7 @@ export default function Home() {
         <div className="absolute top-0 right-0 w-64 h-64 bg-solar-500 rounded-full blur-[100px] opacity-10 pointer-events-none" />
 
         <div className="relative z-10">
-          <h1 className="font-display text-3xl md:text-4xl font-extrabold text-slate-900 dark:text-white tracking-wide mb-2">
+          <h1 className="font-display text-3xl md:text-4xl font-extrabold text-solar-700 dark:text-solar-400 tracking-wide mb-2">
             Good Afternoon.
           </h1>
           <p className="text-slate-600 dark:text-void-200 text-lg">

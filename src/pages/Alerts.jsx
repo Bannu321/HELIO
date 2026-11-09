@@ -11,6 +11,7 @@ import {
   ArrowRight
 } from "lucide-react";
 import clsx from "clsx";
+import { API_BASE } from "../services/api";
 
 export default function Alerts() {
   const [alertsData, setAlertsData] = useState([]);
@@ -19,7 +20,7 @@ export default function Alerts() {
   useEffect(() => {
     const fetchMLAlerts = async () => {
       try {
-        const res = await axios.get("http://127.0.0.1:5000/api/ml/anomalies/latest");
+        const res = await axios.get(`${API_BASE}/ai/anomalies/latest`);
 
         if (res.data && res.data.data) {
           const mlAnomalies = res.data.data;
@@ -135,7 +136,7 @@ export default function Alerts() {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-2 border-b border-slate-200/80 dark:border-void-700/60">
         <div>
           <div className="flex items-center gap-3">
-            <h1 className="font-display text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
+            <h1 className="font-display text-2xl font-bold tracking-tight text-solar-700 dark:text-solar-400">
               System Alerts & Diagnostics
             </h1>
             <span className="live-badge">

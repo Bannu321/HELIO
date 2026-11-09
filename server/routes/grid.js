@@ -1,7 +1,7 @@
 // server/routes/grid.js
 const router = require('express').Router();
 const { PowerReading, DailySummary } = require('../models');
-const axios = require('axios');
+const { requestMl } = require('../services/mlClient');
 
 // GET /api/grid/overview — current + today summary
 // router.get('/overview', async (req, res) => {
@@ -149,7 +149,6 @@ router.get('/log', async (req, res) => {
 router.get('/flow', async (req, res) => {
   try {
     const { PowerReading } = require('../models');
-    const axios = require('axios'); // Ensure this is imported at the top of your file
     
     // 1. Get Live Solar (Simulates Day/Night cycle based on your actual computer clock)
     const latest = await PowerReading.findOne().sort({ timestamp: -1 });
@@ -166,10 +165,10 @@ router.get('/flow', async (req, res) => {
     let batteryLevel = 342.35; // Fallback state
     let batteryCapacity = 500.0;
     try {
-        const mlRes = await axios.get('http://127.0.0.1:5000/api/ml/solar-optimization');
-        if (mlRes.data?.data?.battery_storage) {
-            batteryLevel = mlRes.data.data.battery_storage.current_level_kwh;
-            batteryCapacity = mlRes.data.data.battery_storage.capacity_kwh;
+        const mlRes = await requestMl('GET', '/api/ml/solar-optimization');
+        if (mlRes?.data?.battery_storage) {
+            batteryLevel = mlRes.data.battery_storage.current_level_kwh;
+            batteryCapacity = mlRes.data.battery_storage.capacity_kwh;
         }
     } catch(e) { 
         console.log("ML optimization not reachable, using fallback"); 
